@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "310945322778",
+    "project_id": "gamerstreet-40220",
+    "storage_bucket": "gamerstreet-40220.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:310945322778:android:794f204ad96b8feec2bea3",
+        "android_client_info": {
+          "package_name": "com.application.gamer_street"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "310945322778-65e4ooib8k0e6f13usdihl05a7do1q7l.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC55lsUjl4N5Dlhots3-TVUnw_M3MPrQ4w"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "310945322778-65e4ooib8k0e6f13usdihl05a7do1q7l.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,4 +1,4 @@
-package com.example.gamer_street
+package com.application.gamer_street
 
 import io.flutter.embedding.android.FlutterActivity
 

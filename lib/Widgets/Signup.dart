@@ -1,7 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:gamer_street/providers/google_signin_provider.dart';
 import 'package:gamer_street/screens/email_verify_wait_screen.dart';
+import 'package:gamer_street/screens/games_screen.dart';
+import 'package:provider/provider.dart';
 
 class SignupWidget extends StatefulWidget {
   @override
@@ -15,6 +19,8 @@ class _SignupWidgetState extends State<SignupWidget> {
   String _email = "";
   String _password = "";
   String _userName = "";
+  bool _passwordNotVisible = true;
+  final _curUser = FirebaseAuth.instance.currentUser;
   //function to check if the given number is a number or not.
   //Validating if given input is a number or an email
   String userData = "";
@@ -231,6 +237,16 @@ class _SignupWidgetState extends State<SignupWidget> {
                     enableSuggestions: false,
                     autocorrect: false,
                     decoration: InputDecoration(
+                      suffixIcon: IconButton(
+                        icon: _passwordNotVisible
+                            ? Icon(Icons.visibility_off)
+                            : Icon(Icons.visibility),
+                        onPressed: () {
+                          setState(() {
+                            _passwordNotVisible = !_passwordNotVisible;
+                          });
+                        },
+                      ),
                       labelText: "Password",
                       focusedBorder: OutlineInputBorder(
                         borderSide:
@@ -242,7 +258,7 @@ class _SignupWidgetState extends State<SignupWidget> {
                         borderRadius: BorderRadius.all(Radius.circular(10)),
                       ),
                     ),
-                    obscureText: true,
+                    obscureText: _passwordNotVisible,
                     onSaved: (tx) {
                       _password = tx!;
                     },
@@ -250,7 +266,48 @@ class _SignupWidgetState extends State<SignupWidget> {
                   SizedBox(
                     height: 12,
                   ),
-                  ElevatedButton(onPressed: register, child: Text("Signup"))
+                  ElevatedButton(onPressed: register, child: Text("Signup")),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Text("--or--"),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      FaIcon(
+                        FontAwesomeIcons.google,
+                        color: Colors.green,
+                      ),
+                      TextButton(
+                        child: Text("Join with Google"),
+                        onPressed: () {
+                          final provider = Provider.of<GoogleSigninProvider>(
+                              context,
+                              listen: false);
+                          provider.googleLogin().then((value) async {
+                            final User? _curUser =
+                                FirebaseAuth.instance.currentUser;
+                            if (_curUser != null) {
+                              await FirebaseFirestore.instance
+                                  .collection('users')
+                                  .doc(_curUser.uid)
+                                  .set({
+                                'userName': _curUser.displayName,
+                                'admin': false,
+                                'email': _curUser.email!,
+                                'gamesPlayed': 0,
+                                'gamesWon': 0,
+                                'phone': "",
+                                'rank': 'noRank',
+                              });
+                            }
+                            Navigator.of(context).pushReplacementNamed(
+                                GamesScreen.gamesScreenRoute);
+                          });
+                        },
+                      )
+                    ],
+                  ),
                 ],
               ),
             ));

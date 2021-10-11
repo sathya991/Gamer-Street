@@ -14,6 +14,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "310945322778-7463tq3b44jfhu21sccf04r1dht5ocll.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.application.gamer_street",
+            "certificate_hash": "74255de2606b41d6ca627d8d1786e0252f99d047"
+          }
+        },
+        {
           "client_id": "310945322778-65e4ooib8k0e6f13usdihl05a7do1q7l.apps.googleusercontent.com",
           "client_type": 3
         }

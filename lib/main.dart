@@ -4,9 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:gamer_street/screens/auth_screen.dart';
 import 'package:gamer_street/screens/choose_screen.dart';
 import 'package:gamer_street/screens/games_screen.dart';
+import 'package:gamer_street/screens/email_verify_wait_screen.dart';
 import 'package:gamer_street/screens/splash_screen.dart';
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   runApp(MyApp());
 }
 
@@ -30,13 +33,21 @@ class MyApp extends StatelessWidget {
                   return SplashScreen();
                 }
                 if (userSnapshot.hasData) {
-                  return GamesScreen();
+                  User? _user = FirebaseAuth.instance.currentUser;
+                  if (_user!.emailVerified) {
+                    return GamesScreen();
+                  } else if (!_user.emailVerified) {
+                    return EmailVerifyWaitScreen();
+                  }
                 }
                 return ChooseScreen();
               },
             ),
             routes: {
               AuthScreen.authScreenRoute: (ctx) => AuthScreen(),
+              EmailVerifyWaitScreen.otpScreenRoute: (ctx) =>
+                  EmailVerifyWaitScreen(),
+              GamesScreen.gamesScreenRoute: (ctx) => GamesScreen(),
             },
           );
         }

@@ -6,7 +6,6 @@ class ChooseScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    bool _login = false;
     void _chooseAuth(bool loginCheck) {
       Navigator.pushNamed(context, AuthScreen.authScreenRoute,
           arguments: {"val": loginCheck});

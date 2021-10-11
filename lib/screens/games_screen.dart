@@ -5,6 +5,10 @@ class GamesScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(child: Text("this is login"));
+    return Scaffold(
+        body: Center(
+            child: Container(
+                child: Text("this is login",
+                    style: TextStyle(fontWeight: FontWeight.bold)))));
   }
 }

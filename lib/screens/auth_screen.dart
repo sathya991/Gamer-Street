@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import '/Widgets/LoginWidget.dart';
 
 class AuthScreen extends StatefulWidget {
   static const String authScreenRoute = "/auth-screen";
@@ -22,7 +23,7 @@ class _AuthScreenState extends State<AuthScreen> {
         title: Text("GamerStreet"),
       ),
       body: Center(
-        child: check ? Text("Login") : Text("SignUp"),
+        child: check ? Login() : Text("SignUp"),
       ),
     );
   }

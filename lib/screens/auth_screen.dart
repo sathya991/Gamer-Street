@@ -1,7 +1,8 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:gamer_street/Widgets/Login.dart';
+
 import 'package:gamer_street/Widgets/Signup.dart';
+
+import '/Widgets/LoginWidget.dart';
 
 class AuthScreen extends StatefulWidget {
   static const String authScreenRoute = "/auth-screen";
@@ -12,8 +13,6 @@ class AuthScreen extends StatefulWidget {
 }
 
 class _AuthScreenState extends State<AuthScreen> {
-  final _auth = FirebaseAuth.instance;
-  var _isLoading = false;
   @override
   Widget build(BuildContext context) {
     var loginCheck =
@@ -26,7 +25,7 @@ class _AuthScreenState extends State<AuthScreen> {
           alignment: Alignment.center,
           child: SingleChildScrollView(
             child: Center(
-              child: check ? LoginWidget() : SignupWidget(),
+              child: check ? Login() : SignupWidget(),
             ),
           ),
         ),

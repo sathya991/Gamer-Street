@@ -14,7 +14,11 @@
       },
       "oauth_client": [
         {
+<<<<<<< HEAD
           "client_id": "310945322778-7463tq3b44jfhu21sccf04r1dht5ocll.apps.googleusercontent.com",
+=======
+          "client_id": "310945322778-7em1vd7stgsoaqqmao1kboj49hq2ktnt.apps.googleusercontent.com",
+>>>>>>> 3eb8a548c64c7957591a04b791ce79de6b341043
           "client_type": 1,
           "android_info": {
             "package_name": "com.application.gamer_street",

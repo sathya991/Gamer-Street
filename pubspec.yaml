@@ -35,7 +35,7 @@ dependencies:
   firebase_messaging: "^10.0.8"
   firebase_storage: "^10.0.5"
   firebase_core: "^1.7.0"
-  google_sign_in: ^5.0.0
+  google_sign_in: ^5.1.1
 dev_dependencies:
   flutter_test:
     sdk: flutter

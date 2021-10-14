@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:gamer_street/screens/TabsScreenState.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import '../screens/games_screen.dart';
 
@@ -67,13 +68,8 @@ class _LoginState extends State<Login> {
           _isLoading = false;
           /* Navigator.of(context)
               .push(MaterialPageRoute(builder: (context) => GamesScreen()));*/
-          Navigator.pushAndRemoveUntil(
-            context,
-            MaterialPageRoute(
-              builder: (BuildContext context) => GamesScreen(),
-            ),
-            (route) => false,
-          );
+          Navigator.of(context).pushNamedAndRemoveUntil(
+              TabsScreenState.tabsRouteName, (route) => false);
         });
       } on FirebaseAuthException catch (e) {
         setState(() {

@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:gamer_street/screens/games_screen.dart';
+import 'package:gamer_street/screens/TabsScreenState.dart';
 
 class EmailVerifyWaitScreen extends StatefulWidget {
   static const String otpScreenRoute = "/otp-screen";
@@ -25,7 +25,7 @@ class _OtpScreenState extends State<EmailVerifyWaitScreen> {
           setState(() {
             _isUserEmailVerified = user.emailVerified;
             Navigator.pushNamedAndRemoveUntil(
-                context, GamesScreen.gamesScreenRoute, (route) => false);
+                context, TabsScreenState.tabsRouteName, (route) => false);
           });
           timer.cancel();
         }

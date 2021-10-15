@@ -3,7 +3,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gamer_street/providers/google_signin_provider.dart';
-import 'package:gamer_street/screens/TabsScreenState.dart';
+import 'package:gamer_street/providers/user_provider.dart';
+import 'package:gamer_street/screens/addDetailsGoogleScreen.dart';
 import 'package:gamer_street/screens/email_verify_wait_screen.dart';
 import 'package:provider/provider.dart';
 
@@ -36,29 +37,6 @@ class _SignupWidgetState extends State<SignupWidget> {
     });
   }
 
-  String? _userNameValidator(String? txt) {
-    String? returnStatement;
-    if (txt!.length < 5) {
-      returnStatement = "Username must be atleast 5 characters long.";
-    }
-    if (txt.length > 15) {
-      returnStatement = "Username must be smaller than 16 characters long.";
-    } else {
-      returnStatement = null;
-    }
-    return returnStatement;
-  }
-
-  String? _emailValidator(String? txt) {
-    bool emailValid = RegExp(
-            r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
-        .hasMatch(txt!);
-    if (!emailValid) {
-      return "Enter a valid Email";
-    }
-    return null;
-  }
-
   Future<bool> usernameCheck(String username) async {
     setState(() {
       _userNameChecking = true;
@@ -68,27 +46,6 @@ class _SignupWidgetState extends State<SignupWidget> {
         .where('userName', isEqualTo: username)
         .get();
     return result.docs.isEmpty;
-  }
-
-  //Password Validator
-  String? _passwordValidator(String? txt) {
-    String pattern =
-        r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$';
-    RegExp regex = new RegExp(pattern);
-    if (txt!.isEmpty) {
-      return "Please Enter a valid password";
-    } else {
-      if (txt.length < 8) {
-        return 'Password must be atleast 8 characters';
-      } else if (txt.length >= 8) {
-        if (!regex.hasMatch(txt))
-          return """Password should contain:\n
-                * atleast one special character\n
-                * atleast one uppercase character\n
-                * atleast one number""";
-      } else
-        return null;
-    }
   }
 
   void register() async {
@@ -124,8 +81,6 @@ class _SignupWidgetState extends State<SignupWidget> {
           }
           Navigator.of(context).pushNamedAndRemoveUntil(
               EmailVerifyWaitScreen.otpScreenRoute, (route) => false);
-
-          // arguments: {"user": curUser}).then((value) => loadingSet(false)
         });
       } on FirebaseAuthException catch (e) {
         loadingSet(false);
@@ -141,6 +96,7 @@ class _SignupWidgetState extends State<SignupWidget> {
 
   @override
   Widget build(BuildContext context) {
+    final userProvider = Provider.of<UserDataProvider>(context, listen: false);
     return _isLoading
         ? Center(child: CircularProgressIndicator())
         : Padding(
@@ -165,7 +121,7 @@ class _SignupWidgetState extends State<SignupWidget> {
                         });
                       }
                     },
-                    validator: (txt) => _userNameValidator(txt),
+                    validator: (txt) => userProvider.userNameValidator(txt),
                     autocorrect: true,
                     enableSuggestions: true,
                     decoration: InputDecoration(
@@ -208,7 +164,7 @@ class _SignupWidgetState extends State<SignupWidget> {
                     height: 12,
                   ),
                   TextFormField(
-                    validator: (txt) => _emailValidator(txt),
+                    validator: (txt) => userProvider.emailValidator(txt),
                     autocorrect: true,
                     enableSuggestions: true,
                     onSaved: (tx) {
@@ -232,7 +188,7 @@ class _SignupWidgetState extends State<SignupWidget> {
                     height: 40,
                   ),
                   TextFormField(
-                    validator: (txt) => _passwordValidator(txt),
+                    validator: (txt) => userProvider.passwordValidator(txt),
                     enableSuggestions: false,
                     autocorrect: false,
                     decoration: InputDecoration(
@@ -284,26 +240,13 @@ class _SignupWidgetState extends State<SignupWidget> {
                               context,
                               listen: false);
                           provider.googleLogin().then((value) async {
-                            final User? _curUser =
-                                FirebaseAuth.instance.currentUser;
-                            if (_curUser != null) {
-                              await FirebaseFirestore.instance
-                                  .collection('users')
-                                  .doc(_curUser.uid)
-                                  .set({
-                                'userName': _curUser.displayName,
-                                'admin': false,
-                                'email': _curUser.email!,
-                                'gamesPlayed': 0,
-                                'gamesWon': 0,
-                                'phone': "",
-                                'rank': 'noRank',
-                              }).then((_) async {
-                                Navigator.of(context).pushNamedAndRemoveUntil(
-                                    TabsScreenState.tabsRouteName,
-                                    (route) => false);
-                              });
-                            }
+                            final _curEmail =
+                                FirebaseAuth.instance.currentUser!.email;
+                            FirebaseAuth.instance.currentUser!.delete();
+                            Navigator.of(context).pushNamedAndRemoveUntil(
+                                DetailGoogleScreen.googleDetailsScreen,
+                                (route) => false,
+                                arguments: _curEmail);
                           });
                         },
                       )

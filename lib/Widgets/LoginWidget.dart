@@ -21,7 +21,8 @@ class _LoginState extends State<Login> {
   void navigation() {
     if (logged == false) {
       logged = true;
-      Navigator.of(context).pushReplacementNamed(GamesScreen.gamesScreenRoute);
+      Navigator.of(context).pushNamedAndRemoveUntil(
+          GamesScreen.gamesScreenRoute, (route) => false);
     }
   }
 
@@ -43,8 +44,8 @@ class _LoginState extends State<Login> {
         break;
       }
     }
-    if (flag == true) return (true);
-    return (false);
+
+    return (flag);
   }
 
 //validator for for resend Forgot password

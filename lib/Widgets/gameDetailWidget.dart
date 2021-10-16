@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:gamer_street/screens/Gamestournamet.dart';
+import 'package:gamer_street/screens/Gamestournamet.dart';
 
 class GameDetailWidget extends StatefulWidget {
   final String? game;
@@ -18,7 +20,13 @@ class _GameDetailWidgetState extends State<GameDetailWidget> {
   Widget build(BuildContext context) {
     //double width = MediaQuery.of(context).size.width;
     return InkWell(
-      onTap: () {},
+      borderRadius: BorderRadius.only(
+          bottomLeft: Radius.circular(15), bottomRight: Radius.circular(15)),
+      splashColor: Colors.white,
+      onTap: () {
+        Navigator.of(context).pushNamed(GamesTournament.gamesTournamentRoute,
+            arguments: widget.game);
+      },
       child: Card(
           shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.only(
@@ -39,7 +47,11 @@ class _GameDetailWidgetState extends State<GameDetailWidget> {
                     decoration: BoxDecoration(
                         borderRadius:
                             BorderRadius.only(bottomLeft: Radius.circular(15)),
-                        color: Colors.black54),
+                        gradient: LinearGradient(colors: [
+                          Colors.black54,
+                          Colors.black,
+                        ]),
+                        color: Colors.black87),
                     padding: EdgeInsets.all(widget.width! / 13),
                     width: (widget.width! / 4) * 2.8,
                     child: Text(

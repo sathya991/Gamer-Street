@@ -24,6 +24,19 @@ class _GamesScreenState extends State<GamesScreen> {
   @override
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
+    final widgetwidth;
+
+    if (width < 500) {
+      widgetwidth = width / 2;
+    } else if (width < 700) {
+      widgetwidth = width / 3;
+    } else if (width < 900) {
+      widgetwidth = width / 4;
+    } else if (width < 1200)
+      widgetwidth = width / 5;
+    else
+      widgetwidth = width / 6;
+
     return Scaffold(
         body: StreamBuilder<QuerySnapshot>(
       stream: FirebaseFirestore.instance.collection("games").snapshots(),
@@ -35,7 +48,7 @@ class _GamesScreenState extends State<GamesScreen> {
           return GridView.builder(
             padding: EdgeInsets.all(8),
             gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-                maxCrossAxisExtent: width / 2,
+                maxCrossAxisExtent: widgetwidth,
                 mainAxisSpacing: 4,
                 crossAxisSpacing: 4),
             itemCount: streamSnapshot.data?.docs.length,
@@ -43,7 +56,7 @@ class _GamesScreenState extends State<GamesScreen> {
               return GameDetailWidget(
                 game: documents![index]['game'],
                 gameImageUrl: documents[index]['url'],
-                width: width / 2,
+                width: widgetwidth,
               );
             },
           );

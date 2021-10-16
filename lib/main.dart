@@ -10,6 +10,7 @@ import 'package:gamer_street/screens/games_screen.dart';
 import 'package:gamer_street/screens/email_verify_wait_screen.dart';
 import 'package:gamer_street/screens/splash_screen.dart';
 import 'package:provider/provider.dart';
+import 'package:gamer_street/screens/Gamestournamet.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -61,6 +62,8 @@ class MyApp extends StatelessWidget {
                 EmailVerifyWaitScreen.otpScreenRoute: (ctx) =>
                     EmailVerifyWaitScreen(),
                 TabsScreenState.tabsRouteName: (ctx) => TabsScreenState(),
+                GamesTournament.gamesTournamentRoute: (ctx) =>
+                    GamesTournament(),
               },
             ),
           );

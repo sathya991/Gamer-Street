@@ -2,6 +2,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:gamer_street/providers/google_signin_provider.dart';
+import 'package:gamer_street/providers/user_provider.dart';
+import 'package:gamer_street/screens/TabsScreenState.dart';
 import 'package:gamer_street/screens/auth_screen.dart';
 import 'package:gamer_street/screens/choose_screen.dart';
 import 'package:gamer_street/screens/games_screen.dart';
@@ -23,8 +25,15 @@ class MyApp extends StatelessWidget {
     return FutureBuilder(
       builder: (ctx, snapShot) {
         if (snapShot.connectionState == ConnectionState.done) {
-          return ChangeNotifierProvider(
-            create: (context) => GoogleSigninProvider(),
+          return MultiProvider(
+            providers: [
+              ChangeNotifierProvider(
+                create: (context) => GoogleSigninProvider(),
+              ),
+              ChangeNotifierProvider(
+                create: (context) => UserDataProvider(),
+              )
+            ],
             child: MaterialApp(
               title: 'Flutter Demo',
               theme: ThemeData(
@@ -39,7 +48,7 @@ class MyApp extends StatelessWidget {
                   if (userSnapshot.hasData) {
                     User? _user = FirebaseAuth.instance.currentUser;
                     if (_user!.emailVerified) {
-                      return GamesScreen();
+                      return TabsScreenState();
                     } else if (!_user.emailVerified) {
                       return EmailVerifyWaitScreen();
                     }
@@ -51,7 +60,7 @@ class MyApp extends StatelessWidget {
                 AuthScreen.authScreenRoute: (ctx) => AuthScreen(),
                 EmailVerifyWaitScreen.otpScreenRoute: (ctx) =>
                     EmailVerifyWaitScreen(),
-                GamesScreen.gamesScreenRoute: (ctx) => GamesScreen(),
+                TabsScreenState.tabsRouteName: (ctx) => TabsScreenState(),
               },
             ),
           );

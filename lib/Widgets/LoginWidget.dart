@@ -1,8 +1,11 @@
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+
 import 'package:firebase_auth/firebase_auth.dart';
+
 import 'package:google_sign_in/google_sign_in.dart';
-import '../screens/games_screen.dart';
+
+import 'package:gamer_street/screens/TabsScreenState.dart';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Login extends StatefulWidget {
@@ -20,9 +23,10 @@ class _LoginState extends State<Login> {
   bool logged = false;
   void navigation() {
     if (logged == false) {
+      _showMessage("Succesfully you are logging in...");
       logged = true;
-      Navigator.of(context).pushNamedAndRemoveUntil(
-          GamesScreen.gamesScreenRoute, (route) => false);
+      Navigator.pushNamedAndRemoveUntil(
+          context, TabsScreenState.tabsRouteName, (route) => false);
     }
   }
 
@@ -114,7 +118,6 @@ class _LoginState extends State<Login> {
         await FirebaseAuth.instance.signOut();
         await GoogleSignIn().signOut();
       } else {
-        _showMessage("Succesfully you are logging in...");
         navigation();
       }
     } else {
@@ -129,11 +132,9 @@ class _LoginState extends State<Login> {
     FocusScope.of(context).unfocus();
 
     if (isValid) {
-      print('uuuuuuuuuuuuu' + _usernameEmail);
       setState(() {
         this._formKey.currentState!.save();
         _isLoading = true;
-        // print(_userEmail + "   " + _userPassword);
       });
       try {
         final UserCredential userCredential =
@@ -143,9 +144,9 @@ class _LoginState extends State<Login> {
         );
         user = userCredential.user;
         setState(() {
-          _showMessage("Succesfully you are logging in...");
-          _isLoading = false;
           navigation();
+
+          _isLoading = false;
         });
       } on FirebaseAuthException catch (e) {
         setState(() {
@@ -226,7 +227,6 @@ class _LoginState extends State<Login> {
                               valid = await getuserid(value.toString().trim());
                             },
                             onSaved: (value) {
-                              print("ssggggggggggg" + _usernameEmail);
                               if (_usernameEmailFlag == true) {
                                 _userEmail = _usernameEmail;
                               } else {

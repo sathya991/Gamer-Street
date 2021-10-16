@@ -38,6 +38,7 @@ dependencies:
   google_sign_in: ^5.1.1
   font_awesome_flutter: ^9.1.0
   provider: ^6.0.1
+  connectivity: ^3.0.6
   
 
 

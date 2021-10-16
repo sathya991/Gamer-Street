@@ -3,8 +3,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gamer_street/providers/google_signin_provider.dart';
+import 'package:gamer_street/screens/TabsScreenState.dart';
 import 'package:gamer_street/screens/email_verify_wait_screen.dart';
-import 'package:gamer_street/screens/games_screen.dart';
 import 'package:provider/provider.dart';
 
 class SignupWidget extends StatefulWidget {
@@ -20,7 +20,6 @@ class _SignupWidgetState extends State<SignupWidget> {
   String _password = "";
   String _userName = "";
   bool _passwordNotVisible = true;
-  final _curUser = FirebaseAuth.instance.currentUser;
   //function to check if the given number is a number or not.
   //Validating if given input is a number or an email
   String userData = "";
@@ -123,8 +122,8 @@ class _SignupWidgetState extends State<SignupWidget> {
           if (curUser != null && !curUser.emailVerified) {
             await curUser.sendEmailVerification();
           }
-          Navigator.of(context)
-              .pushReplacementNamed(EmailVerifyWaitScreen.otpScreenRoute);
+          Navigator.of(context).pushNamedAndRemoveUntil(
+              EmailVerifyWaitScreen.otpScreenRoute, (route) => false);
 
           // arguments: {"user": curUser}).then((value) => loadingSet(false)
         });
@@ -299,10 +298,12 @@ class _SignupWidgetState extends State<SignupWidget> {
                                 'gamesWon': 0,
                                 'phone': "",
                                 'rank': 'noRank',
+                              }).then((_) async {
+                                Navigator.of(context).pushNamedAndRemoveUntil(
+                                    TabsScreenState.tabsRouteName,
+                                    (route) => false);
                               });
                             }
-                            Navigator.of(context).pushReplacementNamed(
-                                GamesScreen.gamesScreenRoute);
                           });
                         },
                       )

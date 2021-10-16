@@ -21,7 +21,7 @@ class _GameDetailWidgetState extends State<GameDetailWidget> {
     //double width = MediaQuery.of(context).size.width;
     return InkWell(
       borderRadius: BorderRadius.only(
-          bottomLeft: Radius.circular(15), bottomRight: Radius.circular(15)),
+          bottomLeft: Radius.circular(20), bottomRight: Radius.circular(15)),
       splashColor: Colors.white,
       onTap: () {
         Navigator.of(context).pushNamed(GamesTournament.gamesTournamentRoute,
@@ -30,7 +30,7 @@ class _GameDetailWidgetState extends State<GameDetailWidget> {
       child: Card(
           shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.only(
-                  bottomLeft: Radius.circular(15),
+                  bottomLeft: Radius.circular(20),
                   bottomRight: Radius.circular(15))),
           elevation: 5,
           child: Stack(
@@ -46,7 +46,7 @@ class _GameDetailWidgetState extends State<GameDetailWidget> {
                   child: Container(
                     decoration: BoxDecoration(
                         borderRadius:
-                            BorderRadius.only(bottomLeft: Radius.circular(15)),
+                            BorderRadius.only(bottomLeft: Radius.circular(20)),
                         gradient: LinearGradient(colors: [
                           Colors.black54,
                           Colors.black,
@@ -66,16 +66,5 @@ class _GameDetailWidgetState extends State<GameDetailWidget> {
             ],
           )),
     );
-
-    /*Container(
-      decoration: BoxDecoration(
-          borderRadius: BorderRadius.all(Radius.circular(10)),
-          color: Colors.blue),
-      child: Center(
-        child: Text(
-          "BGMI",
-        ),
-      ),
-    );*/
   }
 }

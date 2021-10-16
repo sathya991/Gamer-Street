@@ -2,22 +2,67 @@ import 'package:flutter/material.dart';
 
 import 'package:gamer_street/Widgets/gameDetailWidget.dart';
 
-class GamesScreen extends StatelessWidget {
+import 'package:firebase_auth/firebase_auth.dart';
+
+import 'package:google_sign_in/google_sign_in.dart';
+
+import 'package:gamer_street/screens/TabsScreenState.dart';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
+
+import 'package:connectivity/connectivity.dart';
+
+class GamesScreen extends StatefulWidget {
   const GamesScreen({Key? key}) : super(key: key);
   static const gamesScreenRoute = '/games-screen';
 
   @override
+  State<GamesScreen> createState() => _GamesScreenState();
+}
+
+class _GamesScreenState extends State<GamesScreen> {
+  @override
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
+    final widgetwidth;
+
+    if (width < 500) {
+      widgetwidth = width / 2;
+    } else if (width < 700) {
+      widgetwidth = width / 3;
+    } else if (width < 900) {
+      widgetwidth = width / 4;
+    } else if (width < 1200)
+      widgetwidth = width / 5;
+    else
+      widgetwidth = width / 6;
+
     return Scaffold(
-        body: GridView.builder(
-            padding: EdgeInsets.all(2),
+        body: StreamBuilder<QuerySnapshot>(
+      stream: FirebaseFirestore.instance.collection("games").snapshots(),
+      builder: (ctx, streamSnapshot) {
+        final documents = streamSnapshot.data?.docs;
+        if (streamSnapshot.connectionState == ConnectionState.waiting) {
+          return CircularProgressIndicator();
+        } else if (streamSnapshot.hasData) {
+          return GridView.builder(
+            padding: EdgeInsets.all(8),
             gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-                maxCrossAxisExtent: width / 3,
-                mainAxisSpacing: 2,
-                crossAxisSpacing: 2),
+                maxCrossAxisExtent: widgetwidth,
+                mainAxisSpacing: 4,
+                crossAxisSpacing: 4),
+            itemCount: streamSnapshot.data?.docs.length,
             itemBuilder: (ctx, index) {
-              return GameDetailWidget();
-            }));
+              return GameDetailWidget(
+                game: documents![index]['game'],
+                gameImageUrl: documents[index]['url'],
+                width: widgetwidth,
+              );
+            },
+          );
+        }
+        return (Center(child: Text("nodata")));
+      },
+    ));
   }
 }

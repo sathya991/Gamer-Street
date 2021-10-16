@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
+
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:gamer_street/screens/TabsScreenState.dart';
+
 import 'package:google_sign_in/google_sign_in.dart';
+
+import 'package:gamer_street/screens/TabsScreenState.dart';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Login extends StatefulWidget {
@@ -19,8 +23,10 @@ class _LoginState extends State<Login> {
   bool logged = false;
   void navigation() {
     if (logged == false) {
+      _showMessage("Succesfully you are logging in...");
       logged = true;
-      Navigator.of(context).pushReplacementNamed(TabsScreenState.tabsRouteName);
+      Navigator.pushNamedAndRemoveUntil(
+          context, TabsScreenState.tabsRouteName, (route) => false);
     }
   }
 
@@ -40,8 +46,8 @@ class _LoginState extends State<Login> {
         break;
       }
     }
-    if (flag == true) return (true);
-    return (false);
+
+    return (flag);
   }
 
 //validator for for resend Forgot password

@@ -13,7 +13,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:connectivity/connectivity.dart';
 
 class GamesScreen extends StatefulWidget {
-  const GamesScreen({Key? key}) : super(key: key);
+  final bool isHosting;
+  const GamesScreen({Key? key, required this.isHosting}) : super(key: key);
   static const gamesScreenRoute = '/games-screen';
 
   @override
@@ -57,6 +58,7 @@ class _GamesScreenState extends State<GamesScreen> {
                 game: documents![index]['game'],
                 gameImageUrl: documents[index]['url'],
                 width: widgetwidth,
+                isHosting: widget.isHosting,
               );
             },
           );

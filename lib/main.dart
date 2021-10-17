@@ -3,8 +3,9 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:gamer_street/providers/google_signin_provider.dart';
 import 'package:gamer_street/providers/user_provider.dart';
+import 'package:gamer_street/screens/Hosting.dart';
+import 'package:gamer_street/screens/HostingGame.dart';
 import 'package:gamer_street/screens/TabsScreenState.dart';
-import 'package:gamer_street/screens/addDetailsGoogleScreen.dart';
 import 'package:gamer_street/screens/auth_screen.dart';
 import 'package:gamer_street/screens/choose_screen.dart';
 import 'package:gamer_street/screens/games_screen.dart';
@@ -63,10 +64,10 @@ class MyApp extends StatelessWidget {
                 EmailVerifyWaitScreen.otpScreenRoute: (ctx) =>
                     EmailVerifyWaitScreen(),
                 TabsScreenState.tabsRouteName: (ctx) => TabsScreenState(),
-                DetailGoogleScreen.googleDetailsScreen: (ctx) =>
-                    DetailGoogleScreen(),
                 GamesTournament.gamesTournamentRoute: (ctx) =>
                     GamesTournament(),
+                Hosting.HostingRoute: (ctx) => Hosting(),
+                HostingGame.Hosting_Game: (ctx) => HostingGame(),
               },
             ),
           );

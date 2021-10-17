@@ -1,13 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:gamer_street/screens/Gamestournamet.dart';
-import 'package:gamer_street/screens/Gamestournamet.dart';
+import 'package:gamer_street/screens/HostingGame.dart';
 
 class GameDetailWidget extends StatefulWidget {
   final String? game;
   final String? gameImageUrl;
   final double? width;
+  final bool isHosting;
   //const GameDetailWidget({this.game,this.gameImageUrl});
-  const GameDetailWidget({Key? key, this.game, this.gameImageUrl, this.width})
+  const GameDetailWidget(
+      {Key? key,
+      this.game,
+      this.gameImageUrl,
+      this.width,
+      required this.isHosting})
       : super(key: key);
 
   @override
@@ -24,8 +30,13 @@ class _GameDetailWidgetState extends State<GameDetailWidget> {
           bottomLeft: Radius.circular(20), bottomRight: Radius.circular(15)),
       splashColor: Colors.white,
       onTap: () {
-        Navigator.of(context).pushNamed(GamesTournament.gamesTournamentRoute,
-            arguments: widget.game);
+        if (widget.isHosting) {
+          Navigator.of(context)
+              .pushNamed(HostingGame.Hosting_Game, arguments: widget.game);
+        } else {
+          Navigator.of(context).pushNamed(GamesTournament.gamesTournamentRoute,
+              arguments: widget.game);
+        }
       },
       child: Card(
           shape: RoundedRectangleBorder(

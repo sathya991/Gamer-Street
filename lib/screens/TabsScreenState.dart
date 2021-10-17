@@ -26,7 +26,7 @@ class _TabsState extends State<TabsScreenState> with TickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
-    _widgets = [GamesScreen(), RegistrationsScreen()];
+    _widgets = [GamesScreen(isHosting: false), RegistrationsScreen()];
     _tabController = new TabController(length: 2, vsync: this);
     _tabController.addListener(_handleSelected);
   }

@@ -3,11 +3,17 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:gamer_street/providers/google_signin_provider.dart';
 import 'package:gamer_street/providers/user_provider.dart';
+import 'package:gamer_street/screens/Hosting.dart';
 import 'package:provider/provider.dart';
 
-class AppDrawer extends StatelessWidget {
+class AppDrawer extends StatefulWidget {
   const AppDrawer({Key? key}) : super(key: key);
 
+  @override
+  State<AppDrawer> createState() => _AppDrawerState();
+}
+
+class _AppDrawerState extends State<AppDrawer> {
   @override
   Widget build(BuildContext context) {
     final _curUserInstance = FirebaseAuth.instance;
@@ -19,6 +25,8 @@ class AppDrawer extends StatelessWidget {
           .snapshots(),
       builder: (context, snapShot) {
         var list = snapShot.data! as DocumentSnapshot;
+        var _isHosting = list['admin'];
+        print(_isHosting);
         return Drawer(
           child: ListView(
             padding: EdgeInsets.zero,
@@ -57,9 +65,20 @@ class AppDrawer extends StatelessWidget {
                   Navigator.pop(context);
                 },
               ),
-              VerticalDivider(
-                width: 2,
-              ),
+              _isHosting
+                  ? ListTile(
+                      leading: Icon(Icons.emoji_events),
+                      title: Text("H O S T"),
+                      onTap: () {
+                        Navigator.of(context).popAndPushNamed(
+                            Hosting.HostingRoute,
+                            arguments: _isHosting);
+                        //   Navigator.of(context).pushNamed(Hosting.HostingRoute);
+                      },
+                    )
+                  : VerticalDivider(
+                      width: 2,
+                    ),
               ListTile(
                 leading: Icon(Icons.logout),
                 title: Text("Logout"),

@@ -11,23 +11,35 @@ class RegistrationsScreen extends StatefulWidget {
 }
 
 class _RegistrationsScreenState extends State<RegistrationsScreen> {
+  var stream;
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    stream = FirebaseFirestore.instance
+        .collection('users')
+        .doc(FirebaseAuth.instance.currentUser!.uid)
+        .collection('registeredTourneys')
+        .snapshots();
+  }
+
   @override
   Widget build(BuildContext context) {
-    final _curUserUid = FirebaseAuth.instance.currentUser!.uid;
-    return FutureBuilder(
-        future: FirebaseFirestore.instance
-            .collection('users')
-            .doc(_curUserUid)
-            .collection('registeredTourneys')
-            .snapshots()
-            .length,
-        builder: (ctx, snap) {
-          return ListView.builder(
-            itemBuilder: (ctx, index) {
-              return TourneySmallDisplay();
-            },
-            itemCount: snap.data as int,
-          );
+    int i = 0;
+    return StreamBuilder<QuerySnapshot>(
+        stream: stream,
+        builder: (ctx, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return CircularProgressIndicator();
+          } else {
+            return ListView.builder(
+                key: ValueKey(i),
+                itemBuilder: (ctx, index) {
+                  i++;
+                  return TourneySmallDisplay(snapshot.data!.docs[index]);
+                },
+                itemCount: snapshot.data!.docs.length);
+          }
         });
   }
 }

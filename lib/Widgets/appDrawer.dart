@@ -20,12 +20,15 @@ class _AppDrawerState extends State<AppDrawer> {
     return StreamBuilder(
       stream: FirebaseFirestore.instance
           .collection('users')
-          .doc(_curUserInstance.currentUser!.uid)
+          .doc(FirebaseAuth.instance.currentUser!.uid)
           .snapshots(),
       builder: (context, snapShot) {
         if (snapShot.connectionState == ConnectionState.waiting) {
-          return CircularProgressIndicator();
-        } else {
+          return CircularProgressIndicator(
+            color: Colors.red,
+            backgroundColor: Colors.black,
+          );
+        } else if (snapShot.hasData) {
           var list = snapShot.data! as DocumentSnapshot;
           var _isHosting = list['admin'];
           return Drawer(
@@ -95,6 +98,25 @@ class _AppDrawerState extends State<AppDrawer> {
             ),
           ]));
         }
+        return Container(
+          alignment: Alignment.center,
+          color: Colors.black12,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Icon(
+                Icons.error,
+                color: Colors.green,
+              ),
+              Text(
+                "Hey Dude! turn on your Internet, Man.",
+                textAlign: TextAlign.center,
+                style: TextStyle(fontWeight: FontWeight.w300, fontSize: 30),
+              )
+            ],
+          ),
+        );
       },
     );
   }

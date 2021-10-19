@@ -19,15 +19,14 @@ class _RegistrationsScreenState extends State<RegistrationsScreen> {
             .collection('users')
             .doc(_curUserUid)
             .collection('registeredTourneys')
-            .snapshots()
-            .length,
+            .get(),
         builder: (ctx, snap) {
           return ListView.builder(
-            itemBuilder: (ctx, index) {
-              return TourneySmallDisplay();
-            },
-            itemCount: snap.data as int,
-          );
+              itemBuilder: (ctx, index) {
+                return TourneySmallDisplay();
+              },
+              itemCount: 0 // (snap as QuerySnapshot).docs.length,
+              );
         });
   }
 }

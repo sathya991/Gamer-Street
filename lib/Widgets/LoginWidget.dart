@@ -8,6 +8,8 @@ import 'package:gamer_street/screens/TabsScreenState.dart';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+
 class Login extends StatefulWidget {
   const Login({Key? key}) : super(key: key);
 
@@ -331,8 +333,11 @@ class _LoginState extends State<Login> {
                                   Container(
                                     height: 25,
                                     width: 25,
-                                    child:
-                                        Image.asset("assets/images/google.png"),
+                                    child: FaIcon(
+                                      FontAwesomeIcons.google,
+                                      color: Colors.green,
+                                    ),
+                                    //  Image.asset("assets/images/google.png"),
                                   ),
                                 ],
                               ),

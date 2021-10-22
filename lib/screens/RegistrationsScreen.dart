@@ -22,7 +22,9 @@ class _RegistrationsScreenState extends State<RegistrationsScreen> {
         .collection('registeredTourneys')
         .snapshots();
   }
+  // Future<List> getItems() async{
 
+  // }
   @override
   Widget build(BuildContext context) {
     int i = 0;

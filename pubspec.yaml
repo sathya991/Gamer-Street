@@ -44,6 +44,8 @@ dependencies:
   custom_refresh_indicator: ^1.0.0
   loading_animations: "^2.1.0"
   
+  
+  
 
 
 dev_dependencies:
@@ -63,10 +65,10 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
-    - Assets/cloud1.png
-    - Assets/cloud2.png
-    - Assets/cloud3.png
-    - Assets/cloud4.png
+    - assets/cloud1.png
+    - assets/cloud2.png
+    - assets/cloud3.png
+    - assets/cloud4.png
     - assets/games.gif
 
     # - images/a_dot_ham.jpeg

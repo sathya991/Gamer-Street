@@ -16,18 +16,29 @@ class _RegistrationsScreenState extends State<RegistrationsScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    stream = FirebaseFirestore.instance
-        .collection('users')
-        .doc(FirebaseAuth.instance.currentUser!.uid)
-        .collection('registeredTourneys')
-        .snapshots();
+    setState(() {
+      stream = FirebaseFirestore.instance
+          .collection('users')
+          .doc(FirebaseAuth.instance.currentUser!.uid)
+          .collection('registeredTourneys')
+          .snapshots();
+    });
+    // stream = FirebaseFirestore.instance
+    //     .collection('users')
+    //     .doc(FirebaseAuth.instance.currentUser!.uid)
+    //     .collection('registeredTourneys')
+    //     .snapshots();
+  }
+
+  Future getdata(String id) async {
+    await TourneySmallDisplay(id);
   }
   // Future<List> getItems() async{
 
   // }
   @override
   Widget build(BuildContext context) {
-    int i = 0;
+    // int i = 0;
     return StreamBuilder<QuerySnapshot>(
         stream: stream,
         builder: (ctx, snapshot) {
@@ -35,10 +46,9 @@ class _RegistrationsScreenState extends State<RegistrationsScreen> {
             return CircularProgressIndicator();
           } else {
             return ListView.builder(
-                key: ValueKey(i),
                 itemBuilder: (ctx, index) {
-                  i++;
-                  return TourneySmallDisplay(snapshot.data!.docs[index]);
+                  return (TourneySmallDisplay(
+                      snapshot.data!.docs[index]['id']));
                 },
                 itemCount: snapshot.data!.docs.length);
           }

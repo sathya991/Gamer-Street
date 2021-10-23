@@ -4,7 +4,8 @@ import 'package:gamer_street/providers/tourney_provider.dart';
 import 'package:provider/provider.dart';
 
 class TourneySmallDisplay extends StatefulWidget {
-  final QueryDocumentSnapshot<Object?> tourneyObj;
+  //final QueryDocumentSnapshot<Object?>
+  final String tourneyObj;
   TourneySmallDisplay(this.tourneyObj);
 
   @override
@@ -13,27 +14,48 @@ class TourneySmallDisplay extends StatefulWidget {
 
 class _TourneySmallDisplayState extends State<TourneySmallDisplay> {
   late Future val;
-  Future getData() async {
-    return await FirebaseFirestore.instance
+  var stream;
+  var game;
+  Future<QuerySnapshot> getData() {
+    return FirebaseFirestore.instance
         .collection('tournaments')
-        .doc(widget.tourneyObj.id.toString())
+        .doc(widget.tourneyObj)
         .collection('basicInfo')
         .get();
   }
 
-  @override
-  void initState() {
-    super.initState();
-    val = getData();
+  Future<QuerySnapshot> streamss() {
+    return FirebaseFirestore.instance.collection("games").get();
   }
 
   @override
   Widget build(BuildContext context) {
-    String v = "";
-    val.then((value) {
-      v = value.docs.first.id;
-    });
-    return Text(v);
+    return FutureBuilder(
+        future: Future.wait([streamss(), getData()]),
+        builder: (ctx, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting)
+            return CircularProgressIndicator();
+          else if (snapshot.hasData) {
+            ((snapshot.data as dynamic)[0] as QuerySnapshot)
+                .docs
+                .map((e) => print(e.data.toString()));
+
+            var gameDocument = (snapshot.data as dynamic)[1] as QuerySnapshot;
+            var idGame =
+                ((snapshot.data as dynamic)[1] as QuerySnapshot).docs.first;
+            return Column(
+              children: [
+                Text(idGame['entryFee'].toString()),
+                Text(((snapshot.data as dynamic)[0] as QuerySnapshot)
+                    .docs
+                    .first['game']
+                    .toString()),
+                Text(idGame.id),
+              ],
+            );
+          } else
+            return Text("nodata");
+        });
 
     // return Padding(
     //   padding: EdgeInsets.all(8),

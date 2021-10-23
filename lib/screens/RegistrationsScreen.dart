@@ -14,7 +14,6 @@ class _RegistrationsScreenState extends State<RegistrationsScreen> {
   var stream;
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     stream = FirebaseFirestore.instance
         .collection('users')
@@ -27,7 +26,6 @@ class _RegistrationsScreenState extends State<RegistrationsScreen> {
   // }
   @override
   Widget build(BuildContext context) {
-    int i = 0;
     return StreamBuilder<QuerySnapshot>(
         stream: stream,
         builder: (ctx, snapshot) {
@@ -35,10 +33,8 @@ class _RegistrationsScreenState extends State<RegistrationsScreen> {
             return CircularProgressIndicator();
           } else {
             return ListView.builder(
-                key: ValueKey(i),
                 itemBuilder: (ctx, index) {
-                  i++;
-                  return TourneySmallDisplay(snapshot.data!.docs[index]);
+                  return TourneySmallDisplay(snapshot.data!.docs[index].id);
                 },
                 itemCount: snapshot.data!.docs.length);
           }

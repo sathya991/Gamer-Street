@@ -6,6 +6,7 @@ import 'package:gamer_street/providers/google_signin_provider.dart';
 import 'package:gamer_street/providers/user_provider.dart';
 import 'package:gamer_street/screens/addDetailsGoogleScreen.dart';
 import 'package:gamer_street/screens/email_verify_wait_screen.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:provider/provider.dart';
 
 class SignupWidget extends StatefulWidget {
@@ -239,6 +240,7 @@ class _SignupWidgetState extends State<SignupWidget> {
                           final provider = Provider.of<GoogleSigninProvider>(
                               context,
                               listen: false);
+
                           provider.googleLogin().then((value) async {
                             final _curEmail =
                                 FirebaseAuth.instance.currentUser!.email;
@@ -247,6 +249,9 @@ class _SignupWidgetState extends State<SignupWidget> {
                                 DetailGoogleScreen.googleDetailsScreen,
                                 (route) => false,
                                 arguments: _curEmail);
+                          }).catchError((e) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(content: Text(e.toString())));
                           });
                         },
                       )

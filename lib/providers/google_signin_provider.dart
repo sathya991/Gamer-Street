@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -11,6 +12,10 @@ class GoogleSigninProvider extends ChangeNotifier {
     final googleUser = await googleSignIn.signIn();
     if (googleUser == null) return;
     _user = googleUser;
+    bool _curEmail = await emailCheck(_user!.email);
+    if (!_curEmail) {
+      return Future.error("Email Exists");
+    }
     final googleAuth = await googleUser.authentication;
     final credential = GoogleAuthProvider.credential(
         accessToken: googleAuth.accessToken, idToken: googleAuth.idToken);
@@ -20,12 +25,20 @@ class GoogleSigninProvider extends ChangeNotifier {
     });
   }
 
+  Future<bool> emailCheck(String? email) async {
+    final result = await FirebaseFirestore.instance
+        .collection('users')
+        .where('email', isEqualTo: email)
+        .get();
+    return result.docs.isEmpty;
+  }
+
   bool get isGoogleSignin {
     return _isGoogleSigninCheck;
   }
 
   Future googleLogout() async {
     await googleSignIn.disconnect();
-    FirebaseAuth.instance.signOut();
+    await FirebaseAuth.instance.signOut();
   }
 }

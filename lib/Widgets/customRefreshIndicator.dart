@@ -7,10 +7,10 @@ class _Cloud {
   static const _normal = Color(0x8A000000);
 
   static const _assets = [
-    "Assets/cloud1.png",
-    "Assets/cloud2.png",
-    "Assets/cloud3.png",
-    "Assets/cloud4.png",
+    "assets/cloud1.png",
+    "assets/cloud2.png",
+    "assets/cloud3.png",
+    "assets/cloud4.png",
   ];
 
   AnimationController? controller;
@@ -146,7 +146,7 @@ class _PlaneIndicatorState extends State<PlaneIndicator>
     final plane = AnimatedBuilder(
       animation: _planeController,
       child: Image.asset(
-        "Assets/games.gif",
+        "assets/games.gif",
         width: 200,
         height: 200,
         fit: BoxFit.contain,

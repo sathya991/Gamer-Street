@@ -42,6 +42,7 @@ dependencies:
   cached_network_image: ^3.1.0
   shimmer: ^2.0.0
   custom_refresh_indicator: ^1.0.0
+  loading_animations: "^2.1.0"
   
 
 

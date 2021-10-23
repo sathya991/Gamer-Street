@@ -16,7 +16,9 @@ class _TourneySmallDisplayState extends State<TourneySmallDisplay> {
   late Future val;
   var stream;
   var game;
+
   Future<QuerySnapshot> getData() {
+    print(widget.tourneyObj);
     return FirebaseFirestore.instance
         .collection('tournaments')
         .doc(widget.tourneyObj)
@@ -24,37 +26,22 @@ class _TourneySmallDisplayState extends State<TourneySmallDisplay> {
         .get();
   }
 
-  Future<QuerySnapshot> streamss() {
+  Future streamss() {
     return FirebaseFirestore.instance.collection("games").get();
   }
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-        future: Future.wait([streamss(), getData()]),
+    return FutureBuilder<QuerySnapshot>(
+        future: getData(),
         builder: (ctx, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting)
             return CircularProgressIndicator();
           else if (snapshot.hasData) {
-            ((snapshot.data as dynamic)[0] as QuerySnapshot)
-                .docs
-                .map((e) => print(e.data.toString()));
-
-            var gameDocument = (snapshot.data as dynamic)[1] as QuerySnapshot;
-            var idGame =
-                ((snapshot.data as dynamic)[1] as QuerySnapshot).docs.first;
-            return Column(
-              children: [
-                Text(idGame['entryFee'].toString()),
-                Text(((snapshot.data as dynamic)[0] as QuerySnapshot)
-                    .docs
-                    .first['game']
-                    .toString()),
-                Text(idGame.id),
-              ],
-            );
-          } else
-            return Text("nodata");
+            /* return Text((snapshot).data!.docs.first['entryFee'].toString());*/
+            // print(snapshot.data!.docs.first['entryFee']);
+          }
+          return Text("nodata");
         });
 
     // return Padding(

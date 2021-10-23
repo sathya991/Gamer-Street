@@ -240,16 +240,17 @@ class _SignupWidgetState extends State<SignupWidget> {
                           final provider = Provider.of<GoogleSigninProvider>(
                               context,
                               listen: false);
-
                           provider.googleLogin().then((value) async {
                             final _curEmail =
                                 FirebaseAuth.instance.currentUser!.email;
+                            GoogleSignIn().disconnect();
                             FirebaseAuth.instance.currentUser!.delete();
                             Navigator.of(context).pushNamedAndRemoveUntil(
                                 DetailGoogleScreen.googleDetailsScreen,
                                 (route) => false,
                                 arguments: _curEmail);
                           }).catchError((e) {
+                            GoogleSignIn().disconnect();
                             ScaffoldMessenger.of(context).showSnackBar(
                                 SnackBar(content: Text(e.toString())));
                           });

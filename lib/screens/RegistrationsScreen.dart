@@ -15,26 +15,13 @@ class _RegistrationsScreenState extends State<RegistrationsScreen> {
   @override
   void initState() {
     super.initState();
-    setState(() {
-      stream = FirebaseFirestore.instance
-          .collection('users')
-          .doc(FirebaseAuth.instance.currentUser!.uid)
-          .collection('registeredTourneys')
-          .snapshots();
-    });
-    // stream = FirebaseFirestore.instance
-    //     .collection('users')
-    //     .doc(FirebaseAuth.instance.currentUser!.uid)
-    //     .collection('registeredTourneys')
-    //     .snapshots();
+    stream = FirebaseFirestore.instance
+        .collection('users')
+        .doc(FirebaseAuth.instance.currentUser!.uid)
+        .collection('registeredTourneys')
+        .snapshots();
   }
 
-  Future getdata(String id) async {
-    await TourneySmallDisplay(id);
-  }
-  // Future<List> getItems() async{
-
-  // }
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(

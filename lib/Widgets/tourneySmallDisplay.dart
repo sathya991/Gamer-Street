@@ -1,24 +1,23 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:gamer_street/providers/tourney_provider.dart';
 import 'package:loading_animations/loading_animations.dart';
-import 'package:provider/provider.dart';
-import 'package:shimmer/shimmer.dart';
 
 class TourneySmallDisplay extends StatefulWidget {
-  final String tourneyObj;
+  String tourneyObj;
   TourneySmallDisplay(this.tourneyObj);
   @override
   State<TourneySmallDisplay> createState() => _TourneySmallDisplayState();
 }
 
 class _TourneySmallDisplayState extends State<TourneySmallDisplay> {
-  Future<QuerySnapshot> getData() {
-    return FirebaseFirestore.instance
+  Future<QuerySnapshot> getData() async {
+    var stream = await FirebaseFirestore.instance
         .collection('tournaments')
         .doc(widget.tourneyObj)
         .collection('basicInfo')
         .get();
+    widget.tourneyObj = "";
+    return stream;
   }
 
   @override

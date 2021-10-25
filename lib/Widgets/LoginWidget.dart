@@ -115,6 +115,7 @@ class _LoginState extends State<Login> {
           userCredential.additionalUserInfo == null) {
         _showMessage("No User found!");
         await userCredential.user!.delete();
+        await GoogleSignIn().disconnect();
         await FirebaseAuth.instance.signOut();
         await GoogleSignIn().signOut();
       } else {

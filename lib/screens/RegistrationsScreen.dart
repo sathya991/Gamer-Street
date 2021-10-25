@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:gamer_street/Widgets/tourneySmallDisplay.dart';
+import 'package:gamer_street/Widgets/new.dart';
 
 class RegistrationsScreen extends StatefulWidget {
   const RegistrationsScreen({Key? key}) : super(key: key);
@@ -22,19 +23,8 @@ class _RegistrationsScreenState extends State<RegistrationsScreen> {
           .collection('registeredTourneys')
           .snapshots();
     });
-    // stream = FirebaseFirestore.instance
-    //     .collection('users')
-    //     .doc(FirebaseAuth.instance.currentUser!.uid)
-    //     .collection('registeredTourneys')
-    //     .snapshots();
   }
 
-  Future getdata(String id) async {
-    await TourneySmallDisplay(id);
-  }
-  // Future<List> getItems() async{
-
-  // }
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
@@ -45,7 +35,7 @@ class _RegistrationsScreenState extends State<RegistrationsScreen> {
           } else {
             return ListView.builder(
                 itemBuilder: (ctx, index) {
-                  return TourneySmallDisplay(snapshot.data!.docs[index].id);
+                  return TourneySmallDisplay(snapshot.data!.docs[index]['Tid']);
                 },
                 itemCount: snapshot.data!.docs.length);
           }

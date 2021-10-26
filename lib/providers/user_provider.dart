@@ -1,8 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:gamer_street/services/storage.dart';
 
 class UserDataProvider extends ChangeNotifier {
+  final SecureStorage secureStorage = SecureStorage();
+  String _password = "";
   String? passwordValidator(String? txt) {
     String pattern =
         r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$';
@@ -18,8 +21,9 @@ class UserDataProvider extends ChangeNotifier {
                 * atleast one special character\n
                 * atleast one uppercase character\n
                 * atleast one number""";
-      } else
+      } else {
         return null;
+      }
     }
     notifyListeners();
   }
@@ -62,6 +66,35 @@ class UserDataProvider extends ChangeNotifier {
         'phone': "",
         'rank': 'noRank',
       });
+    }
+  }
+
+  Future _deleteFromDb() async {
+    await FirebaseFirestore.instance
+        .collection('users')
+        .doc(FirebaseAuth.instance.currentUser!.uid)
+        .delete();
+  }
+
+  Future deleteAccount() async {
+    var _password = await secureStorage.readSecureData('password');
+    final User? _curUser = FirebaseAuth.instance.currentUser;
+    if (_curUser != null) {
+      try {
+        await _deleteFromDb();
+        await _curUser.delete();
+        await secureStorage.deleteSecureData('password');
+      } on FirebaseAuthException catch (e) {
+        if (e.code == 'requires-recent-login') {
+          AuthCredential credential = EmailAuthProvider.credential(
+              email: _curUser.email.toString(), password: _password);
+          await FirebaseAuth.instance.currentUser!
+              .reauthenticateWithCredential(credential);
+          await _deleteFromDb();
+          await FirebaseAuth.instance.currentUser!.delete();
+          await secureStorage.deleteSecureData('password');
+        }
+      }
     }
   }
 }

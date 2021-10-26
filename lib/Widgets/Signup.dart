@@ -6,6 +6,7 @@ import 'package:gamer_street/providers/google_signin_provider.dart';
 import 'package:gamer_street/providers/user_provider.dart';
 import 'package:gamer_street/screens/addDetailsGoogleScreen.dart';
 import 'package:gamer_street/screens/email_verify_wait_screen.dart';
+import 'package:gamer_street/services/storage.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:provider/provider.dart';
 
@@ -15,6 +16,7 @@ class SignupWidget extends StatefulWidget {
 }
 
 class _SignupWidgetState extends State<SignupWidget> {
+  final SecureStorage secureStorage = SecureStorage();
   bool _userNameChecking = false;
   final _formKey = GlobalKey<FormState>();
   bool _isLoading = false;
@@ -81,7 +83,8 @@ class _SignupWidgetState extends State<SignupWidget> {
             await curUser.sendEmailVerification();
           }
           Navigator.of(context).pushNamedAndRemoveUntil(
-              EmailVerifyWaitScreen.otpScreenRoute, (route) => false);
+              EmailVerifyWaitScreen.otpScreenRoute, (route) => false,
+              arguments: {'password': _password});
         });
       } on FirebaseAuthException catch (e) {
         loadingSet(false);

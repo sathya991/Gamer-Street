@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:gamer_street/providers/google_signin_provider.dart';
 import 'package:gamer_street/screens/Hosting.dart';
+import 'package:gamer_street/screens/settingsScreen.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:provider/provider.dart';
 
@@ -59,6 +60,7 @@ class _AppDrawerState extends State<AppDrawer> {
               title: Text("Settings"),
               onTap: () {
                 Navigator.pop(context);
+                Navigator.pushNamed(context, SettingsScreen.settingScreenRoute);
               },
             ),
             ListTile(
@@ -82,22 +84,6 @@ class _AppDrawerState extends State<AppDrawer> {
                 : VerticalDivider(
                     width: 2,
                   ),
-            ListTile(
-              leading: Icon(Icons.logout),
-              title: Text("Logout"),
-              onTap: () {
-                final provider =
-                    Provider.of<GoogleSigninProvider>(context, listen: false);
-                if (provider.isGoogleSignin) {
-                  GoogleSignIn().disconnect();
-                  provider.googleLogout();
-                } else {
-                  _curUserInstance.signOut();
-                }
-                Navigator.of(context).pushNamedAndRemoveUntil(
-                    '/', (Route<dynamic> route) => false);
-              },
-            ),
           ]));
         }
         return Container(

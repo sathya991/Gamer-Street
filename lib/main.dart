@@ -12,6 +12,7 @@ import 'package:gamer_street/screens/auth_screen.dart';
 import 'package:gamer_street/screens/choose_screen.dart';
 import 'package:gamer_street/screens/games_screen.dart';
 import 'package:gamer_street/screens/email_verify_wait_screen.dart';
+import 'package:gamer_street/screens/settingsScreen.dart';
 import 'package:gamer_street/screens/splash_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:gamer_street/screens/Gamestournamet.dart';
@@ -75,6 +76,7 @@ class MyApp extends StatelessWidget {
                 HostingGame.Hosting_Game: (ctx) => HostingGame(),
                 DetailGoogleScreen.googleDetailsScreen: (ctx) =>
                     DetailGoogleScreen(),
+                SettingsScreen.settingScreenRoute: (ctx) => SettingsScreen(),
               },
             ),
           );

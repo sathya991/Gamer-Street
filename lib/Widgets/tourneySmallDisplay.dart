@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:loading_animations/loading_animations.dart';
 
@@ -10,20 +11,19 @@ class TourneySmallDisplay extends StatefulWidget {
 }
 
 class _TourneySmallDisplayState extends State<TourneySmallDisplay> {
-  Future<QuerySnapshot> getData() async {
-    var stream = await FirebaseFirestore.instance
+  Stream<QuerySnapshot> getData() {
+    var stream = FirebaseFirestore.instance
         .collection('tournaments')
         .doc(widget.tourneyObj)
         .collection('basicInfo')
-        .get();
-    widget.tourneyObj = "";
+        .snapshots();
     return stream;
   }
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<QuerySnapshot>(
-        future: getData(),
+    return StreamBuilder<QuerySnapshot>(
+        stream: getData(),
         builder: (ctx, snap) {
           if (snap.connectionState == ConnectionState.waiting) {
             return LoadingRotating.square(

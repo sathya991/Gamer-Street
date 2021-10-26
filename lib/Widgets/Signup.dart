@@ -240,7 +240,7 @@ class _SignupWidgetState extends State<SignupWidget> {
                           final provider = Provider.of<GoogleSigninProvider>(
                               context,
                               listen: false);
-                          provider.googleLogin().then((value) async {
+                          provider.googleLogin(false).then((value) async {
                             final _curEmail =
                                 FirebaseAuth.instance.currentUser!.email;
                             GoogleSignIn().disconnect();

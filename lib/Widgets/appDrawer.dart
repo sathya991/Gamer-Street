@@ -92,7 +92,6 @@ class _AppDrawerState extends State<AppDrawer> {
                   GoogleSignIn().disconnect();
                   provider.googleLogout();
                 } else {
-                  GoogleSignIn().disconnect();
                   _curUserInstance.signOut();
                 }
                 Navigator.of(context).pushNamedAndRemoveUntil(

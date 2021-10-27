@@ -27,6 +27,10 @@ class _RegistrationsScreenState extends State<RegistrationsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    var screenWidth = MediaQuery.of(context).size.width;
+    var width = screenWidth;
+    if (screenWidth > 700) width = screenWidth / 2;
+
     return StreamBuilder<QuerySnapshot>(
         stream: stream,
         builder: (ctx, snapshot) {
@@ -35,7 +39,14 @@ class _RegistrationsScreenState extends State<RegistrationsScreen> {
           } else {
             return ListView.builder(
                 itemBuilder: (ctx, index) {
-                  return TourneySmallDisplay(snapshot.data!.docs[index]['Tid']);
+                  return Container(
+                    padding: EdgeInsets.all(2),
+                    child: Card(
+                      elevation: 4,
+                      child: TourneySmallDisplay(
+                          snapshot.data!.docs[index]['Tid'], width),
+                    ),
+                  );
                 },
                 itemCount: snapshot.data!.docs.length);
           }

@@ -9,7 +9,8 @@ import 'package:cached_network_image/cached_network_image.dart';
 
 class TourneySmallDisplay extends StatefulWidget {
   final String tourneyObj;
-  TourneySmallDisplay(this.tourneyObj);
+  final double width;
+  TourneySmallDisplay(this.tourneyObj, this.width);
   @override
   State<TourneySmallDisplay> createState() => _TourneySmallDisplayState();
 }
@@ -68,6 +69,7 @@ class _TourneySmallDisplayState extends State<TourneySmallDisplay> {
 
   @override
   Widget build(BuildContext context) {
+    double width = widget.width;
     return FutureBuilder<QuerySnapshot>(
         future: getData(),
         builder: (ctx, snap) {
@@ -87,12 +89,12 @@ class _TourneySmallDisplayState extends State<TourneySmallDisplay> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Container(
-                      height: 110,
-                      width: 150,
+                      height: width / 3.4,
+                      width: width / 2.4,
                       child: buildImage(data['url']),
                     ),
                     Padding(
-                      padding: const EdgeInsets.only(left: 0, right: 20),
+                      padding: const EdgeInsets.only(left: 0, right: 10),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -102,35 +104,47 @@ class _TourneySmallDisplayState extends State<TourneySmallDisplay> {
                               Text(
                                 "Game: ",
                                 style: TextStyle(
-                                    fontWeight: FontWeight.bold, fontSize: 15),
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: width / 25),
                               ),
-                              Text(data['game']),
+                              Text(
+                                data['game'],
+                                style: TextStyle(fontSize: width / 28),
+                              ),
                             ],
                           ),
                           SizedBox(
-                            height: 5,
+                            height: width / 50,
                           ),
                           Row(
                             children: [
                               Text(
                                 "Entry Fee: ",
                                 style: TextStyle(
-                                    fontWeight: FontWeight.bold, fontSize: 15),
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: width / 25),
                               ),
-                              Text("Rs ${data['entryFee'].toString()}"),
+                              Text(
+                                "Rs ${data['entryFee'].toString()}",
+                                style: TextStyle(fontSize: width / 28),
+                              ),
                             ],
                           ),
                           SizedBox(
-                            height: 5,
+                            height: width / 50,
                           ),
                           Row(
                             children: [
                               Text(
                                 "Prize Money: ",
                                 style: TextStyle(
-                                    fontWeight: FontWeight.bold, fontSize: 15),
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: width / 25),
                               ),
-                              Text("Rs ${data['prizeMoney'].toString()}"),
+                              Text(
+                                "Rs ${data['prizeMoney'].toString()}",
+                                style: TextStyle(fontSize: width / 28),
+                              ),
                             ],
                           )
                         ],

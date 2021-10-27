@@ -10,6 +10,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
+import 'package:provider/provider.dart';
+
+import 'package:gamer_street/providers/google_signin_provider.dart';
+
 class Login extends StatefulWidget {
   const Login({Key? key}) : super(key: key);
 
@@ -119,6 +123,9 @@ class _LoginState extends State<Login> {
         await FirebaseAuth.instance.signOut();
         await GoogleSignIn().signOut();
       } else {
+        final provider =
+            Provider.of<GoogleSigninProvider>(context, listen: false);
+        provider.loginPut();
         _showMessage("Succesfully Logged in");
         navigation();
       }

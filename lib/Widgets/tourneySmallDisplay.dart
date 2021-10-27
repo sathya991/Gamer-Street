@@ -8,7 +8,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
 class TourneySmallDisplay extends StatefulWidget {
-  String tourneyObj;
+  final String tourneyObj;
   TourneySmallDisplay(this.tourneyObj);
   @override
   State<TourneySmallDisplay> createState() => _TourneySmallDisplayState();
@@ -62,7 +62,7 @@ class _TourneySmallDisplayState extends State<TourneySmallDisplay> {
         .doc(widget.tourneyObj)
         .collection('basicInfo')
         .get();
-    widget.tourneyObj = '';
+    //  widget.tourneyObj = '';
     return stream;
   }
 
@@ -81,6 +81,7 @@ class _TourneySmallDisplayState extends State<TourneySmallDisplay> {
             return Padding(
               padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
               child: Card(
+                elevation: 0,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -91,7 +92,7 @@ class _TourneySmallDisplayState extends State<TourneySmallDisplay> {
                       child: buildImage(data['url']),
                     ),
                     Padding(
-                      padding: const EdgeInsets.only(right: 50),
+                      padding: const EdgeInsets.only(left: 0, right: 20),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,

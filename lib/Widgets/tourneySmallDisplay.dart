@@ -74,9 +74,14 @@ class _TourneySmallDisplayState extends State<TourneySmallDisplay> {
         future: getData(),
         builder: (ctx, snap) {
           if (snap.connectionState == ConnectionState.waiting) {
-            return LoadingRotating.square(
-              borderColor: Colors.black,
-              size: 20,
+            return Container(
+              width: double.infinity,
+              child: Center(
+                child: CircularProgressIndicator(
+                  color: Colors.black26,
+                  strokeWidth: 2,
+                ),
+              ),
             );
           } else if (snap.hasData) {
             var data = snap.data!.docs.first;
@@ -155,7 +160,7 @@ class _TourneySmallDisplayState extends State<TourneySmallDisplay> {
               ),
             );
           } else {
-            return Text("No tourney");
+            return Center(child: Text("No tourneys Registred!"));
           }
         });
   }

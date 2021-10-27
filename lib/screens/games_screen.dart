@@ -81,7 +81,7 @@ class _GamesScreenState extends State<GamesScreen> {
         {
           return PlaneIndicator(
               child: GridView.builder(
-            padding: EdgeInsets.all(8),
+            padding: EdgeInsets.only(left: 5, right: 5, top: 8, bottom: 200),
             gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
                 maxCrossAxisExtent: widgetwidth,
                 mainAxisSpacing: 4,

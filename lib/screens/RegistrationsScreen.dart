@@ -35,9 +35,15 @@ class _RegistrationsScreenState extends State<RegistrationsScreen> {
         stream: stream,
         builder: (ctx, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return CircularProgressIndicator();
+            return Center(
+              child: CircularProgressIndicator(
+                color: Colors.black,
+                strokeWidth: 5,
+              ),
+            );
           } else {
             return ListView.builder(
+                padding: EdgeInsets.only(bottom: 200),
                 itemBuilder: (ctx, index) {
                   return Container(
                     padding: EdgeInsets.all(2),

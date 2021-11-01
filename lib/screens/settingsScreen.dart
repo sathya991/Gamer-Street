@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:gamer_street/providers/google_signin_provider.dart';
 import 'package:gamer_street/providers/user_provider.dart';
+import 'package:gamer_street/screens/themesScreen.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:provider/provider.dart';
 
@@ -56,7 +57,11 @@ class SettingsScreen extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            TextButton(onPressed: () {}, child: Text("Themes")),
+            TextButton(
+                onPressed: () {
+                  Navigator.of(context).pushNamed(ThemeScreen.themeScreenRoute);
+                },
+                child: Text("Themes")),
             TextButton(onPressed: () {}, child: Text("Notifications")),
             TextButton(
                 onPressed: () {

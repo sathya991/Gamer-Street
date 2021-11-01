@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:loading_animations/loading_animations.dart';
 
 class TourneySmallDisplay extends StatefulWidget {
-  String tourneyObj;
+  final String tourneyObj;
   TourneySmallDisplay(this.tourneyObj);
   @override
   State<TourneySmallDisplay> createState() => _TourneySmallDisplayState();
@@ -35,6 +35,7 @@ class _TourneySmallDisplayState extends State<TourneySmallDisplay> {
             return Padding(
               padding: EdgeInsets.all(8),
               child: Card(
+                elevation: 0,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -45,7 +46,7 @@ class _TourneySmallDisplayState extends State<TourneySmallDisplay> {
                       child: Image.network(data['url'], fit: BoxFit.fill),
                     ),
                     Padding(
-                      padding: const EdgeInsets.only(right: 50),
+                      padding: const EdgeInsets.only(left: 0, right: 20),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,

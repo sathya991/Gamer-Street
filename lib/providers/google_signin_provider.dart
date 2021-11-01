@@ -35,6 +35,10 @@ class GoogleSigninProvider extends ChangeNotifier {
     return result.docs.isEmpty;
   }
 
+  void loginPut() {
+    _isGoogleSigninCheck = true;
+  }
+
   bool get isGoogleSignin {
     return _isGoogleSigninCheck;
   }

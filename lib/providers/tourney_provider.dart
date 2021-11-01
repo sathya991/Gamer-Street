@@ -9,12 +9,4 @@ class TourneyProvider extends ChangeNotifier {
         .collection('basicInfo')
         .get();
   }
-
-  // String get tourneyId {
-  //   if (val != "") {
-  //     return val;
-  //   } else {
-  //     return "";
-  //   }
-  // }
 }

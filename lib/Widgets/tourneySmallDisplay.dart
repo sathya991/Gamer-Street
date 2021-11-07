@@ -85,6 +85,7 @@ class _TourneySmallDisplayState extends State<TourneySmallDisplay> {
             );
           } else if (snap.hasData) {
             var data = snap.data!.docs.first;
+            print(data['entryFee']);
             return Padding(
               padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
               child: Card(
@@ -96,7 +97,9 @@ class _TourneySmallDisplayState extends State<TourneySmallDisplay> {
                     Container(
                       height: width / 3.4,
                       width: width / 2.4,
-                      child: buildImage(data['url']),
+                      child:
+                          buildImage('https://unsplash.com/photos/fAwtxmVRsds'),
+                      // data['url']),
                     ),
                     Padding(
                       padding: const EdgeInsets.only(left: 0, right: 10),
@@ -113,7 +116,8 @@ class _TourneySmallDisplayState extends State<TourneySmallDisplay> {
                                     fontSize: width / 25),
                               ),
                               Text(
-                                data['game'],
+                                'k',
+                                // data['game'],
                                 style: TextStyle(fontSize: width / 28),
                               ),
                             ],

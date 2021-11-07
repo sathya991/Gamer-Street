@@ -18,14 +18,14 @@ class GamesTournament extends StatelessWidget {
     });
   }
 
-  Future<QuerySnapshot> getTid() {
-    return FirebaseFirestore.instance.collection('tournaments').get();
+  Future<QuerySnapshot> getTid() async {
+    return await FirebaseFirestore.instance.collection('tournaments').get();
   }
 
   @override
   Widget build(BuildContext context) {
-    var screenWidth = MediaQuery.of(context).size.width;
-    var width;
+    double screenWidth = MediaQuery.of(context).size.width;
+    double width;
     if (screenWidth < 500) {
       width = screenWidth;
     } else if (screenWidth < 700) {
@@ -53,11 +53,16 @@ class GamesTournament extends StatelessWidget {
               );
             } else if (snap.hasData) {
               var doc = snap.data!.docs;
+              // print(doc[0]);
+              print(doc.length);
+
               return GridView.builder(
                 padding: EdgeInsets.only(bottom: 200),
                 gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-                    maxCrossAxisExtent: width,
-                    childAspectRatio: width / (width / 1.7),
+                    maxCrossAxisExtent: 200,
+                    childAspectRatio: 3 / 2,
+                    // maxCrossAxisExtent: width,
+                    // childAspectRatio: width / (width / 1.7),
                     mainAxisSpacing: 4,
                     crossAxisSpacing: 4),
                 itemCount: doc.length,
@@ -70,7 +75,7 @@ class GamesTournament extends StatelessWidget {
                             BorderRadius.only(bottomLeft: Radius.circular(20))),
                     child: Column(
                       children: [
-                        TourneySmallDisplay(doc[index].id, width),
+                        TourneySmallDisplay(doc[index].id, 200),
                         Container(
                           padding: EdgeInsets.all(10),
                           child: TextButton(

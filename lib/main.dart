@@ -15,6 +15,8 @@ import 'package:gamer_street/screens/email_verify_wait_screen.dart';
 import 'package:gamer_street/screens/splash_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:gamer_street/screens/Gamestournamet.dart';
+import 'package:gamer_street/screens/profile.dart';
+import 'package:gamer_street/screens/EditProfile.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -75,6 +77,8 @@ class MyApp extends StatelessWidget {
                 HostingGame.Hosting_Game: (ctx) => HostingGame(),
                 DetailGoogleScreen.googleDetailsScreen: (ctx) =>
                     DetailGoogleScreen(),
+                Profile.profile: (ctx) => Profile(),
+                EditProfile.Editprofile: (ctx) => EditProfile(),
               },
             ),
           );

@@ -1,11 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:gamer_street/providers/google_signin_provider.dart';
 import 'package:gamer_street/screens/Hosting.dart';
+import 'package:gamer_street/screens/know_more_screen.dart';
 import 'package:gamer_street/screens/settingsScreen.dart';
-import 'package:google_sign_in/google_sign_in.dart';
-import 'package:provider/provider.dart';
 
 class AppDrawer extends StatefulWidget {
   const AppDrawer({Key? key}) : super(key: key);
@@ -17,8 +15,6 @@ class AppDrawer extends StatefulWidget {
 class _AppDrawerState extends State<AppDrawer> {
   @override
   Widget build(BuildContext context) {
-    final _curUserInstance = FirebaseAuth.instance;
-
     return StreamBuilder(
       stream: FirebaseFirestore.instance
           .collection('users')
@@ -32,7 +28,6 @@ class _AppDrawerState extends State<AppDrawer> {
           );
         } else if (snapShot.hasData) {
           var list = snapShot.data! as DocumentSnapshot;
-          var _isHosting = list['admin'];
           return Drawer(
               child: ListView(padding: EdgeInsets.zero, children: <Widget>[
             UserAccountsDrawerHeader(
@@ -68,22 +63,18 @@ class _AppDrawerState extends State<AppDrawer> {
               title: Text("Know more"),
               onTap: () {
                 Navigator.pop(context);
+                Navigator.of(context)
+                    .pushNamed(KnowMoreScreen.knowMoreScreenRoute);
               },
             ),
-            _isHosting
-                ? ListTile(
-                    leading: Icon(Icons.emoji_events),
-                    title: Text("H O S T"),
-                    onTap: () {
-                      Navigator.of(context).popAndPushNamed(
-                          Hosting.HostingRoute,
-                          arguments: _isHosting);
-                      //   Navigator.of(context).pushNamed(Hosting.HostingRoute);
-                    },
-                  )
-                : VerticalDivider(
-                    width: 2,
-                  ),
+            ListTile(
+              leading: Icon(Icons.emoji_events),
+              title: Text("Host"),
+              onTap: () {
+                Navigator.of(context)
+                    .popAndPushNamed(Hosting.HostingRoute, arguments: true);
+              },
+            )
           ]));
         }
         return Container(

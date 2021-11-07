@@ -44,6 +44,8 @@ dependencies:
   loading_animations: "^2.1.0"
   custom_refresh_indicator: ^1.0.0
   flutter_secure_storage: ^4.2.1
+  intl: ^0.17.0
+  date_format: ^2.0.4
   
 
 

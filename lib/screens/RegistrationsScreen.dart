@@ -34,7 +34,7 @@ class _RegistrationsScreenState extends State<RegistrationsScreen> {
         future: fut,
         builder: (ctx, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return CircularProgressIndicator();
+            return Container();
           } else {
             return ListView.builder(
                 itemBuilder: (ctx, index) {

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gamer_street/screens/tourneyCreationScreen.dart';
 
 class HostingGame extends StatefulWidget {
   const HostingGame({Key? key}) : super(key: key);
@@ -12,11 +13,7 @@ class _HostingGameState extends State<HostingGame> {
   Widget build(BuildContext context) {
     final gamename = ModalRoute.of(context)!.settings.arguments as String;
     return Scaffold(
-      appBar: AppBar(
-        title: Text("Host $gamename",
-            style: TextStyle(fontWeight: FontWeight.w300)),
-      ),
-      body: Center(child: Text(gamename)),
+      body: TourneyCreationScreen(gameName: gamename),
     );
   }
 }

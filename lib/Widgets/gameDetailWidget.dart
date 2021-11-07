@@ -9,7 +9,6 @@ class GameDetailWidget extends StatefulWidget {
   final String? gameImageUrl;
   final double? width;
   final bool isHosting;
-  //const GameDetailWidget({this.game,this.gameImageUrl});
   const GameDetailWidget(
       {Key? key,
       this.game,

@@ -12,6 +12,7 @@ import 'package:gamer_street/screens/addDetailsGoogleScreen.dart';
 import 'package:gamer_street/screens/auth_screen.dart';
 import 'package:gamer_street/screens/choose_screen.dart';
 import 'package:gamer_street/screens/email_verify_wait_screen.dart';
+import 'package:gamer_street/screens/know_more_screen.dart';
 import 'package:gamer_street/screens/settingsScreen.dart';
 import 'package:gamer_street/screens/splash_screen.dart';
 import 'package:gamer_street/screens/themesScreen.dart';
@@ -91,6 +92,8 @@ class _MyAppState extends State<MyApp> {
                     SettingsScreen.settingScreenRoute: (ctx) =>
                         SettingsScreen(),
                     ThemeScreen.themeScreenRoute: (ctx) => ThemeScreen(),
+                    KnowMoreScreen.knowMoreScreenRoute: (ctx) =>
+                        KnowMoreScreen(),
                   },
                 );
               }));

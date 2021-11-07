@@ -1,17 +1,31 @@
 import 'package:flutter/material.dart';
-import 'package:gamer_street/Widgets/bgmiAdditionalInfo.dart';
-import 'package:gamer_street/Widgets/ludoKingAdditionalInfo.dart';
+
+import 'package:gamer_street/screens/bgmiAdditionalInfoScreen.dart';
+import 'package:gamer_street/screens/ludoAdditionalInfoScreen.dart';
 
 class GetCurrentGame extends StatelessWidget {
   final gameName;
-  const GetCurrentGame({Key? key, this.gameName}) : super(key: key);
+  final prizeMoney;
+  final entryFee;
+  final DateTime gameTime;
+  final DateTime registrationEndtime;
+  const GetCurrentGame(
+      {Key? key,
+      required this.gameName,
+      required this.entryFee,
+      required this.gameTime,
+      required this.prizeMoney,
+      required this.registrationEndtime})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     if (gameName == "BGMI") {
-      return BGMIAdditionalInfo();
+      return BGMIAdditionalInfo(
+          prizeMoney, entryFee, gameTime, registrationEndtime);
     } else {
-      return LudoKingAdditionalInfo();
+      return LudoKingAdditionalInfo(
+          prizeMoney, entryFee, gameTime, registrationEndtime);
     }
   }
 }

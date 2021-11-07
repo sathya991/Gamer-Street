@@ -72,7 +72,7 @@ class GamesTournament extends StatelessWidget {
                   });
             } else {
               return Center(
-                child: Text("No Tournaments Awailable"),
+                child: Text("No Tournaments Available"),
               );
             }
           }),

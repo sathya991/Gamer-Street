@@ -23,11 +23,7 @@ class _TourneyCreationScreenState extends State<TourneyCreationScreen> {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              TourneyBasicDetail(),
-              GetCurrentGame(
-                gameName: widget.gameName,
-              ),
-              ElevatedButton(onPressed: () {}, child: Text("Create"))
+              TourneyBasicDetail(gameName: widget.gameName),
             ],
           ),
         ),

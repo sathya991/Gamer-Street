@@ -1,36 +1,58 @@
 import 'package:date_format/date_format.dart';
 import 'package:flutter/material.dart';
+import 'package:gamer_street/Widgets/getCurrentGameWidget.dart';
+import 'package:gamer_street/providers/tourney_provider.dart';
 import 'package:intl/intl.dart';
-
-typedef basicInfoCallback = void Function(int entryFee, int prizeMoney,
-    DateTime gameTime, DateTime registrationEndTime);
+import 'package:provider/provider.dart';
 
 class TourneyBasicDetail extends StatefulWidget {
-  const TourneyBasicDetail({Key? key}) : super(key: key);
+  final gameName;
+  const TourneyBasicDetail({Key? key, this.gameName}) : super(key: key);
 
   @override
   State<TourneyBasicDetail> createState() => _TourneyBasicDetailState();
 }
 
 class _TourneyBasicDetailState extends State<TourneyBasicDetail> {
+  final _formKey = GlobalKey<FormState>();
   DateTime selectedDate = DateTime.now();
 
   TimeOfDay selectedTime = TimeOfDay(hour: 00, minute: 00);
-  late double _height;
-  late double _width;
+  int prizeMoney = 0;
+  int entryFee = 0;
   DateTime tourneyDateTime = DateTime.now();
-  DateTime compareTourneyDateTime = DateTime.now();
   DateTime registerDateTime = DateTime.now();
-  DateTime compareRegisterDateTime = DateTime.now();
+
   TextEditingController _dateController = TextEditingController();
   TextEditingController _timeController = TextEditingController();
   Future createTourney() async {}
   String getTourneyText() {
-    return DateFormat('MM/dd/yyyy HH:mm').format(tourneyDateTime);
+    return DateFormat('dd/MM/yyyy HH:mm').format(tourneyDateTime);
   }
 
   String getRegisterText() {
-    return DateFormat('MM/dd/yyyy HH:mm').format(registerDateTime);
+    return DateFormat('dd/MM/yyyy HH:mm').format(registerDateTime);
+  }
+
+  validateAndPush() {
+    if (registerDateTime.isAfter(tourneyDateTime) ||
+        registerDateTime.isAtSameMomentAs(tourneyDateTime)) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text(
+              "Starting time should not be before or at the time of registration ending time")));
+      return;
+    }
+    if (_formKey.currentState!.validate()) {
+      _formKey.currentState!.save();
+      Navigator.of(context).push(MaterialPageRoute(
+          builder: (BuildContext context) => GetCurrentGame(
+                gameName: widget.gameName,
+                prizeMoney: prizeMoney,
+                entryFee: entryFee,
+                gameTime: tourneyDateTime,
+                registrationEndtime: registerDateTime,
+              )));
+    }
   }
 
   Future tourneyDateTimePicker(BuildContext context) async {
@@ -91,47 +113,64 @@ class _TourneyBasicDetailState extends State<TourneyBasicDetail> {
 
   @override
   Widget build(BuildContext context) {
-    _height = MediaQuery.of(context).size.height;
-    _width = MediaQuery.of(context).size.width;
-    return Form(
-      child: Column(
-        children: [
-          TextFormField(
-            decoration: InputDecoration(labelText: "Entry Fee"),
-            keyboardType: TextInputType.number,
+    final provider = Provider.of<TourneyProvider>(context);
+    return Column(
+      children: [
+        Form(
+          key: _formKey,
+          child: Column(
+            children: [
+              TextFormField(
+                decoration: InputDecoration(labelText: "Entry Fee"),
+                keyboardType: TextInputType.number,
+                validator: (val) => provider.entryFeeValidator(val),
+                onSaved: (tx) {
+                  entryFee = int.tryParse(tx!)!;
+                },
+              ),
+              TextFormField(
+                decoration: InputDecoration(labelText: "Prize Money"),
+                keyboardType: TextInputType.number,
+                validator: (val) => provider.prizeMoneyValidator(val),
+                onSaved: (tx) {
+                  prizeMoney = int.tryParse(tx!)!;
+                },
+              ),
+            ],
           ),
-          TextFormField(
-            decoration: InputDecoration(labelText: "Prize Money"),
-            keyboardType: TextInputType.number,
-          ),
-          TextButton(
-              onPressed: () {
-                tourneyDateTimePicker(context);
-              },
-              child: Row(
-                children: [
-                  Text(
-                    "Tournament Date and Time: ",
-                    style: TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                  Text(getTourneyText()),
-                ],
-              )),
-          TextButton(
-              onPressed: () {
-                registerEndDateTimePicker(context);
-              },
-              child: Row(
-                children: [
-                  Text(
-                    "Registration ends at: ",
-                    style: TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                  Text(getRegisterText()),
-                ],
-              )),
-        ],
-      ),
+        ),
+        TextButton(
+            onPressed: () {
+              tourneyDateTimePicker(context);
+            },
+            child: Row(
+              children: [
+                Text(
+                  "Tournament Date and Time: ",
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+                Text(getTourneyText()),
+              ],
+            )),
+        TextButton(
+            onPressed: () {
+              registerEndDateTimePicker(context);
+            },
+            child: Row(
+              children: [
+                Text(
+                  "Registration ends at: ",
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+                Text(getRegisterText()),
+              ],
+            )),
+        ElevatedButton(
+            onPressed: () {
+              validateAndPush();
+            },
+            child: Text("Add Additional Info")),
+      ],
     );
   }
 }

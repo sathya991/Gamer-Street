@@ -9,16 +9,9 @@ class ThemeProvider extends ChangeNotifier {
     secureStorage.readSecureData('theme').then((value) {
       if (value == 'dark') {
         themeData = ThemeData.dark();
-      } else {
-        themeData = ThemeData.light();
-      }
-    });
-    secureStorage.readSecureData('theme').then((value) {
-      if (value == 'light') {
-        themeData = ThemeData.light();
         notifyListeners();
       } else {
-        themeData = ThemeData.dark();
+        themeData = ThemeData.light();
         notifyListeners();
       }
     });

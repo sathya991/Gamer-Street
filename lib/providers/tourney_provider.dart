@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class TourneyProvider extends ChangeNotifier {
@@ -56,6 +57,13 @@ class TourneyProvider extends ChangeNotifier {
             .doc(value.parent.parent!.id)
             .collection('additionalInfo')
             .add({'map': map, 'teamMode': teamMode});
+      }).then((_) async {
+        await FirebaseFirestore.instance
+            .collection('tournaments')
+            .doc(value.parent.parent!.id)
+            .collection('registeredUsers')
+            .doc(FirebaseAuth.instance.currentUser!.uid)
+            .set({'host': FirebaseAuth.instance.currentUser!.uid.toString()});
       });
     });
   }
@@ -86,6 +94,13 @@ class TourneyProvider extends ChangeNotifier {
             .doc(value.parent.parent!.id)
             .collection('additionalInfo')
             .add({'noOfPlayers': players});
+      }).then((_) async {
+        await FirebaseFirestore.instance
+            .collection('tournaments')
+            .doc(value.parent.parent!.id)
+            .collection('registeredUsers')
+            .doc(FirebaseAuth.instance.currentUser!.uid)
+            .set({'host': FirebaseAuth.instance.currentUser!.uid.toString()});
       });
     });
   }

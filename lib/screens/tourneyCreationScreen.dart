@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:gamer_street/Widgets/getCurrentGameWidget.dart';
 import 'package:gamer_street/Widgets/tourneyBasicDetail.dart';
 
 class TourneyCreationScreen extends StatefulWidget {

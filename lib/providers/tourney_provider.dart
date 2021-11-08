@@ -40,13 +40,23 @@ class TourneyProvider extends ChangeNotifier {
       'entryFee': entryFee,
       'prizeMoney': prizeMoney,
       'tourneyTime': tourneyTime,
-      'registrationEndTime': registrationTime
+      'registrationEndTime': registrationTime,
+      'game': 'BGMI',
+      'url':
+          'https://firebasestorage.googleapis.com/v0/b/gamerstreet-40220.appspot.com/o/games%2Fbgmi.jpg?alt=media&token=2b9d0c31-1162-4aa9-93b4-af4c0ba5b3fe'
     }).then((value) async {
       await FirebaseFirestore.instance
           .collection('tournaments')
           .doc(value.parent.parent!.id)
-          .collection('additionalInfo')
-          .add({'map': map, 'teamMode': teamMode});
+          .set({
+        'game': 'BGMI',
+      }).then((val) async {
+        await FirebaseFirestore.instance
+            .collection('tournaments')
+            .doc(value.parent.parent!.id)
+            .collection('additionalInfo')
+            .add({'map': map, 'teamMode': teamMode});
+      });
     });
   }
 
@@ -60,13 +70,23 @@ class TourneyProvider extends ChangeNotifier {
       'entryFee': entryFee,
       'prizeMoney': prizeMoney,
       'tourneyTime': tourneyTime,
-      'registrationEndTime': registrationTime
+      'registrationEndTime': registrationTime,
+      'game': 'Ludo King',
+      'url':
+          'https://firebasestorage.googleapis.com/v0/b/gamerstreet-40220.appspot.com/o/games%2FLudo_King_Logo.jpg?alt=media&token=eeed85e4-aac3-4d53-af9f-a9cb98d9fd7a'
     }).then((value) async {
       await FirebaseFirestore.instance
           .collection('tournaments')
           .doc(value.parent.parent!.id)
-          .collection('additionalInfo')
-          .add({'noOfPlayers': players});
+          .set({
+        'game': 'Ludo King',
+      }).then((val) async {
+        await FirebaseFirestore.instance
+            .collection('tournaments')
+            .doc(value.parent.parent!.id)
+            .collection('additionalInfo')
+            .add({'noOfPlayers': players});
+      });
     });
   }
 }

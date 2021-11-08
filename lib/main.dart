@@ -18,6 +18,7 @@ import 'package:gamer_street/screens/ludoAdditionalInfoScreen.dart';
 import 'package:gamer_street/screens/settingsScreen.dart';
 import 'package:gamer_street/screens/splash_screen.dart';
 import 'package:gamer_street/screens/themesScreen.dart';
+import 'package:gamer_street/screens/tournamentDetailScreen.dart';
 import 'package:gamer_street/services/storage.dart';
 import 'package:provider/provider.dart';
 import 'package:gamer_street/screens/Gamestournament.dart';
@@ -96,6 +97,8 @@ class _MyAppState extends State<MyApp> {
                     ThemeScreen.themeScreenRoute: (ctx) => ThemeScreen(),
                     KnowMoreScreen.knowMoreScreenRoute: (ctx) =>
                         KnowMoreScreen(),
+                    TournamentDetailScreen.tournamentDetailScreenRoute: (ctx) =>
+                        TournamentDetailScreen(),
                   },
                 );
               }));

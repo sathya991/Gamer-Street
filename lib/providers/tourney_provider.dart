@@ -51,6 +51,7 @@ class TourneyProvider extends ChangeNotifier {
           .doc(value.parent.parent!.id)
           .set({
         'game': 'BGMI',
+        'hostId': FirebaseAuth.instance.currentUser!.uid.toString(),
       }).then((val) async {
         await FirebaseFirestore.instance
             .collection('tournaments')
@@ -88,6 +89,7 @@ class TourneyProvider extends ChangeNotifier {
           .doc(value.parent.parent!.id)
           .set({
         'game': 'Ludo King',
+        'hostId': FirebaseAuth.instance.currentUser!.uid.toString(),
       }).then((val) async {
         await FirebaseFirestore.instance
             .collection('tournaments')

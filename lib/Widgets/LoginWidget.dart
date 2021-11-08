@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:gamer_street/services/storage.dart';
 
 import 'package:google_sign_in/google_sign_in.dart';
 
@@ -22,6 +23,7 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
+  final SecureStorage secureStorage = SecureStorage();
 //Forgot password flag
   bool forgotpassword = false;
 
@@ -152,7 +154,6 @@ class _LoginState extends State<Login> {
         );
         user = userCredential.user;
         setState(() {
-          _showMessage("Succesfully you are logging in...");
           _isLoading = false;
           navigation();
         });

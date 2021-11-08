@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:gamer_street/Widgets/tourneySmallDisplay.dart';
-import 'package:gamer_street/Widgets/new.dart';
 
 class RegistrationsScreen extends StatefulWidget {
   const RegistrationsScreen({Key? key}) : super(key: key);
@@ -12,35 +11,30 @@ class RegistrationsScreen extends StatefulWidget {
 }
 
 class _RegistrationsScreenState extends State<RegistrationsScreen> {
-  var stream;
-  @override
-  void initState() {
-    super.initState();
+  var fut;
+  void firstData() {
     setState(() {
-      stream = FirebaseFirestore.instance
+      fut = FirebaseFirestore.instance
           .collection('users')
           .doc(FirebaseAuth.instance.currentUser!.uid)
           .collection('registeredTourneys')
-          .snapshots();
+          .get();
     });
   }
 
   @override
-  Widget build(BuildContext context) {
-    var screenWidth = MediaQuery.of(context).size.width;
-    var width = screenWidth;
-    if (screenWidth > 700) width = screenWidth / 2;
+  void initState() {
+    super.initState();
+    firstData();
+  }
 
-    return StreamBuilder<QuerySnapshot>(
-        stream: stream,
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder<QuerySnapshot>(
+        future: fut,
         builder: (ctx, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(
-              child: CircularProgressIndicator(
-                color: Colors.black,
-                strokeWidth: 5,
-              ),
-            );
+            return Container();
           } else {
             return ListView.builder(
                 padding: EdgeInsets.only(bottom: 200),
@@ -50,7 +44,7 @@ class _RegistrationsScreenState extends State<RegistrationsScreen> {
                     child: Card(
                       elevation: 4,
                       child: TourneySmallDisplay(
-                          snapshot.data!.docs[index]['Tid'], width),
+                          snapshot.data!.docs[index]['Tid'], 200),
                     ),
                   );
                 },

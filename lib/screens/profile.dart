@@ -12,6 +12,10 @@ import 'package:gamer_street/screens/Sample.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:gamer_street/screens/EditProfile.dart';
 import 'package:gamer_street/Widgets/CustomPageRoute.dart';
+import 'package:gamer_street/providers/user_provider.dart';
+import 'package:gamer_street/providers/theme_provider.dart';
+import 'package:gamer_street/services/storage.dart';
+import 'package:provider/provider.dart';
 
 class Profile extends StatefulWidget {
   const Profile({Key? key}) : super(key: key);
@@ -38,10 +42,11 @@ class _ProfileState extends State<Profile> {
 
   @override
   Widget build(BuildContext context) {
+    bool theme = Provider.of<ThemeProvider>(context).getThemeForProfile();
     return Scaffold(
       appBar: AppBar(
-        foregroundColor: Colors.black,
-        backgroundColor: Colors.white,
+        foregroundColor: theme ? Colors.black : Colors.white,
+        backgroundColor: theme ? Colors.white : Colors.black,
         title: Text('sasi_bhumaraju'),
         actions: [
           IconButton(
@@ -82,6 +87,8 @@ class Profilerender extends StatefulWidget {
 class _ProfilerenderState extends State<Profilerender> {
   bool _isDragging = false;
   late Offset _offset;
+  int bIndex = 0;
+  double offsetSlide = 1;
 
   void _updatePosition(PointerMoveEvent pointerMoveEvent) {
     double newOffsetX = _offset.dx + pointerMoveEvent.delta.dx;
@@ -113,6 +120,7 @@ class _ProfilerenderState extends State<Profilerender> {
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
+    bool theme = Provider.of<ThemeProvider>(context).getThemeForProfile();
     print(width);
     Widget a = Container(
       key: Key('1'),
@@ -614,6 +622,7 @@ class _ProfilerenderState extends State<Profilerender> {
     return Stack(
       children: [
         Container(
+            padding: EdgeInsets.only(bottom: 72),
             width: double.infinity,
             height: double.infinity,
             child: SingleChildScrollView(
@@ -623,7 +632,10 @@ class _ProfilerenderState extends State<Profilerender> {
                     children: [
                       Container(
                         decoration: BoxDecoration(
-                          border: Border.all(width: 3),
+                          color: theme ? Colors.white : Colors.black,
+                          border: Border.all(width: 2, color: Colors.black
+                              //theme ? Colors.black : Colors.white,
+                              ),
                           borderRadius:
                               BorderRadius.circular(width * 0.0763903035),
                         ),
@@ -672,25 +684,27 @@ class _ProfilerenderState extends State<Profilerender> {
                       ),
                       phone.isEmpty
                           ? Container(
-                              padding: EdgeInsets.only(
-                                  top: width * 0.00509259354,
-                                  bottom: width * 0.00127314838),
+                              // padding: EdgeInsets.only(
+                              //     top: width * 0.00509259354,
+                              //     bottom: width * 0.00127314838),
                               width: double.infinity,
                               alignment: Alignment.center,
-                              margin: EdgeInsets.only(left: 20),
+                              margin: EdgeInsets.only(bottom: 20),
                               child: Container(
                                 width: double.infinity,
                                 alignment: Alignment.center,
                                 child: Center(
                                   child: Shimmer.fromColors(
-                                      period: Duration(milliseconds: 300),
+                                      direction: ShimmerDirection.rtl,
+                                      period: Duration(milliseconds: 400),
                                       child: Text(
                                         'Verify your phone number immediately...',
                                         style: TextStyle(
                                             fontWeight: FontWeight.bold,
                                             fontSize: width * 0.0381944505),
                                       ),
-                                      baseColor: Colors.black,
+                                      baseColor:
+                                          theme ? Colors.black : Colors.white,
                                       highlightColor: Colors.red),
                                 ),
                               ),
@@ -700,9 +714,9 @@ class _ProfilerenderState extends State<Profilerender> {
                           : SizedBox(
                               height: 0,
                             ),
-                      SizedBox(
-                        height: width * 0.0509259354,
-                      ),
+                      // SizedBox(
+                      //   height: width * 0.0509259354,
+                      // ),
                       Container(
                         margin: EdgeInsets.all(1),
                         padding: EdgeInsets.all(0),
@@ -729,14 +743,21 @@ class _ProfilerenderState extends State<Profilerender> {
                             ),
                             Center(
                                 child: AnimatedSwitcher(
-                              duration: Duration(milliseconds: 500),
+                              duration: Duration(milliseconds: 400),
                               reverseDuration: Duration(microseconds: 100),
                               transitionBuilder:
                                   (Widget child, Animation<double> animation) {
-                                return SizeTransition(
-                                  //axis: Axis.horizontal,
-                                  sizeFactor: animation,
-                                  //scale: animation,
+                                // return SizeTransition(
+                                //   axis: Axis.horizontal,
+                                //   sizeFactor: animation,
+                                //   //scale: animation,
+                                //   child: child,
+                                // );
+                                return SlideTransition(
+                                  position: Tween<Offset>(
+                                    begin: Offset(offsetSlide, 0),
+                                    end: Offset.zero,
+                                  ).animate(animation),
                                   child: child,
                                 );
                               },
@@ -760,10 +781,12 @@ class _ProfilerenderState extends State<Profilerender> {
                                   barrierDismissible: true,
                                   builder: (BuildContext context) {
                                     return AlertDialog(
+                                      actionsPadding: EdgeInsets.all(0),
+                                      insetPadding: EdgeInsets.all(0),
                                       // title: Text("Alert Dialog Box"),
                                       content: Container(
-                                        height: double.infinity,
-                                        width: 300,
+                                        height: width * 0.95,
+                                        width: width * 0.8,
                                         child: PlayedList(),
                                       ),
                                       actions: <Widget>[
@@ -811,6 +834,7 @@ class _ProfilerenderState extends State<Profilerender> {
                                     child: Text(
                                       'Season',
                                       style: TextStyle(
+                                          color: Colors.black,
                                           fontSize: width * 0.0458,
                                           fontWeight: FontWeight.w500),
                                     ),
@@ -856,179 +880,247 @@ class _ProfilerenderState extends State<Profilerender> {
               ),
             )),
         Positioned(
-          left: _offset.dx,
-          top: _offset.dy,
-          child: Listener(
-            onPointerMove: (PointerMoveEvent pointerMoveEvent) {
-              _updatePosition(pointerMoveEvent);
-
-              setState(() {
-                _isDragging = true;
-              });
-            },
-            onPointerUp: (PointerUpEvent pointerUpEvent) async {
-              double height = MediaQuery.of(context).size.height;
-              print(height);
-              print(_offset.dy);
-              print('onPointerUp');
-              if (_offset.dx < (width / 2) - 30) {
-                if (_offset.dy > height - 180) {
-                  setState(() {
-                    _offset = Offset(10, height - 180);
-                  });
-                } else if (_offset.dy < 0) {
-                  setState(() {
-                    _offset = Offset(10, 10);
-                  });
-                } else {
-                  setState(() {
-                    _offset = Offset(10, _offset.dy);
-                  });
-                }
-              } else {
-                if (_offset.dy > height - 180) {
-                  setState(() {
-                    _offset = Offset(width - 65, height - 180);
-                  });
-                } else if (_offset.dy < 0) {
-                  setState(() {
-                    _offset = Offset(width - 65, 10);
-                  });
-                } else {
-                  setState(() {
-                    _offset = Offset(width - 65, _offset.dy);
-                  });
-                }
-              }
-              SharedPreferences prefs = await SharedPreferences.getInstance();
-              await prefs.setDouble('Dx', _offset.dx);
-              await prefs.setDouble('Dy', _offset.dy);
-              if (_isDragging) {
-                setState(() {
-                  _isDragging = false;
-                });
-              } else {
-                // widget.onPressed();
-                // setState(() {
-                //   flag = !flag;
-                // });
-              }
-            },
-            child: FloatingActionButton(
+          //top: 100,
+          bottom: 0,
+          child: Container(
+            height: 70,
+            width: width,
+            child: BottomNavigationBar(
                 backgroundColor: Colors.white,
-                autofocus: true,
-                focusColor: Colors.black,
-                elevation: 200,
-                onPressed: () {
-                  setState(() {
-                    flag = !flag;
-                  });
+                // fixedColor: Colors.white,
+                items: <BottomNavigationBarItem>[
+                  BottomNavigationBarItem(
+                    backgroundColor: theme ? Colors.white : Colors.black,
+                    icon: flag
+                        ? Icon(Icons.videogame_asset_rounded,
+                            size: 32,
+                            color: theme ? Colors.green : Colors.white)
+                        : Icon(Icons.videogame_asset_outlined,
+                            size: 32,
+                            color: theme ? Colors.black : Colors.white),
+                    title: Text(
+                      'Player',
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 13,
+                          color: theme ? Colors.black : Colors.white),
+                    ),
+                    // label: 'Player',
+                  ),
+                  BottomNavigationBarItem(
+                    backgroundColor: theme ? Colors.white : Colors.black,
+                    icon: flag
+                        ? Icon(Icons.home_outlined,
+                            size: 32,
+                            color: theme ? Colors.black : Colors.white)
+                        : Icon(Icons.home,
+                            size: 32,
+                            color: theme ? Colors.blue : Colors.white),
+                    title: Text(
+                      'Hoster',
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 13,
+                          color: theme ? Colors.black : Colors.white),
+                    ),
+                  ),
+                ],
+                type: BottomNavigationBarType.shifting,
+                currentIndex: bIndex,
+                selectedItemColor: Colors.black,
+                iconSize: 40,
+                onTap: (index) {
+                  if (index == 1) {
+                    setState(() {
+                      flag = false;
+                      bIndex = 1;
+                      offsetSlide = 1;
+                    });
+                  } else
+                    setState(() {
+                      flag = true;
+                      bIndex = 0;
+                      offsetSlide = -1;
+                    });
                 },
-                child: Stack(
-                  children: [
-                    Container(
-                      height: 17,
-                      width: 17,
-                      margin: EdgeInsets.all(3.7),
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: Colors.white,
-                      ),
-                    ),
-                    Container(
-                      width: 17.5,
-                      height: 17.5,
-                      alignment: Alignment.center,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                      ),
-                      child: Icon(
-                        Icons.change_circle_sharp,
-                        size: 17.5,
-                        color: flag ? Colors.blue : Colors.green,
-                      ),
-                    ),
-                    Container(
-                        height: 40,
-                        width: 54,
-                        margin: EdgeInsets.only(left: 2, top: 7, bottom: 7),
-                        alignment: Alignment.center,
-                        child: Row(
-                          children: [
-                            flag
-                                ? Container(
-                                    width: 40,
-                                    child: Text(
-                                      'Hoster',
-                                      textAlign: TextAlign.left,
-                                      style: TextStyle(
-                                          letterSpacing: 0.0,
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 13,
-                                          color: Colors.black),
-                                    ),
-                                  )
-                                : Container(
-                                    width: 40,
-                                    child: Text(
-                                      'Player',
-                                      textAlign: TextAlign.left,
-                                      style: TextStyle(
-                                          letterSpacing: 0.0,
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 13,
-                                          color: Colors.black),
-                                    ),
-                                  ),
-                            Container(
-                                height: 14,
-                                width: 14,
-                                child: Shimmer.fromColors(
-                                    period: Duration(milliseconds: 150),
-                                    direction: ShimmerDirection.ltr,
-                                    child: Icon(
-                                      Icons.double_arrow,
-                                      size: 14,
-                                      color: flag ? Colors.blue : Colors.green,
-                                    ),
-                                    baseColor:
-                                        flag ? Colors.blue : Colors.green,
-                                    highlightColor: Colors.white10))
-                          ],
-                        )),
-                    Container(
-                      width: double.infinity,
-                      margin: EdgeInsets.all(7),
-                      padding: EdgeInsets.only(right: 0),
-                      alignment: Alignment.centerRight,
-                      child: Column(
-                        children: [
-                          Transform.rotate(
-                            angle: 315 * pi / 180,
-                            child: Icon(
-                              Icons.double_arrow,
-                              size: 14,
-                              color: flag ? Colors.blue : Colors.green,
-                            ),
-                          ),
-                          SizedBox(
-                            height: 13,
-                          ),
-                          Transform.rotate(
-                            angle: 45 * pi / 180,
-                            child: Icon(
-                              Icons.double_arrow,
-                              size: 14,
-                              color: flag ? Colors.blue : Colors.green,
-                            ),
-                          ),
-                        ],
-                      ),
-                    )
-                  ],
-                )),
+                elevation: 20),
           ),
-        ),
+        )
+        // Positioned(
+        //   left: _offset.dx,
+        //   top: _offset.dy,
+        //   child: Listener(
+        //     onPointerMove: (PointerMoveEvent pointerMoveEvent) {
+        //       _updatePosition(pointerMoveEvent);
+
+        //       setState(() {
+        //         _isDragging = true;
+        //       });
+        //     },
+        //     onPointerUp: (PointerUpEvent pointerUpEvent) async {
+        //       double height = MediaQuery.of(context).size.height;
+        //       print(height);
+        //       print(_offset.dy);
+        //       print('onPointerUp');
+        //       if (_offset.dx < (width / 2) - 30) {
+        //         if (_offset.dy > height - 180) {
+        //           setState(() {
+        //             _offset = Offset(10, height - 180);
+        //           });
+        //         } else if (_offset.dy < 0) {
+        //           setState(() {
+        //             _offset = Offset(10, 10);
+        //           });
+        //         } else {
+        //           setState(() {
+        //             _offset = Offset(10, _offset.dy);
+        //           });
+        //         }
+        //       } else {
+        //         if (_offset.dy > height - 180) {
+        //           setState(() {
+        //             _offset = Offset(width - 65, height - 180);
+        //           });
+        //         } else if (_offset.dy < 0) {
+        //           setState(() {
+        //             _offset = Offset(width - 65, 10);
+        //           });
+        //         } else {
+        //           setState(() {
+        //             _offset = Offset(width - 65, _offset.dy);
+        //           });
+        //         }
+        //       }
+        //       SharedPreferences prefs = await SharedPreferences.getInstance();
+        //       await prefs.setDouble('Dx', _offset.dx);
+        //       await prefs.setDouble('Dy', _offset.dy);
+        //       if (_isDragging) {
+        //         setState(() {
+        //           _isDragging = false;
+        //         });
+        //       } else {
+        //         // widget.onPressed();
+        //         // setState(() {
+        //         //   flag = !flag;
+        //         // });
+        //       }
+        //     },
+        //     child: FloatingActionButton(
+        //         backgroundColor: Colors.white,
+        //         autofocus: true,
+        //         focusColor: Colors.black,
+        //         elevation: 200,
+        //         onPressed: () {
+        //           setState(() {
+        //             flag = !flag;
+        //           });
+        //         },
+        //         child: Stack(
+        //           children: [
+        //             Container(
+        //               height: 17,
+        //               width: 17,
+        //               margin: EdgeInsets.all(3.7),
+        //               decoration: BoxDecoration(
+        //                 shape: BoxShape.circle,
+        //                 color: Colors.white,
+        //               ),
+        //             ),
+        //             Container(
+        //               width: 17.5,
+        //               height: 17.5,
+        //               alignment: Alignment.center,
+        //               decoration: BoxDecoration(
+        //                 shape: BoxShape.circle,
+        //               ),
+        //               child: Icon(
+        //                 Icons.change_circle_sharp,
+        //                 size: 17.5,
+        //                 color: flag ? Colors.blue : Colors.green,
+        //               ),
+        //             ),
+        //             Container(
+        //                 height: 40,
+        //                 width: 54,
+        //                 margin: EdgeInsets.only(left: 2, top: 7, bottom: 7),
+        //                 alignment: Alignment.center,
+        //                 child: Row(
+        //                   children: [
+        //                     flag
+        //                         ? Container(
+        //                             width: 40,
+        //                             child: Text(
+        //                               'Hoster',
+        //                               textAlign: TextAlign.left,
+        //                               style: TextStyle(
+        //                                   letterSpacing: 0.0,
+        //                                   fontWeight: FontWeight.bold,
+        //                                   fontSize: 13,
+        //                                   color: Colors.black),
+        //                             ),
+        //                           )
+        //                         : Container(
+        //                             width: 40,
+        //                             child: Text(
+        //                               'Player',
+        //                               textAlign: TextAlign.left,
+        //                               style: TextStyle(
+        //                                   letterSpacing: 0.0,
+        //                                   fontWeight: FontWeight.bold,
+        //                                   fontSize: 13,
+        //                                   color: Colors.black),
+        //                             ),
+        //                           ),
+        //                     Container(
+        //                         height: 14,
+        //                         width: 14,
+        //                         child: Shimmer.fromColors(
+        //                             period: Duration(milliseconds: 150),
+        //                             direction: ShimmerDirection.ltr,
+        //                             child: Icon(
+        //                               Icons.double_arrow,
+        //                               size: 14,
+        //                               color: flag ? Colors.blue : Colors.green,
+        //                             ),
+        //                             baseColor:
+        //                                 flag ? Colors.blue : Colors.green,
+        //                             highlightColor: Colors.white10))
+        //                   ],
+        //                 )),
+        //             Container(
+        //               width: double.infinity,
+        //               margin: EdgeInsets.all(7),
+        //               padding: EdgeInsets.only(right: 0),
+        //               alignment: Alignment.centerRight,
+        //               child: Column(
+        //                 children: [
+        //                   Transform.rotate(
+        //                     angle: 315 * pi / 180,
+        //                     child: Icon(
+        //                       Icons.double_arrow,
+        //                       size: 14,
+        //                       color: flag ? Colors.blue : Colors.green,
+        //                     ),
+        //                   ),
+        //                   SizedBox(
+        //                     height: 13,
+        //                   ),
+        //                   Transform.rotate(
+        //                     angle: 45 * pi / 180,
+        //                     child: Icon(
+        //                       Icons.double_arrow,
+        //                       size: 14,
+        //                       color: flag ? Colors.blue : Colors.green,
+        //                     ),
+        //                   ),
+        //                 ],
+        //               ),
+        //             )
+        //           ],
+        //         )
+        //         ),
+        //   ),
+        // ),
       ],
     );
   }

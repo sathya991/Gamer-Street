@@ -42,6 +42,13 @@ class _GamesScreenState extends State<GamesScreen> {
   }
 
   @override
+  void dispose() {
+    // _planeController.dispose();
+    // _disposeCloudsControllers();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
@@ -62,7 +69,6 @@ class _GamesScreenState extends State<GamesScreen> {
         body: FutureBuilder<QuerySnapshot>(
       future: streamss(),
       builder: (ctx, AsyncSnapshot<QuerySnapshot> streamSnapshot) {
-        final documents = streamSnapshot.data?.docs;
         if (streamSnapshot.connectionState == ConnectionState.waiting) {
           return Container(
             height: double.infinity,
@@ -77,8 +83,10 @@ class _GamesScreenState extends State<GamesScreen> {
                   ),
                   baseColor: Colors.black,
                   highlightColor: Colors.red);*/
-        }
-        {
+        } else {
+          final documents = streamSnapshot.data?.docs;
+          print(documents!.length);
+
           return PlaneIndicator(
               child: GridView.builder(
             padding: EdgeInsets.only(left: 5, right: 5, top: 8, bottom: 200),
@@ -89,7 +97,7 @@ class _GamesScreenState extends State<GamesScreen> {
             itemCount: streamSnapshot.data?.docs.length,
             itemBuilder: (ctx, index) {
               return GameDetailWidget(
-                game: documents![index]['game'],
+                game: documents[index]['game'],
                 gameImageUrl: documents[index]['url'],
                 width: widgetwidth,
                 isHosting: widget.isHosting,

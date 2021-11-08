@@ -61,7 +61,7 @@ class GamesTournament extends StatelessWidget {
                 gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
                     // maxCrossAxisExtent: 200,
                     // childAspectRatio: 3 / 2,
-                    maxCrossAxisExtent: 390,
+                    maxCrossAxisExtent: width,
                     childAspectRatio: width / (width / 1.7),
                     mainAxisSpacing: 4,
                     crossAxisSpacing: 4),
@@ -75,7 +75,7 @@ class GamesTournament extends StatelessWidget {
                             BorderRadius.only(bottomLeft: Radius.circular(20))),
                     child: Column(
                       children: [
-                        TourneySmallDisplay(doc[index].id, width),
+                        TourneySmallDisplay(doc[index].id, 200),
                         Container(
                           padding: EdgeInsets.all(10),
                           child: TextButton(
@@ -83,7 +83,7 @@ class GamesTournament extends StatelessWidget {
                                 rigesterTid(doc[index].id);
                               },
                               child: Text(
-                                "Re",
+                                "Register",
                                 style: TextStyle(
                                     fontSize: width / 19,
                                     fontWeight: FontWeight.w300),
@@ -96,7 +96,7 @@ class GamesTournament extends StatelessWidget {
               );
             } else {
               return Center(
-                child: Text("No Tournaments Awailable"),
+                child: Text("No Tournaments Available"),
               );
             }
           }),

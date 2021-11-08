@@ -45,6 +45,9 @@ dependencies:
   custom_refresh_indicator: ^1.0.0
   flutter_animated_dialog: ^2.0.1
   shared_preferences: ^2.0.5
+  flutter_secure_storage: ^4.2.1
+  intl: ^0.17.0
+  date_format: ^2.0.4
   
 
 
@@ -67,10 +70,10 @@ flutter:
   assets:
     - assets/levels/bronze.png
     - assets/games.gif
-    # - assets/cloud1.png
-    # - assets/cloud2.png
-    # - assets/cloud3.png
-    # - assets/cloud4.png
+    - assets/cloud1.png
+    - assets/cloud2.png
+    - assets/cloud3.png
+    - assets/cloud4.png
    
         
 

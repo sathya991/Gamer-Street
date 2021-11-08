@@ -69,7 +69,8 @@ class _TourneySmallDisplayState extends State<TourneySmallDisplay> {
 
   @override
   Widget build(BuildContext context) {
-    double width = widget.width;
+    double width = 400;
+    //widget.width;
     return FutureBuilder<QuerySnapshot>(
         future: getData(),
         builder: (ctx, snap) {
@@ -85,7 +86,6 @@ class _TourneySmallDisplayState extends State<TourneySmallDisplay> {
             );
           } else if (snap.hasData) {
             var data = snap.data!.docs.first;
-            print(data['entryFee']);
             return Padding(
               padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
               child: Card(
@@ -94,13 +94,14 @@ class _TourneySmallDisplayState extends State<TourneySmallDisplay> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Container(
-                      height: width / 3.4,
-                      width: width / 2.4,
-                      child:
-                          buildImage('https://unsplash.com/photos/fAwtxmVRsds'),
-                      // data['url']),
-                    ),
+                    // Container(
+                    //   height: width / 3.4,
+                    //   width: width / 2.4,
+                    //   child:
+                    //   //buildImage(
+                    //     //  'https://images.unsplash.com/photo-1635997125782-ddc8ca652efa?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1887&q=80'),
+                    //   // data['url']),
+                    // ),
                     Padding(
                       padding: const EdgeInsets.only(left: 0, right: 10),
                       child: Column(
@@ -133,6 +134,7 @@ class _TourneySmallDisplayState extends State<TourneySmallDisplay> {
                                     fontWeight: FontWeight.bold,
                                     fontSize: width / 25),
                               ),
+                              //  print(data['entryFee']);
                               Text(
                                 "Rs ${data['entryFee'].toString()}",
                                 style: TextStyle(fontSize: width / 28),
@@ -151,7 +153,8 @@ class _TourneySmallDisplayState extends State<TourneySmallDisplay> {
                                     fontSize: width / 25),
                               ),
                               Text(
-                                "Rs ${data['prizeMoney'].toString()}",
+                                '900',
+                                // "Rs ${data['prizeMoney'].toString()}",
                                 style: TextStyle(fontSize: width / 28),
                               ),
                             ],

@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:gamer_street/Widgets/appDrawer.dart';
 import 'package:gamer_street/screens/RegistrationsScreen.dart';
@@ -35,7 +37,42 @@ class _TabsState extends State<TabsScreenState> with TickerProviderStateMixin {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(appBarName),
+        title: Row(
+          children: [
+            Text(
+              "Gamer",
+              style: TextStyle(
+                  fontWeight: FontWeight.w900,
+                  fontSize: 25,
+                  color: Colors.black),
+            ),
+            Stack(
+              children: <Widget>[
+                // Stroked text as border.
+                Text(
+                  'Street',
+                  style: TextStyle(
+                    fontSize: 23,
+                    fontStyle: FontStyle.italic,
+                    foreground: Paint()
+                      ..style = PaintingStyle.stroke
+                      ..strokeWidth = 3.5
+                      ..color = Colors.black,
+                  ),
+                ),
+                // Solid text as fill.
+                Text(
+                  'Street',
+                  style: TextStyle(
+                    fontSize: 23,
+                    fontStyle: FontStyle.italic,
+                    color: Colors.redAccent.shade700,
+                  ),
+                ),
+              ],
+            )
+          ],
+        ),
         bottom: new TabBar(
           controller: _tabController,
           tabs: [

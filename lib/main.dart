@@ -15,6 +15,7 @@ import 'package:gamer_street/screens/choose_screen.dart';
 import 'package:gamer_street/screens/email_verify_wait_screen.dart';
 import 'package:gamer_street/screens/know_more_screen.dart';
 import 'package:gamer_street/screens/ludoAdditionalInfoScreen.dart';
+import 'package:gamer_street/screens/profile.dart';
 import 'package:gamer_street/screens/settingsScreen.dart';
 import 'package:gamer_street/screens/splash_screen.dart';
 import 'package:gamer_street/screens/themesScreen.dart';
@@ -99,6 +100,7 @@ class _MyAppState extends State<MyApp> {
                         KnowMoreScreen(),
                     TournamentDetailScreen.tournamentDetailScreenRoute: (ctx) =>
                         TournamentDetailScreen(),
+                    Profile.profile: (ctx) => Profile(),
                   },
                 );
               }));

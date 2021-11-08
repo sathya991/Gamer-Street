@@ -16,6 +16,12 @@ class ThemeProvider extends ChangeNotifier {
       }
     });
   }
+  bool getThemeForProfile() {
+    if (getTheme() == ThemeData.dark())
+      return false;
+    else
+      return true;
+  }
 
   // bool get isDarkMode => themeData == ThemeData.dark();
   void toggleTheme(String isOn) {

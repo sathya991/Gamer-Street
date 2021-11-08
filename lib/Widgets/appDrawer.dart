@@ -2,8 +2,13 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:gamer_street/screens/Hosting.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+import 'package:provider/provider.dart';
+import 'package:gamer_street/screens/profile.dart';
+import 'package:flutter/services.dart';
 import 'package:gamer_street/screens/know_more_screen.dart';
 import 'package:gamer_street/screens/settingsScreen.dart';
+import 'package:gamer_street/screens/profile.dart';
 
 class AppDrawer extends StatefulWidget {
   const AppDrawer({Key? key}) : super(key: key);
@@ -47,7 +52,7 @@ class _AppDrawerState extends State<AppDrawer> {
               leading: Icon(Icons.home),
               title: Text("User Details"),
               onTap: () {
-                Navigator.pop(context);
+                Navigator.of(context).popAndPushNamed(Profile.profile);
               },
             ),
             ListTile(

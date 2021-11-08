@@ -37,8 +37,16 @@ class _RegistrationsScreenState extends State<RegistrationsScreen> {
             return Container();
           } else {
             return ListView.builder(
+                padding: EdgeInsets.only(bottom: 200),
                 itemBuilder: (ctx, index) {
-                  return TourneySmallDisplay(snapshot.data!.docs[index]['Tid']);
+                  return Container(
+                    padding: EdgeInsets.all(2),
+                    child: Card(
+                      elevation: 4,
+                      child: TourneySmallDisplay(
+                          snapshot.data!.docs[index]['Tid'], 200),
+                    ),
+                  );
                 },
                 itemCount: snapshot.data!.docs.length);
           }

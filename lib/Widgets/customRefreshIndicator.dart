@@ -45,7 +45,7 @@ class _PlaneIndicatorState extends State<PlaneIndicator>
   static final _planeTween = CurveTween(curve: Curves.easeInOut);
   late AnimationController _planeController;
   IndicatorState? _prevState;
-
+  static int flag = 0;
   @override
   void initState() {
     _planeController = AnimationController(
@@ -54,6 +54,7 @@ class _PlaneIndicatorState extends State<PlaneIndicator>
     );
 
     _setupCloudsAnimationControllers();
+
     super.initState();
   }
 
@@ -128,12 +129,16 @@ class _PlaneIndicatorState extends State<PlaneIndicator>
   }
 
   void _disposeCloudsControllers() {
-    for (final cloud in _clouds) cloud.controller!.dispose();
+    if (flag == 0) {
+      for (final cloud in _clouds) cloud.controller!.dispose();
+      flag = 1;
+    }
   }
 
   @override
   void dispose() {
     _planeController.dispose();
+
     _disposeCloudsControllers();
     super.dispose();
   }

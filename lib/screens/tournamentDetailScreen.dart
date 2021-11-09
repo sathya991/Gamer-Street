@@ -24,20 +24,25 @@ class _TournamentDetailScreenState extends State<TournamentDetailScreen>
     });
   }
 
+  String tId = 'sasi';
   @override
   void initState() {
     super.initState();
-    _widgets = [
-      AllTournamentDetails(),
-      InTournamentDetails(),
-      InTournamentChat()
-    ];
+
     _tabController = new TabController(length: 3, vsync: this);
     _tabController.addListener(_handleSelected);
   }
 
   @override
   Widget build(BuildContext context) {
+    tId = ModalRoute.of(context)!.settings.arguments as String;
+
+    _widgets = [
+      TournamentDetails(tId: tId),
+      InTournamentDetails(),
+      InTournamentChat()
+    ];
+
     return Scaffold(
       appBar: AppBar(
         title: Text(appBarName),

@@ -72,10 +72,11 @@ class GamesTournament extends StatelessWidget {
                               onPressed: () {
                                 Navigator.of(context).pushNamed(
                                     TournamentDetailScreen
-                                        .tournamentDetailScreenRoute);
+                                        .tournamentDetailScreenRoute,
+                                    arguments: doc[index].id);
                               },
                               child: Text(
-                                "Register",
+                                "Tap to get registration screen",
                                 style: TextStyle(
                                     fontSize: width / 19,
                                     fontWeight: FontWeight.w300),

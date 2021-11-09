@@ -48,6 +48,7 @@ dependencies:
   flutter_secure_storage: ^4.2.1
   intl: ^0.17.0
   date_format: ^2.0.4
+  fluttertoast: ^8.0.8
   
 
 

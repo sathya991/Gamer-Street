@@ -39,6 +39,16 @@ class _TournamentDetailsState extends State<TournamentDetails> {
   }
 
   Future<void> add() async {
+    var flag = await FirebaseFirestore.instance
+        .collection("users")
+        .doc(FirebaseAuth.instance.currentUser!.uid)
+        .collection('PlayerGames')
+        .where("Tid", isEqualTo: widget.tId)
+        .get()
+        .then((value) {
+      if (value.docs.isEmpty) {}
+    });
+
     await FirebaseFirestore.instance
         .collection('users')
         .doc(FirebaseAuth.instance.currentUser!.uid)
@@ -48,22 +58,65 @@ class _TournamentDetailsState extends State<TournamentDetails> {
       var k = data['phone'];
       if (k.toString().isNotEmpty) {
         await FirebaseFirestore.instance
-            .collection('tournaments')
-            .doc(widget.tId)
-            .collection('registeredUsers')
-            .doc()
-            .set({
-          "player": FirebaseAuth.instance.currentUser!.uid,
-          "userName": data['userName'],
-          'phone': data['phone'],
-          'email': data['email']
-        });
-        await FirebaseFirestore.instance
-            .collection('users')
+            .collection("users")
             .doc(FirebaseAuth.instance.currentUser!.uid)
             .collection('PlayerGames')
-            .doc()
-            .set({"Tid": widget.tId});
+            .where("Tid", isEqualTo: widget.tId)
+            .get()
+            .then((value) async {
+          if (value.docs.isEmpty) {
+            await FirebaseFirestore.instance
+                .collection('tournaments')
+                .doc(widget.tId)
+                .collection('registeredUsers')
+                .doc()
+                .set({
+              "player": FirebaseAuth.instance.currentUser!.uid,
+              "userName": data['userName'],
+              'phone': data['phone'],
+              'email': data['email']
+            });
+            await FirebaseFirestore.instance
+                .collection('users')
+                .doc(FirebaseAuth.instance.currentUser!.uid)
+                .collection('PlayerGames')
+                .doc()
+                .set({"Tid": widget.tId});
+          } else
+            fToast.showToast(
+              child: Container(
+                height: 60,
+                padding: const EdgeInsets.symmetric(
+                    horizontal: 24.0, vertical: 12.0),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(25.0),
+                  color: Colors.black,
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(
+                      Icons.check_circle_outlined,
+                      color: Colors.green,
+                    ),
+                    SizedBox(
+                      width: 12.0,
+                    ),
+                    Text(
+                      "Already Registered",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.w500,
+                          fontSize: 16),
+                    ),
+                  ],
+                ),
+              ),
+              gravity: ToastGravity.BOTTOM,
+              toastDuration: Duration(seconds: 2),
+            );
+        });
       } else {
         fToast.showToast(
           child: Container(

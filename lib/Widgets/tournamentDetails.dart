@@ -39,16 +39,6 @@ class _TournamentDetailsState extends State<TournamentDetails> {
   }
 
   Future<void> add() async {
-    var flag = await FirebaseFirestore.instance
-        .collection("users")
-        .doc(FirebaseAuth.instance.currentUser!.uid)
-        .collection('PlayerGames')
-        .where("Tid", isEqualTo: widget.tId)
-        .get()
-        .then((value) {
-      if (value.docs.isEmpty) {}
-    });
-
     await FirebaseFirestore.instance
         .collection('users')
         .doc(FirebaseAuth.instance.currentUser!.uid)

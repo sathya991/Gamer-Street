@@ -71,7 +71,6 @@ class _SignupWidgetState extends State<SignupWidget> {
             .doc(userCredential.user!.uid)
             .set({
           'userName': _userName,
-          'admin': false,
           'email': _email,
           'gamesPlayed': 0,
           'gamesWon': 0,

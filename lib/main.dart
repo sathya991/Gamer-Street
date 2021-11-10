@@ -98,9 +98,16 @@ class _MyAppState extends State<MyApp> {
                     ThemeScreen.themeScreenRoute: (ctx) => ThemeScreen(),
                     KnowMoreScreen.knowMoreScreenRoute: (ctx) =>
                         KnowMoreScreen(),
-                    TournamentDetailScreen.tournamentDetailScreenRoute: (ctx) =>
-                        TournamentDetailScreen(),
                     Profile.profile: (ctx) => Profile(),
+                  },
+                  onGenerateRoute: (data) {
+                    if (data.name ==
+                        TournamentDetailScreen.tournamentDetailScreenRoute) {
+                      final tourneyId = data.arguments as String;
+                      return MaterialPageRoute(
+                          builder: (_) => TournamentDetailScreen(tourneyId));
+                    }
+                    return null;
                   },
                 );
               }));

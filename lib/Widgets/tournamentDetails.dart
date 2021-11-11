@@ -211,7 +211,7 @@ class BasicInfo extends StatelessWidget {
               children: [
                 Container(
                     child: Text(
-                  "            Game : ${doc['game']}",
+                  "Game : ${doc['game']}",
                   style: TextStyle(
                       color: Colors.white,
                       fontWeight: FontWeight.w300,

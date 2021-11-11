@@ -43,9 +43,6 @@ class GamesTournament extends StatelessWidget {
               );
             } else if (snap.hasData) {
               var doc = snap.data!.docs;
-              // print(doc[0]);
-              print(doc.length);
-
               return GridView.builder(
                 padding: EdgeInsets.only(bottom: 200),
                 gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(

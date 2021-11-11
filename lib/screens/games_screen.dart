@@ -32,13 +32,8 @@ class _GamesScreenState extends State<GamesScreen> {
 
   Future<QuerySnapshot> streamss() {
     refreshkey.currentState?.show();
-    //await Future.delayed(Duration(milliseconds: 500));
 
     return FirebaseFirestore.instance.collection("games").get();
-
-    /* print(stream);
-
-    return (stream as QuerySnapshot);*/
   }
 
   @override
@@ -84,8 +79,7 @@ class _GamesScreenState extends State<GamesScreen> {
                   baseColor: Colors.black,
                   highlightColor: Colors.red);*/
         } else {
-          final documents = streamSnapshot.data?.docs;
-          print(documents!.length);
+          final documents = streamSnapshot.data!.docs;
 
           return PlaneIndicator(
               child: GridView.builder(

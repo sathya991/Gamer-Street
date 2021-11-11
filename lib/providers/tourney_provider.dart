@@ -58,13 +58,6 @@ class TourneyProvider extends ChangeNotifier {
             .doc(value.parent.parent!.id)
             .collection('additionalInfo')
             .add({'map': map, 'teamMode': teamMode});
-      }).then((_) async {
-        await FirebaseFirestore.instance
-            .collection('tournaments')
-            .doc(value.parent.parent!.id)
-            .collection('registeredUsers')
-            .doc(FirebaseAuth.instance.currentUser!.uid)
-            .set({'host': FirebaseAuth.instance.currentUser!.uid.toString()});
       });
     });
   }
@@ -96,49 +89,7 @@ class TourneyProvider extends ChangeNotifier {
             .doc(value.parent.parent!.id)
             .collection('additionalInfo')
             .add({'noOfPlayers': players});
-      }).then((_) async {
-        await FirebaseFirestore.instance
-            .collection('tournaments')
-            .doc(value.parent.parent!.id)
-            .collection('registeredUsers')
-            .doc(FirebaseAuth.instance.currentUser!.uid)
-            .set({'host': FirebaseAuth.instance.currentUser!.uid.toString()});
       });
     });
-  }
-
-  Future getRegisteredUsers(String id) async {
-    String hostId = "";
-    List registeredId = [];
-    await FirebaseFirestore.instance
-        .collection('tournaments')
-        .doc(id)
-        .get()
-        .then((firstValue) async {
-      hostId = firstValue.get('hostId');
-    });
-    await FirebaseFirestore.instance
-        .collection('tournaments')
-        .doc(id)
-        .collection('registeredUsers')
-        .get()
-        .then((secondValue) async {
-      int len = secondValue.docs.length;
-      for (int i = 0; i < len; i++) {
-        if (hostId == secondValue.docs[i].id) {
-          continue;
-        }
-        registeredId.add(secondValue.docs[i].id);
-      }
-    });
-    for (int i = 0; i < registeredId.length; i++) {
-      await FirebaseFirestore.instance
-          .collection('users')
-          .doc(registeredId[i].trim())
-          .get()
-          .then((value) {
-        return value.get('userName');
-      });
-    }
   }
 }

@@ -17,7 +17,7 @@ class _RegistrationsScreenState extends State<RegistrationsScreen> {
       fut = FirebaseFirestore.instance
           .collection('users')
           .doc(FirebaseAuth.instance.currentUser!.uid)
-          .collection('registeredTourneys')
+          .collection('PlayerGames')
           .get();
     });
   }

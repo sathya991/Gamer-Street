@@ -76,7 +76,7 @@ class GamesTournament extends StatelessWidget {
                                     arguments: doc[index].id.toString());
                               },
                               child: Text(
-                                "Register",
+                                "Tap to get registration screen",
                                 style: TextStyle(
                                     fontSize: width / 19,
                                     fontWeight: FontWeight.w300),

@@ -28,17 +28,22 @@ class _TournamentDetailScreenState extends State<TournamentDetailScreen>
   @override
   void initState() {
     super.initState();
-    _widgets = [
-      AllTournamentDetails(),
-      InTournamentDetails(widget.tourneyId),
-      InTournamentChat()
-    ];
     _tabController = new TabController(length: 3, vsync: this);
     _tabController.addListener(_handleSelected);
   }
 
   @override
   Widget build(BuildContext context) {
+    _widgets = [
+      TournamentDetails(
+        tId: widget.tourneyId,
+      ),
+      InTournamentDetails(
+        widget.tourneyId,
+      ),
+      InTournamentChat()
+    ];
+
     return Scaffold(
       appBar: AppBar(
         title: Text(appBarName),

@@ -20,7 +20,6 @@ class _ThemeScreenState extends State<ThemeScreen> {
     return FutureBuilder<dynamic>(
         future: secureStorage.readSecureData('theme'),
         builder: (context, snapshot) {
-          print(snapshot.data);
           if (snapshot.connectionState == ConnectionState.waiting) {
             return CircularProgressIndicator();
           }

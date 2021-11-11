@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:gamer_street/screens/Gamestournamet.dart';
+import 'package:gamer_street/screens/Gamestournament.dart';
 import 'package:gamer_street/screens/HostingGame.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:shimmer/shimmer.dart';
@@ -9,7 +9,6 @@ class GameDetailWidget extends StatefulWidget {
   final String? gameImageUrl;
   final double? width;
   final bool isHosting;
-  //const GameDetailWidget({this.game,this.gameImageUrl});
   const GameDetailWidget(
       {Key? key,
       this.game,

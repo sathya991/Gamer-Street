@@ -7,17 +7,20 @@ class ThemeProvider extends ChangeNotifier {
   ThemeData getTheme() => themeData;
   ThemeProvider() {
     secureStorage.readSecureData('theme').then((value) {
-      themeData = value ?? ThemeData.light();
-    });
-    secureStorage.readSecureData('theme').then((value) {
-      if (value == 'light') {
-        themeData = ThemeData.light();
+      if (value == 'dark') {
+        themeData = ThemeData.dark();
         notifyListeners();
       } else {
-        themeData = ThemeData.dark();
+        themeData = ThemeData.light();
         notifyListeners();
       }
     });
+  }
+  bool getThemeForProfile() {
+    if (getTheme() == ThemeData.dark())
+      return false;
+    else
+      return true;
   }
 
   // bool get isDarkMode => themeData == ThemeData.dark();

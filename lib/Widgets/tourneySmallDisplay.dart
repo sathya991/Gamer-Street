@@ -52,7 +52,6 @@ class _TourneySmallDisplayState extends State<TourneySmallDisplay> {
   }
 
   Future<QuerySnapshot> getData() async {
-    print(widget.tourneyObj);
     final String documentid = widget.tourneyObj;
     var stream = await FirebaseFirestore.instance
         .collection('tournaments')
@@ -126,7 +125,6 @@ class _TourneySmallDisplayState extends State<TourneySmallDisplay> {
                                     fontWeight: FontWeight.bold,
                                     fontSize: width / 25),
                               ),
-                              //  print(data['entryFee']);
                               Text(
                                 "Rs ${data['entryFee'].toString()}",
                                 style: TextStyle(fontSize: width / 28),

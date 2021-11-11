@@ -1,21 +1,17 @@
-import 'dart:math';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:flutter/services.dart';
+
 import 'package:flutter_animated_dialog/flutter_animated_dialog.dart';
 import 'package:gamer_street/Widgets/PlayedList.dart';
-import 'package:gamer_street/screens/Sample.dart';
+
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:gamer_street/screens/EditProfile.dart';
 import 'package:gamer_street/Widgets/CustomPageRoute.dart';
-import 'package:gamer_street/providers/user_provider.dart';
+
 import 'package:gamer_street/providers/theme_provider.dart';
-import 'package:gamer_street/services/storage.dart';
-import 'package:provider/provider.dart';
 
 class Profile extends StatefulWidget {
   const Profile({Key? key}) : super(key: key);
@@ -121,7 +117,6 @@ class _ProfilerenderState extends State<Profilerender> {
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     bool theme = Provider.of<ThemeProvider>(context).getThemeForProfile();
-    print(width);
     Widget a = Container(
       key: Key('1'),
       width: width * 0.458,

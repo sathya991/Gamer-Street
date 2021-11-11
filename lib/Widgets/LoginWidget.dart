@@ -69,7 +69,6 @@ class _LoginState extends State<Login> {
         _isLoading = true;
       });
       try {
-        print(_userEmail);
         await FirebaseAuth.instance.sendPasswordResetEmail(email: _email);
         setState(() {
           _isLoading = false;
@@ -77,7 +76,6 @@ class _LoginState extends State<Login> {
           _showMessage("Check your Mail");
         });
       } on FirebaseAuthException catch (e) {
-        print(e);
         setState(() {
           _isLoading = false;
         });
@@ -240,7 +238,6 @@ class _LoginState extends State<Login> {
                                 _userEmail = _usernameEmail;
                               } else {
                                 _userEmail = value!;
-                                print(_userEmail);
                               }
                               _usernameEmailFlag = false;
                             },
@@ -351,10 +348,6 @@ class _LoginState extends State<Login> {
                                 ],
                               ),
                             ),
-
-
-
-                            
                           ),
                           SizedBox(
                             height: 15,

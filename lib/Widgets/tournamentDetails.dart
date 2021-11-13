@@ -14,6 +14,7 @@ class TournamentDetails extends StatefulWidget {
 
 class _TournamentDetailsState extends State<TournamentDetails> {
   FToast fToast = FToast();
+
   @override
   void initState() {
     FToast fToast;
@@ -36,6 +37,19 @@ class _TournamentDetailsState extends State<TournamentDetails> {
         .doc(widget.tId)
         .collection('additionalInfo')
         .get();
+  }
+
+  String game = '';
+  String hostId = '';
+  Future gameName() async {
+    await FirebaseFirestore.instance
+        .collection('tournaments')
+        .doc(widget.tId)
+        .get()
+        .then((firstValue) async {
+      game = firstValue.get('game');
+      hostId = firstValue.get('hostId');
+    });
   }
 
   Future<void> add() async {
@@ -61,7 +75,8 @@ class _TournamentDetailsState extends State<TournamentDetails> {
                 .collection('registeredUsers')
                 .doc()
                 .set({
-              "player": FirebaseAuth.instance.currentUser!.uid,
+              "player1": FirebaseAuth.instance.currentUser!.uid,
+              "playerAccount": false,
               "userName": data['userName'],
               'phone': data['phone'],
               'email': data['email']
@@ -145,18 +160,54 @@ class _TournamentDetailsState extends State<TournamentDetails> {
     });
   }
 
+  void toastMessage(String msg) {
+    fToast.showToast(
+      child: Container(
+        height: 60,
+        padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 12.0),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(25.0),
+          color: Colors.black,
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(
+              Icons.no_accounts,
+              color: Colors.green,
+            ),
+            SizedBox(
+              width: 12.0,
+            ),
+            Text(
+              msg,
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.w500,
+                  fontSize: 16),
+            ),
+          ],
+        ),
+      ),
+      gravity: ToastGravity.BOTTOM,
+      toastDuration: Duration(seconds: 2),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       child: Center(
           child: FutureBuilder(
-              future: Future.wait([basicData(), additionalData()]),
+              future: Future.wait([basicData(), additionalData(), gameName()]),
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
                   // final doc = snapshot.data!.docs.first;
                   return Column(children: [
                     BasicInfo(snapshot: (snapshot.data! as dynamic)[0]),
-                    AdditionalInfo(snapshot: (snapshot.data! as dynamic)[1]),
+                    AdditionalInfo(
+                        snapshot: (snapshot.data! as dynamic)[1], game: game),
                     Container(
                       height: 300,
                       alignment: Alignment.center,
@@ -164,7 +215,12 @@ class _TournamentDetailsState extends State<TournamentDetails> {
                       width: double.infinity,
                       child: TextButton(
                           onPressed: () {
-                            add();
+                            if (hostId ==
+                                FirebaseAuth.instance.currentUser!.uid) {
+                              toastMessage('You cannot Play this Tournament');
+                            } else {
+                              add();
+                            }
                           },
                           child: Text(
                             "Register",
@@ -274,11 +330,44 @@ class BasicInfo extends StatelessWidget {
 
 class AdditionalInfo extends StatelessWidget {
   final QuerySnapshot snapshot;
-  const AdditionalInfo({Key? key, required this.snapshot}) : super(key: key);
+  final String game;
+  const AdditionalInfo({Key? key, required this.snapshot, required this.game})
+      : super(key: key);
+
+  static Widget buildAdditionalInfo(String head, String value) {
+    return Container(
+      alignment: Alignment.center,
+      width: double.infinity,
+      child: Text(
+        head + ":  " + value,
+        style: TextStyle(
+            color: Colors.white, fontWeight: FontWeight.w300, fontSize: 20),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     final doc = snapshot.docs.first;
+    List l = [];
+    int index = -1;
+    List heading = [];
+    switch (game) {
+      case "BGMI":
+        l = [
+          doc['map'],
+          doc['teamMode'],
+        ];
+        heading = ['Map', 'Team Mode'];
+        break;
+      case "Ludo King":
+        l = [
+          doc['noOfPlayers'],
+        ];
+        heading = ['No of Players'];
+        break;
+    }
+
     return Container(
         padding: EdgeInsets.all(18),
         margin: EdgeInsets.all(2),
@@ -287,26 +376,31 @@ class AdditionalInfo extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Container(
-              alignment: Alignment.center,
-              width: double.infinity,
-              child: Text(
-                "Team Mode :${doc['teamMode']}",
-                style: TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.w300,
-                    fontSize: 20),
-              ),
-            ),
-            Container(
-              child: Text(
-                "Map :${doc['map']}",
-                style: TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.w300,
-                    fontSize: 20),
-              ),
-            ),
+            ...l.map((value) {
+              index = index + 1;
+              return buildAdditionalInfo(heading[index], value.toString());
+            }).toList()
+            // buildAdditionalInfo(l[0].toString()),
+            // Container(
+            //   alignment: Alignment.center,
+            //   width: double.infinity,
+            //   child: Text(
+            //     "Team Mode :${doc['teamMode']}",
+            //     style: TextStyle(
+            //         color: Colors.white,
+            //         fontWeight: FontWeight.w300,
+            //         fontSize: 20),
+            //   ),
+            // ),
+            // Container(
+            //   child: Text(
+            //     "Map :${doc['map']}",
+            //     style: TextStyle(
+            //         color: Colors.white,
+            //         fontWeight: FontWeight.w300,
+            //         fontSize: 20),
+            //   ),
+            // ),
           ],
         ));
   }

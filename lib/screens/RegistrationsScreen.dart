@@ -37,6 +37,7 @@ class _RegistrationsScreenState extends State<RegistrationsScreen> {
             return Container();
           } else {
             return ListView.builder(
+                physics: BouncingScrollPhysics(),
                 padding: EdgeInsets.only(bottom: 200),
                 itemBuilder: (ctx, index) {
                   return Container(

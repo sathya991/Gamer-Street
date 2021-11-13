@@ -77,6 +77,7 @@ class _SignupWidgetState extends State<SignupWidget> {
           'phone': "",
           'rank': 'noRank',
         }).then((_) async {
+          secureStorage.writeSecureData('userName', _userName);
           User? curUser = FirebaseAuth.instance.currentUser;
           if (curUser != null && !curUser.emailVerified) {
             await curUser.sendEmailVerification();

@@ -41,7 +41,7 @@ class _TournamentDetailScreenState extends State<TournamentDetailScreen>
       InTournamentDetails(
         widget.tourneyId,
       ),
-      InTournamentChat()
+      InTournamentChat(widget.tourneyId)
     ];
 
     return Scaffold(

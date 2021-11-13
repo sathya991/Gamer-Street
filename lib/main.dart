@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:gamer_street/providers/chat_provider.dart';
 import 'package:gamer_street/providers/google_signin_provider.dart';
 import 'package:gamer_street/providers/theme_provider.dart';
 import 'package:gamer_street/providers/tourney_provider.dart';
@@ -59,6 +60,7 @@ class _MyAppState extends State<MyApp> {
                 ChangeNotifierProvider(
                   create: (context) => ThemeProvider(),
                 ),
+                ChangeNotifierProvider(create: (context) => ChatProvider()),
               ],
               child: Consumer<ThemeProvider>(builder: (_, theme, __) {
                 return MaterialApp(

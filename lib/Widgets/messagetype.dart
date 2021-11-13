@@ -22,7 +22,7 @@ class _MessageTypeState extends State<MessageType> {
   void sendMessage() async {
     final userName = await secureStorage.readSecureData('userName');
     FocusScope.of(context).unfocus();
-    final sentTime = DateTime.now();
+    final sentTime = DateTime.now().toUtc();
     chatProvider.sendMessage(
         widget.tourneyId, message, userId, userName, sentTime);
     _controller.clear();

@@ -41,7 +41,6 @@ class _MessagesState extends State<Messages> {
               ? buildText("Say hi")
               : Flexible(
                   child: ListView.builder(
-                      physics: BouncingScrollPhysics(),
                       itemCount: messages.docs.length,
                       reverse: true,
                       itemBuilder: (ctx, index) {

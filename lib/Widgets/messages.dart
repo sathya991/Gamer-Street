@@ -34,22 +34,27 @@ class _MessagesState extends State<Messages> {
         stream: getMessages(),
         builder: (ctx, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return CircularProgressIndicator();
+            return Container(
+              height: 200,
+            );
+          } else if (snapshot.hasData) {
+            final messages = snapshot.data!;
+            return messages.docs.isEmpty
+                ? buildText("Say hi")
+                : Flexible(
+                    child: ListView.builder(
+                        itemCount: messages.docs.length,
+                        reverse: true,
+                        itemBuilder: (ctx, index) {
+                          final curMessage = messages.docs[index];
+                          final isMe = curMessage.get('userName') == userName;
+                          return MessageView(curMessage.get('content'), isMe,
+                              curMessage.get('userName'));
+                        }),
+                  );
+          } else {
+            return Text('data');
           }
-          final messages = snapshot.data!;
-          return messages.docs.isEmpty
-              ? buildText("Say hi")
-              : Flexible(
-                  child: ListView.builder(
-                      itemCount: messages.docs.length,
-                      reverse: true,
-                      itemBuilder: (ctx, index) {
-                        final curMessage = messages.docs[index];
-                        final isMe = curMessage.get('userName') == userName;
-                        return MessageView(curMessage.get('content'), isMe,
-                            curMessage.get('userName'));
-                      }),
-                );
         });
   }
 

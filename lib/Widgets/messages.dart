@@ -47,8 +47,8 @@ class _MessagesState extends State<Messages> {
                       itemBuilder: (ctx, index) {
                         final curMessage = messages.docs[index];
                         final isMe = curMessage.get('userName') == userName;
-                        return MessageView(
-                            curMessage.get('content'), isMe, userName);
+                        return MessageView(curMessage.get('content'), isMe,
+                            curMessage.get('userName'));
                       }),
                 );
         });

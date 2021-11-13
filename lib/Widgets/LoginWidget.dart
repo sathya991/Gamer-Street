@@ -29,14 +29,15 @@ class _LoginState extends State<Login> {
 
 //Navigation to Gamer Street
   bool logged = false;
-  void navigation() {
-    if (logged == false) {
-      _showMessage("Succesfully you are logging in...");
-      logged = true;
+  void navigation() async {
+    await insertUserData().then((value) {
       Navigator.pushNamedAndRemoveUntil(
           context, TabsScreenState.tabsRouteName, (route) => false);
-    }
+    });
+    // _showMessage("Succesfully you are logging in...");
   }
+
+//getting userpassword
 
 //Cheking userid in Database
   static var _usernameEmail = '';
@@ -126,7 +127,8 @@ class _LoginState extends State<Login> {
         final provider =
             Provider.of<GoogleSigninProvider>(context, listen: false);
         provider.loginPut();
-        _showMessage("Succesfully Logged in");
+        //_showMessage("Succesfully Logged in");
+
         navigation();
       }
     } else {
@@ -187,6 +189,20 @@ class _LoginState extends State<Login> {
 
   var valid;
 //Build Method
+
+  Future insertUserData() async {
+    await FirebaseFirestore.instance
+        .collection('users')
+        .doc(FirebaseAuth.instance.currentUser!.uid)
+        .get()
+        .then((value) async {
+      secureStorage.writeSecureData('email', value.get('email'));
+      secureStorage.writeSecureData('userName', value.get('userName'));
+      secureStorage.writeSecureData('phone', value.get('phone'));
+      secureStorage.writeSecureData('profileUrl', value.get('profileUrl'));
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return forgotpassword == false

@@ -13,6 +13,7 @@ class InTournamentDetails extends StatefulWidget {
 class _InTournamentDetailsState extends State<InTournamentDetails> {
   List registeredNames = [];
   String hostId = "";
+  var registeredUserStream;
   Future getHostId(String id) async {
     await FirebaseFirestore.instance
         .collection('tournaments')
@@ -25,7 +26,7 @@ class _InTournamentDetailsState extends State<InTournamentDetails> {
 
   getRegisteredUsers(String id) {
     getHostId(id);
-    return FirebaseFirestore.instance
+    registeredUserStream = FirebaseFirestore.instance
         .collection('tournaments')
         .doc(id)
         .collection('registeredUsers')
@@ -33,9 +34,16 @@ class _InTournamentDetailsState extends State<InTournamentDetails> {
   }
 
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getRegisteredUsers(widget.tourneyId);
+  }
+
+  @override
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
-        stream: getRegisteredUsers(widget.tourneyId),
+        stream: registeredUserStream,
         builder: (ctx, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return CircularProgressIndicator();

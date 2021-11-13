@@ -18,9 +18,11 @@ class _MessagesState extends State<Messages> {
     userName = await secureStorage.readSecureData('userName');
   }
 
+  var messageStream;
+
   getMessages() {
     getUserName();
-    return FirebaseFirestore.instance
+    messageStream = FirebaseFirestore.instance
         .collection('tournaments')
         .doc(widget.tourneyId)
         .collection('chat')
@@ -29,9 +31,16 @@ class _MessagesState extends State<Messages> {
   }
 
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getMessages();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
-        stream: getMessages(),
+        stream: messageStream,
         builder: (ctx, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Container(

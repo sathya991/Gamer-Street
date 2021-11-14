@@ -65,6 +65,7 @@ class _MessagesState extends State<Messages> {
   Widget buildText(String text) => Center(
         child: Text(
           text,
+          textAlign: TextAlign.center,
           style: TextStyle(fontSize: 24),
         ),
       );

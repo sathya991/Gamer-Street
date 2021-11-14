@@ -14,7 +14,6 @@ class TournamentDetails extends StatefulWidget {
 
 class _TournamentDetailsState extends State<TournamentDetails> {
   FToast fToast = FToast();
-
   @override
   void initState() {
     FToast fToast;

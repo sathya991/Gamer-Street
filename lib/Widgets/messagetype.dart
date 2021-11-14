@@ -62,7 +62,7 @@ class _MessageTypeState extends State<MessageType> {
               }),
             ),
           ),
-          SizedBox(width: 20),
+          SizedBox(width: 10),
           GestureDetector(
             onTap: message.trim().isEmpty ? null : sendMessage,
             child: Container(

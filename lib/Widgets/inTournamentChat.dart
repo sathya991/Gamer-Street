@@ -13,33 +13,74 @@ class InTournamentChat extends StatefulWidget {
 }
 
 class _InTournamentChatState extends State<InTournamentChat> {
-  // String hostId = "";
-  // bool isRegistered = false;
-  // getRegisterUser() async {
-  //   await FirebaseFirestore.instance
-  //       .collection('tournaments')
-  //       .doc(widget.tourneyId)
-  //       .collection('regsiteredUsers')
-  //       .get()
-  //       .then((value) {
-  //     value.docs.contains(FirebaseAuth.instance.currentUser!.uid);
-  //   });
-  // }
+  String hostId = "";
+  bool isRegistered = false;
+  String tourneyId = "";
 
-  // getUserData() async {
-  //   await FirebaseFirestore.instance
-  //       .collection('tournaments')
-  //       .doc(widget.tourneyId)
-  //       .get()
-  //       .then((value) {
-  //     hostId = value.get('hostId');
-  //   });
-  // }
+  late Stream<QuerySnapshot> registeredData;
+  getRegisterUser() {
+    return FirebaseFirestore.instance
+        .collection('tournaments')
+        .doc(widget.tourneyId)
+        .collection('registeredUsers')
+        .snapshots();
+  }
+
+  getUserData() async {
+    await FirebaseFirestore.instance
+        .collection('tournaments')
+        .doc(widget.tourneyId)
+        .get()
+        .then((value) {
+      hostId = value.get('hostId');
+    });
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    registeredData = getRegisterUser();
+    getUserData();
+    tourneyId = widget.tourneyId;
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [Messages(widget.tourneyId), MessageType(widget.tourneyId)],
-    );
+    bool isEmpty = true;
+    return StreamBuilder<QuerySnapshot>(
+        stream: registeredData,
+        builder: (ctx, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return CircularProgressIndicator();
+          }
+          Widget widget = Container();
+          var len = snapshot.data!.docs.length;
+          var el;
+          for (int i = 0; i < len; i++) {
+            el = snapshot.data!.docs[i];
+            if (el.get('player1') == FirebaseAuth.instance.currentUser!.uid ||
+                hostId == FirebaseAuth.instance.currentUser!.uid) {
+              isEmpty = false;
+              widget = Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Messages(tourneyId),
+                  MessageType(tourneyId),
+                ],
+              );
+            }
+          }
+          if (isEmpty) {
+            widget = emptyDataWidget();
+          }
+          return widget;
+        });
   }
+
+  Widget emptyDataWidget() => Container(
+        child: Center(
+          child: Text("Please register in this tournament to chat."),
+        ),
+      );
 }

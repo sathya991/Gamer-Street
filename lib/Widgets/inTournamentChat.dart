@@ -39,6 +39,7 @@ class _InTournamentChatState extends State<InTournamentChat> {
   @override
   Widget build(BuildContext context) {
     return Column(
+      //mainAxisAlignment: MainAxisAlignment.end,
       children: [Messages(widget.tourneyId), MessageType(widget.tourneyId)],
     );
   }

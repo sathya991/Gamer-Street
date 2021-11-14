@@ -49,7 +49,7 @@ class _MessagesState extends State<Messages> {
           } else if (snapshot.hasData) {
             final messages = snapshot.data!;
             return messages.docs.isEmpty
-                ? buildText("Say hi")
+                ? buildText("Say hi!")
                 : Flexible(
                     child: ListView.builder(
                         itemCount: messages.docs.length,
@@ -68,9 +68,14 @@ class _MessagesState extends State<Messages> {
   }
 
   Widget buildText(String text) => Center(
-        child: Text(
-          text,
-          style: TextStyle(fontSize: 24),
+        child: Container(
+          width: double.infinity,
+          height: MediaQuery.of(context).size.height - 234,
+          alignment: Alignment.center,
+          child: Text(
+            text,
+            style: TextStyle(fontSize: 24, fontWeight: FontWeight.w600),
+          ),
         ),
       );
 }

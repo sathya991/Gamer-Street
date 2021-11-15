@@ -49,6 +49,7 @@ dependencies:
   intl: ^0.17.0
   date_format: ^2.0.4
   fluttertoast: ^8.0.8
+  flutter_easyloading: ^3.0.3
   
 
 

@@ -56,7 +56,7 @@ class _InTournamentChatState extends State<InTournamentChat> {
           var len = snapshot.data!.docs.length;
           var el;
           if ((hostId == FirebaseAuth.instance.currentUser!.uid)) {
-            widget = officialChat(true);
+            widget = officialChat(hostId);
             isRegistered = true;
           } else {
             for (int i = 0; i < len; i++) {
@@ -64,7 +64,7 @@ class _InTournamentChatState extends State<InTournamentChat> {
               if ((el.get('player1') ==
                   FirebaseAuth.instance.currentUser!.uid)) {
                 isRegistered = true;
-                widget = officialChat(false);
+                widget = officialChat(hostId);
               }
             }
           }
@@ -83,10 +83,10 @@ class _InTournamentChatState extends State<InTournamentChat> {
         ),
       );
 
-  Widget officialChat(bool isHost) => Column(
+  Widget officialChat(String hostId) => Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Messages(tourneyId, isHost),
+          Messages(tourneyId, hostId),
           MessageType(tourneyId),
         ],
       );

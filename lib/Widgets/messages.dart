@@ -5,8 +5,8 @@ import 'package:gamer_street/services/storage.dart';
 
 class Messages extends StatefulWidget {
   final tourneyId;
-  final isHost;
-  const Messages(this.tourneyId, this.isHost, {Key? key}) : super(key: key);
+  final hostId;
+  const Messages(this.tourneyId, this.hostId, {Key? key}) : super(key: key);
 
   @override
   _MessagesState createState() => _MessagesState();
@@ -56,8 +56,12 @@ class _MessagesState extends State<Messages> {
                       itemBuilder: (ctx, index) {
                         final curMessage = messages.docs[index];
                         final isMe = curMessage.get('userName') == userName;
-                        return MessageView(curMessage.get('content'), isMe,
-                            widget.isHost, curMessage.get('userName'));
+                        return MessageView(
+                            curMessage.get('content'),
+                            isMe,
+                            widget.hostId,
+                            curMessage.get('userId'),
+                            curMessage.get('userName'));
                       }),
                 );
         });

@@ -1,11 +1,15 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 
 class MessageView extends StatefulWidget {
   final message;
   final isMe;
   final userName;
-  final isHost;
-  const MessageView(this.message, this.isMe, this.isHost, this.userName,
+  final hostId;
+  final messageId;
+  const MessageView(
+      this.message, this.isMe, this.hostId, this.messageId, this.userName,
       {Key? key})
       : super(key: key);
 
@@ -30,8 +34,8 @@ class _MessageViewState extends State<MessageView> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Container(
-                  child:
-                      visibleText(widget.isHost, widget.isMe, widget.userName)),
+                  child: visibleText(widget.hostId, widget.messageId,
+                      widget.isMe, widget.userName)),
               Divider(
                 height: 2,
                 color: Colors.black,
@@ -47,14 +51,17 @@ class _MessageViewState extends State<MessageView> {
     );
   }
 
-  Widget visibleText(bool isHost, bool isMe, String userNameNow) {
-    if (isHost && isMe) {
-      return Text("You");
+  Widget visibleText(
+      String hostId, String messageId, bool isMe, String userNameNow) {
+    if (hostId == "") {
+      return Text("Loading...");
     }
-    if (isHost) {
+    bool isSame = hostId == messageId;
+    if (isSame) {
+      if (isMe) {
+        return Text("You");
+      }
       return Text("Host");
-    } else if (isMe) {
-      return Text("You");
     } else {
       return Text(userNameNow);
     }

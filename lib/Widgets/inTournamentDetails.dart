@@ -48,7 +48,11 @@ class _InTournamentDetailsState extends State<InTournamentDetails> {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return CircularProgressIndicator();
           }
-          // return Text(snapshot.data!.docs.first.id);
+          if (snapshot.data!.docs.length == 0) {
+            return Center(
+              child: Text("No users Registered yet"),
+            );
+          }
           return Container(
             padding: EdgeInsets.all(10),
             child: ListView.builder(

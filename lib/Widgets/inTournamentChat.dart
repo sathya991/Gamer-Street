@@ -16,7 +16,7 @@ class _InTournamentChatState extends State<InTournamentChat> {
   String hostId = "";
   bool isRegistered = false;
   String tourneyId = "";
-
+  int chatLength = 0;
   late Stream<QuerySnapshot> registeredData;
   getRegisterUser() {
     return FirebaseFirestore.instance
@@ -38,7 +38,6 @@ class _InTournamentChatState extends State<InTournamentChat> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     registeredData = getRegisterUser();
     getUserData();
@@ -47,7 +46,6 @@ class _InTournamentChatState extends State<InTournamentChat> {
 
   @override
   Widget build(BuildContext context) {
-    bool isEmpty = true;
     return StreamBuilder<QuerySnapshot>(
         stream: registeredData,
         builder: (ctx, snapshot) {
@@ -57,30 +55,39 @@ class _InTournamentChatState extends State<InTournamentChat> {
           Widget widget = Container();
           var len = snapshot.data!.docs.length;
           var el;
-          for (int i = 0; i < len; i++) {
-            el = snapshot.data!.docs[i];
-            if (el.get('player1') == FirebaseAuth.instance.currentUser!.uid ||
-                hostId == FirebaseAuth.instance.currentUser!.uid) {
-              isEmpty = false;
-              widget = Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Messages(tourneyId),
-                  MessageType(tourneyId),
-                ],
-              );
+          if ((hostId == FirebaseAuth.instance.currentUser!.uid)) {
+            widget = officialChat(true);
+            isRegistered = true;
+          } else {
+            for (int i = 0; i < len; i++) {
+              el = snapshot.data!.docs[i];
+              if ((el.get('player1') ==
+                  FirebaseAuth.instance.currentUser!.uid)) {
+                isRegistered = true;
+                widget = officialChat(false);
+              }
             }
           }
-          if (isEmpty) {
-            widget = emptyDataWidget();
+          if (!isRegistered) {
+            widget =
+                emptyDataWidget("Please register in this tournament to chat.");
           }
+
           return widget;
         });
   }
 
-  Widget emptyDataWidget() => Container(
+  Widget emptyDataWidget(String txt) => Container(
         child: Center(
-          child: Text("Please register in this tournament to chat."),
+          child: Text(txt),
         ),
+      );
+
+  Widget officialChat(bool isHost) => Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Messages(tourneyId, isHost),
+          MessageType(tourneyId),
+        ],
       );
 }

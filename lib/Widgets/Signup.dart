@@ -72,10 +72,20 @@ class _SignupWidgetState extends State<SignupWidget> {
             .set({
           'userName': _userName,
           'email': _email,
+          'gamesHosted': 0,
           'gamesPlayed': 0,
           'gamesWon': 0,
+          'hostSuccess': 0,
           'phone': "",
-          'rank': 'noRank',
+          'hosterRank': 'noRank',
+          'hosterTier': 'noTier',
+          'hosterTierUrl': 'noUrl',
+          'hosterTierNo': 1,
+          'playerRank': 'noRank',
+          'playerTier': 'noTier',
+          'playerTierNo': 1,
+          'playerTierUrl': 'noUrl',
+          'profileUrl': 'noUrl',
         }).then((_) async {
           secureStorage.writeSecureData('userName', _userName);
           User? curUser = FirebaseAuth.instance.currentUser;

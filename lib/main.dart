@@ -24,6 +24,7 @@ import 'package:gamer_street/screens/tournamentDetailScreen.dart';
 import 'package:gamer_street/services/storage.dart';
 import 'package:provider/provider.dart';
 import 'package:gamer_street/screens/Gamestournament.dart';
+import 'package:gamer_street/screens/tournamentDetailsRegistration.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -101,6 +102,8 @@ class _MyAppState extends State<MyApp> {
                     KnowMoreScreen.knowMoreScreenRoute: (ctx) =>
                         KnowMoreScreen(),
                     Profile.profile: (ctx) => Profile(),
+                    TournamentDetailsRegistration.tournamentDetailsRegistration:
+                        (ctx) => TournamentDetailsRegistration(),
                   },
                   onGenerateRoute: (data) {
                     if (data.name ==

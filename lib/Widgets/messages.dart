@@ -68,14 +68,10 @@ class _MessagesState extends State<Messages> {
   }
 
   Widget buildText(String text) => Center(
-        child: Container(
-          width: double.infinity,
-          height: MediaQuery.of(context).size.height - 234,
-          alignment: Alignment.center,
-          child: Text(
-            text,
-            style: TextStyle(fontSize: 24, fontWeight: FontWeight.w600),
-          ),
+        child: Text(
+          text,
+          textAlign: TextAlign.center,
+          style: TextStyle(fontSize: 24),
         ),
       );
 }

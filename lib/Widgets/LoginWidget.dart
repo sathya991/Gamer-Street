@@ -15,6 +15,8 @@ import 'package:provider/provider.dart';
 
 import 'package:gamer_street/providers/google_signin_provider.dart';
 
+import 'package:gamer_street/services/storage.dart';
+
 class Login extends StatefulWidget {
   const Login({Key? key}) : super(key: key);
 
@@ -70,6 +72,7 @@ class _LoginState extends State<Login> {
         _isLoading = true;
       });
       try {
+        print(_userEmail);
         await FirebaseAuth.instance.sendPasswordResetEmail(email: _email);
         setState(() {
           _isLoading = false;
@@ -77,6 +80,7 @@ class _LoginState extends State<Login> {
           _showMessage("Check your Mail");
         });
       } on FirebaseAuthException catch (e) {
+        print(e);
         setState(() {
           _isLoading = false;
         });
@@ -254,6 +258,7 @@ class _LoginState extends State<Login> {
                                 _userEmail = _usernameEmail;
                               } else {
                                 _userEmail = value!;
+                                print(_userEmail);
                               }
                               _usernameEmailFlag = false;
                             },

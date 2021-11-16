@@ -102,8 +102,6 @@ class _MyAppState extends State<MyApp> {
                     KnowMoreScreen.knowMoreScreenRoute: (ctx) =>
                         KnowMoreScreen(),
                     Profile.profile: (ctx) => Profile(),
-                    TournamentDetailsRegistration.tournamentDetailsRegistration:
-                        (ctx) => TournamentDetailsRegistration(),
                   },
                   onGenerateRoute: (data) {
                     if (data.name ==

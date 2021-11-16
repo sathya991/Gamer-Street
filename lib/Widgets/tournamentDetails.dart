@@ -82,9 +82,15 @@ class _TournamentDetailsState extends State<TournamentDetails> {
             .then((value) async {
           if (value.docs.isEmpty) {
             // add();
-            Navigator.of(context).pushNamed(
-                TournamentDetailsRegistration.tournamentDetailsRegistration,
-                arguments: [game, teamCount, widget.tId]);
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => TournamentDetailsRegistration(
+                        game: game, teamSize: teamCount, tId: widget.tId)));
+
+            // Navigator.of(context).pushNamed(
+            //     TournamentDetailsRegistration.tournamentDetailsRegistration,
+            //     arguments: [game, teamCount, widget.tId]);
           } else {
             fToast.showToast(
               child: Container(

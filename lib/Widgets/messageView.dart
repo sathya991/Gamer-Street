@@ -4,7 +4,9 @@ class MessageView extends StatefulWidget {
   final message;
   final isMe;
   final userName;
-  const MessageView(this.message, this.isMe, this.userName, {Key? key})
+  final isHost;
+  const MessageView(this.message, this.isMe, this.isHost, this.userName,
+      {Key? key})
       : super(key: key);
 
   @override
@@ -28,8 +30,8 @@ class _MessageViewState extends State<MessageView> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Container(
-                child: widget.isMe ? Text("You") : Text(widget.userName),
-              ),
+                  child:
+                      visibleText(widget.isHost, widget.isMe, widget.userName)),
               Divider(
                 height: 2,
                 color: Colors.black,
@@ -43,5 +45,18 @@ class _MessageViewState extends State<MessageView> {
         )
       ],
     );
+  }
+
+  Widget visibleText(bool isHost, bool isMe, String userNameNow) {
+    // if (isHost && isMe) {
+    //   return Text("You");
+    // }
+    if (isHost) {
+      return Text("Host");
+    } else if (isMe) {
+      return Text("You");
+    } else {
+      return Text(userNameNow);
+    }
   }
 }

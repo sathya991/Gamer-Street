@@ -9,8 +9,13 @@ class TournamentDetailsRegistration extends StatefulWidget {
   final int teamSize;
   final String game;
   final String tId;
+  final String hostId;
   const TournamentDetailsRegistration(
-      {Key? key, required this.game, required this.teamSize, required this.tId})
+      {Key? key,
+      required this.game,
+      required this.teamSize,
+      required this.tId,
+      required this.hostId})
       : super(key: key);
   static const tournamentDetailsRegistration =
       '/tournamentDetailsRegistration-widget';
@@ -51,6 +56,7 @@ class _TournamentDetailsRegistrationState
                       game: widget.game,
                       teamSize: widget.teamSize,
                       tId: widget.tId,
+                      hostId: widget.hostId,
                     );
                   } else {
                     return Center(
@@ -67,12 +73,14 @@ class UsersRegistration extends StatefulWidget {
   final int teamSize;
   final String game;
   final String tId;
+  final String hostId;
   final List<QueryDocumentSnapshot<Object?>> docs;
   const UsersRegistration(
       {Key? key,
       required this.docs,
       required this.game,
       required this.teamSize,
+      required this.hostId,
       required this.tId})
       : super(key: key);
 
@@ -82,16 +90,22 @@ class UsersRegistration extends StatefulWidget {
 
 class _UsersRegistrationState extends State<UsersRegistration> {
   final _formKey = GlobalKey<FormState>();
+  List<String> userName = [];
+  List<String> docId = [];
+  List<String> phone = [];
+  List<String> email = [];
+  List<String> gameId = [];
+  List<String> profileUrl = [];
 //  bool _focusBool = true;
   List<bool> _focusBool = [];
   void intiliazeData() {
     if (widget.teamSize == 1) {
       userName.add("Add Player");
       docId.add('no');
-
       phone.add('no');
       email.add('no');
-      gameId.add('no');
+      gameId.add('');
+      profileUrl.add("");
       _focusBool.add(false);
     } else {
       for (int i = 0; i < widget.teamSize; i++) {
@@ -100,6 +114,7 @@ class _UsersRegistrationState extends State<UsersRegistration> {
         phone.add('no');
         email.add('no');
         gameId.add('');
+        profileUrl.add("");
         _focusBool.add(false);
       }
     }
@@ -115,23 +130,19 @@ class _UsersRegistrationState extends State<UsersRegistration> {
     fToast.init(context);
   }
 
-  List<String> userName = [];
-  List<String> docId = [];
-  List<String> phone = [];
-  List<String> email = [];
-  List<String> gameId = [];
-
   bool buildvalue = true;
   void setbuildvalue() {
     buildvalue = false;
   }
 
-  void updateList(String uName, String dId, String pe, String em, int index) {
+  void updateList(
+      String uName, String dId, String pe, String em, int index, String pUrl) {
     setState(() {
       userName[index] = uName;
       phone[index] = pe;
       email[index] = em;
       docId[index] = dId;
+      profileUrl[index] = pUrl;
     });
   }
 
@@ -154,7 +165,8 @@ class _UsersRegistrationState extends State<UsersRegistration> {
           'gameId': gameId,
           'phone': phone,
           'email': email,
-          "player": docId,
+          "playerDocId": docId,
+          "profileUrl": profileUrl,
         },
       });
       await FirebaseFirestore.instance
@@ -180,7 +192,8 @@ class _UsersRegistrationState extends State<UsersRegistration> {
               _focusBool[i] = true;
             });
             showSearch(
-                context: context, delegate: UserSearch(dId, i, updateList));
+                context: context,
+                delegate: UserSearch(dId, i, updateList, widget.hostId));
           },
           trailing: Column(
             children: [
@@ -430,11 +443,13 @@ class UserSearch extends SearchDelegate<String> {
   Function updateList;
   List<QueryDocumentSnapshot<Object?>> docs;
   int index;
-  UserSearch(this.docs, this.index, this.updateList);
+  String hostId;
+  UserSearch(this.docs, this.index, this.updateList, this.hostId);
 
   List<String> l = ["sasikumar", "kiran", "gopi", "sasikiran"];
   int indexforDoc = 0;
   String temp = "";
+  String user = "Hoster";
   @override
   List<Widget>? buildActions(BuildContext context) {
     return [
@@ -454,7 +469,7 @@ class UserSearch extends SearchDelegate<String> {
         .get()
         .then((value) {
       updateList(value.get('userName'), temp, value.get('phone'),
-          value.get('email'), index);
+          value.get('email'), index, value.get('profileUrl'));
     });
     // Navigator.of(context).pop();
   }
@@ -472,17 +487,39 @@ class UserSearch extends SearchDelegate<String> {
   @override
   Widget buildResults(BuildContext context) {
     //throw UnimplementedError();
-    addData();
-
-    return Card(
-      child: Container(
-          height: 100,
-          width: 100,
-          child: Text(
-            indexforDoc.toString(),
-            style: TextStyle(fontWeight: FontWeight.bold),
-          )),
-    );
+    if (temp != hostId) {
+      addData();
+      Navigator.of(context).pop();
+    } else {
+      query = "";
+      return Column(
+        children: [
+          Container(
+              height: 100,
+              width: MediaQuery.of(context).size.width,
+              alignment: Alignment.center,
+              child: Text(
+                "You can not add $user. \n Because He/she is a Hoster of this Tournament",
+                textAlign: TextAlign.center,
+                style: TextStyle(fontWeight: FontWeight.w400, fontSize: 16),
+              )),
+          Icon(
+            Icons.person_add_disabled_rounded,
+            size: 40,
+            color: Colors.green,
+          )
+        ],
+      );
+    }
+    return Container(
+        height: 200,
+        width: MediaQuery.of(context).size.width,
+        alignment: Alignment.center,
+        child: Text(
+          "Added",
+          textAlign: TextAlign.center,
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+        ));
   }
 
   @override
@@ -499,9 +536,10 @@ class UserSearch extends SearchDelegate<String> {
             onTap: () {
               indexforDoc = index;
               temp = list[index][1];
-              addData();
-              Navigator.of(context).pop();
-              // showResults(context);
+              user = list[index][0];
+              //addData();
+
+              showResults(context);
             },
             //  selectedTileColor: Colors.grey,
             trailing: Icon(Icons.add),

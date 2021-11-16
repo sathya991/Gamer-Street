@@ -6,7 +6,9 @@ import 'package:gamer_street/Widgets/tournamentDetails.dart';
 class TournamentDetailScreen extends StatefulWidget {
   static const String tournamentDetailScreenRoute = '/tournament-detail-screen';
   final tourneyId;
-  const TournamentDetailScreen(this.tourneyId, {Key? key}) : super(key: key);
+  final gameName;
+  const TournamentDetailScreen(this.tourneyId, this.gameName, {Key? key})
+      : super(key: key);
 
   @override
   _TournamentDetailScreenState createState() => _TournamentDetailScreenState();
@@ -39,6 +41,7 @@ class _TournamentDetailScreenState extends State<TournamentDetailScreen>
         tId: widget.tourneyId,
       ),
       InTournamentDetails(
+        widget.gameName,
         widget.tourneyId,
       ),
       InTournamentChat(widget.tourneyId)

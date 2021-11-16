@@ -52,6 +52,9 @@ class _InTournamentChatState extends State<InTournamentChat> {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return CircularProgressIndicator();
           }
+          if (!snapshot.hasData) {
+            return CircularProgressIndicator();
+          }
           Widget widget = Container();
           var len = snapshot.data!.docs.length;
           var el;
@@ -61,8 +64,9 @@ class _InTournamentChatState extends State<InTournamentChat> {
           } else {
             for (int i = 0; i < len; i++) {
               el = snapshot.data!.docs[i];
-              if ((el.get('player1') ==
-                  FirebaseAuth.instance.currentUser!.uid)) {
+              Map curMap = el.get('players');
+              List userIdList = curMap['playerDocId'];
+              if (userIdList.contains(FirebaseAuth.instance.currentUser!.uid)) {
                 isRegistered = true;
                 widget = officialChat(hostId);
               }

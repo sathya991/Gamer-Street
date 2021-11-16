@@ -71,7 +71,10 @@ class GamesTournament extends StatelessWidget {
                                 Navigator.of(context).pushNamed(
                                     TournamentDetailScreen
                                         .tournamentDetailScreenRoute,
-                                    arguments: doc[index].id.toString());
+                                    arguments: {
+                                      'tId': doc[index].id.toString(),
+                                      'game': doc[index].get('game')
+                                    });
                               },
                               child: Text(
                                 "Tap to get registration screen",

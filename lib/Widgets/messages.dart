@@ -44,26 +44,29 @@ class _MessagesState extends State<Messages> {
         stream: messageStream,
         builder: (ctx, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return CircularProgressIndicator();
+            return Container(
+              height: 200,
+            );
+          } else {
+            final messages = snapshot.data!;
+            return messages.docs.isEmpty
+                ? buildText("Say hi")
+                : Flexible(
+                    child: ListView.builder(
+                        itemCount: messages.docs.length,
+                        reverse: true,
+                        itemBuilder: (ctx, index) {
+                          final curMessage = messages.docs[index];
+                          final isMe = curMessage.get('userName') == userName;
+                          return MessageView(
+                              curMessage.get('content'),
+                              isMe,
+                              widget.hostId,
+                              curMessage.get('userId'),
+                              curMessage.get('userName'));
+                        }),
+                  );
           }
-          final messages = snapshot.data!;
-          return messages.docs.isEmpty
-              ? buildText("Say hi")
-              : Flexible(
-                  child: ListView.builder(
-                      itemCount: messages.docs.length,
-                      reverse: true,
-                      itemBuilder: (ctx, index) {
-                        final curMessage = messages.docs[index];
-                        final isMe = curMessage.get('userName') == userName;
-                        return MessageView(
-                            curMessage.get('content'),
-                            isMe,
-                            widget.hostId,
-                            curMessage.get('userId'),
-                            curMessage.get('userName'));
-                      }),
-                );
         });
   }
 

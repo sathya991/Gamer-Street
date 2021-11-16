@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:gamer_street/screens/tournamentDetailsRegistration.dart';
 
 class TournamentDetails extends StatefulWidget {
   final tId;
@@ -14,6 +15,7 @@ class TournamentDetails extends StatefulWidget {
 
 class _TournamentDetailsState extends State<TournamentDetails> {
   FToast fToast = FToast();
+
   @override
   void initState() {
     FToast fToast;
@@ -40,6 +42,7 @@ class _TournamentDetailsState extends State<TournamentDetails> {
 
   String game = '';
   String hostId = '';
+  int teamCount = 1;
   Future gameName() async {
     await FirebaseFirestore.instance
         .collection('tournaments')
@@ -51,7 +54,17 @@ class _TournamentDetailsState extends State<TournamentDetails> {
     });
   }
 
-  Future<void> add() async {
+  void teamCountUpdate(int count) {
+    teamCount = count;
+  }
+
+  // void navigationtoRegistration(String game) {
+  //   switch (game) {
+  //     case 'BGMI':
+  //   }
+  // }
+
+  Future<void> checkPhoneAndNavigate() async {
     await FirebaseFirestore.instance
         .collection('users')
         .doc(FirebaseAuth.instance.currentUser!.uid)
@@ -68,25 +81,17 @@ class _TournamentDetailsState extends State<TournamentDetails> {
             .get()
             .then((value) async {
           if (value.docs.isEmpty) {
-            await FirebaseFirestore.instance
-                .collection('tournaments')
-                .doc(widget.tId)
-                .collection('registeredUsers')
-                .doc()
-                .set({
-              "player1": FirebaseAuth.instance.currentUser!.uid,
-              "playerAccount": false,
-              "userName": data['userName'],
-              'phone': data['phone'],
-              'email': data['email']
-            });
-            await FirebaseFirestore.instance
-                .collection('users')
-                .doc(FirebaseAuth.instance.currentUser!.uid)
-                .collection('PlayerGames')
-                .doc()
-                .set({"Tid": widget.tId});
-          } else
+            // add();
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => TournamentDetailsRegistration(
+                        game: game, teamSize: teamCount, tId: widget.tId)));
+
+            // Navigator.of(context).pushNamed(
+            //     TournamentDetailsRegistration.tournamentDetailsRegistration,
+            //     arguments: [game, teamCount, widget.tId]);
+          } else {
             fToast.showToast(
               child: Container(
                 height: 60,
@@ -120,6 +125,7 @@ class _TournamentDetailsState extends State<TournamentDetails> {
               gravity: ToastGravity.BOTTOM,
               toastDuration: Duration(seconds: 2),
             );
+          }
         });
       } else {
         fToast.showToast(
@@ -158,6 +164,60 @@ class _TournamentDetailsState extends State<TournamentDetails> {
       }
     });
   }
+
+  // Future<void> add() async {
+  //   await FirebaseFirestore.instance
+  //       .collection('users')
+  //       .doc(FirebaseAuth.instance.currentUser!.uid)
+  //       .get()
+  //       .then((value) async {
+  //     Map<String, dynamic> data = value.data() as Map<String, dynamic>;
+
+  // await FirebaseFirestore.instance
+  //     .collection('tournaments')
+  //     .doc(widget.tId)
+  //     .collection('registeredUsers')
+  //     .doc()
+  //     .set({
+  //   "players": [
+  // {
+  //   "player": FirebaseAuth.instance.currentUser!.uid,
+  //   "playerAccount": false,
+  //   "userName": data['userName'],
+  //   'phone': data['phone'],
+  //   'email': data['email']
+  // },
+  // {
+  //   "player": FirebaseAuth.instance.currentUser!.uid,
+  //   "playerAccount": false,
+  //   "userName": data['userName'],
+  //   'phone': data['phone'],
+  //   'email': data['email']
+  // },
+  // {
+  //   "player": FirebaseAuth.instance.currentUser!.uid,
+  //       "playerAccount": false,
+  //       "userName": data['userName'],
+  //       'phone': data['phone'],
+  //       'email': data['email']
+  //     },
+  //     {
+  //       "player": FirebaseAuth.instance.currentUser!.uid,
+  //       "playerAccount": false,
+  //       "userName": data['userName'],
+  //       'phone': data['phone'],
+  //       'email': data['email']
+  //     }
+  //   ]
+  // });
+  //     await FirebaseFirestore.instance
+  //         .collection('users')
+  //         .doc(FirebaseAuth.instance.currentUser!.uid)
+  //         .collection('PlayerGames')
+  //         .doc()
+  //         .set({"Tid": widget.tId});
+  //   });
+  // }
 
   void toastMessage(String msg) {
     fToast.showToast(
@@ -206,7 +266,9 @@ class _TournamentDetailsState extends State<TournamentDetails> {
                   return Column(children: [
                     BasicInfo(snapshot: (snapshot.data! as dynamic)[0]),
                     AdditionalInfo(
-                        snapshot: (snapshot.data! as dynamic)[1], game: game),
+                        snapshot: (snapshot.data! as dynamic)[1],
+                        game: game,
+                        fun: teamCountUpdate),
                     Container(
                       height: 300,
                       alignment: Alignment.center,
@@ -218,7 +280,7 @@ class _TournamentDetailsState extends State<TournamentDetails> {
                                 FirebaseAuth.instance.currentUser!.uid) {
                               toastMessage('You cannot Play this Tournament');
                             } else {
-                              add();
+                              checkPhoneAndNavigate();
                             }
                           },
                           child: Text(
@@ -330,7 +392,10 @@ class BasicInfo extends StatelessWidget {
 class AdditionalInfo extends StatelessWidget {
   final QuerySnapshot snapshot;
   final String game;
-  const AdditionalInfo({Key? key, required this.snapshot, required this.game})
+  final Function fun;
+
+  const AdditionalInfo(
+      {Key? key, required this.snapshot, required this.game, required this.fun})
       : super(key: key);
 
   static Widget buildAdditionalInfo(String head, String value) {
@@ -353,9 +418,17 @@ class AdditionalInfo extends StatelessWidget {
     List heading = [];
     switch (game) {
       case "BGMI":
+        String teamSize = doc['teamMode'];
+        if (teamSize == 'Solo') {
+          fun(1);
+        } else if (teamSize == 'Duo') {
+          fun(2);
+        } else {
+          fun(4);
+        }
         l = [
           doc['map'],
-          doc['teamMode'],
+          teamSize,
         ];
         heading = ['Map', 'Team Mode'];
         break;

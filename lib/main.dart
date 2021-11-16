@@ -24,6 +24,7 @@ import 'package:gamer_street/screens/tournamentDetailScreen.dart';
 import 'package:gamer_street/services/storage.dart';
 import 'package:provider/provider.dart';
 import 'package:gamer_street/screens/Gamestournament.dart';
+import 'package:gamer_street/screens/tournamentDetailsRegistration.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -105,9 +106,10 @@ class _MyAppState extends State<MyApp> {
                   onGenerateRoute: (data) {
                     if (data.name ==
                         TournamentDetailScreen.tournamentDetailScreenRoute) {
-                      final tourneyId = data.arguments as String;
+                      final curData = data.arguments as Map;
                       return MaterialPageRoute(
-                          builder: (_) => TournamentDetailScreen(tourneyId));
+                          builder: (_) => TournamentDetailScreen(
+                              curData['tId'], curData['game']));
                     }
                     return null;
                   },

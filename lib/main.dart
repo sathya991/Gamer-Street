@@ -11,11 +11,9 @@ import 'package:gamer_street/screens/HostingGame.dart';
 import 'package:gamer_street/screens/TabsScreenState.dart';
 import 'package:gamer_street/screens/addDetailsGoogleScreen.dart';
 import 'package:gamer_street/screens/auth_screen.dart';
-import 'package:gamer_street/screens/bgmiAdditionalInfoScreen.dart';
 import 'package:gamer_street/screens/choose_screen.dart';
 import 'package:gamer_street/screens/email_verify_wait_screen.dart';
 import 'package:gamer_street/screens/know_more_screen.dart';
-import 'package:gamer_street/screens/ludoAdditionalInfoScreen.dart';
 import 'package:gamer_street/screens/profile.dart';
 import 'package:gamer_street/screens/settingsScreen.dart';
 import 'package:gamer_street/screens/splash_screen.dart';
@@ -24,7 +22,6 @@ import 'package:gamer_street/screens/tournamentDetailScreen.dart';
 import 'package:gamer_street/services/storage.dart';
 import 'package:provider/provider.dart';
 import 'package:gamer_street/screens/Gamestournament.dart';
-import 'package:gamer_street/screens/tournamentDetailsRegistration.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();

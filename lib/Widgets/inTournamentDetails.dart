@@ -5,7 +5,7 @@ import 'package:gamer_street/screens/profile.dart';
 class InTournamentDetails extends StatefulWidget {
   final tourneyId;
   final gameName;
-  const InTournamentDetails(this.gameName, this.tourneyId, {Key? key})
+  const InTournamentDetails(this.tourneyId, this.gameName, {Key? key})
       : super(key: key);
 
   @override

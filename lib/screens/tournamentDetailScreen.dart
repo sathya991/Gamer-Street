@@ -41,8 +41,8 @@ class _TournamentDetailScreenState extends State<TournamentDetailScreen>
         tId: widget.tourneyId,
       ),
       InTournamentDetails(
-        widget.gameName,
         widget.tourneyId,
+        widget.gameName,
       ),
       InTournamentChat(widget.tourneyId)
     ];

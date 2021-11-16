@@ -86,7 +86,11 @@ class _TournamentDetailsState extends State<TournamentDetails> {
                 context,
                 MaterialPageRoute(
                     builder: (context) => TournamentDetailsRegistration(
-                        game: game, teamSize: teamCount, tId: widget.tId)));
+                          game: game,
+                          teamSize: teamCount,
+                          tId: widget.tId,
+                          hostId: hostId,
+                        )));
 
             // Navigator.of(context).pushNamed(
             //     TournamentDetailsRegistration.tournamentDetailsRegistration,

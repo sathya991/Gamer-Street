@@ -50,6 +50,9 @@ dependencies:
   date_format: ^2.0.4
   fluttertoast: ^8.0.8
   flutter_easyloading: ^3.0.3
+  image_picker: ^0.8.4+4
+  image_cropper: ^1.3.1
+  
   
 
 

@@ -14,7 +14,6 @@ import 'package:gamer_street/screens/auth_screen.dart';
 import 'package:gamer_street/screens/choose_screen.dart';
 import 'package:gamer_street/screens/email_verify_wait_screen.dart';
 import 'package:gamer_street/screens/know_more_screen.dart';
-import 'package:gamer_street/screens/phone_verification_screen.dart';
 import 'package:gamer_street/screens/profile.dart';
 import 'package:gamer_street/screens/settingsScreen.dart';
 import 'package:gamer_street/screens/splash_screen.dart';

@@ -53,7 +53,6 @@ class TourneyProvider extends ChangeNotifier {
         'game': 'BGMI',
         'hostId': FirebaseAuth.instance.currentUser!.uid.toString(),
         'count': teamsCount(teamMode),
-        'registeredCount': 0
       }).then((val) async {
         await FirebaseFirestore.instance
             .collection('tournaments')
@@ -93,8 +92,7 @@ class TourneyProvider extends ChangeNotifier {
           .set({
         'game': 'Ludo King',
         'hostId': FirebaseAuth.instance.currentUser!.uid.toString(),
-        'count': players,
-        'registeredCount': 0
+        'count': players
       }).then((val) async {
         await FirebaseFirestore.instance
             .collection('tournaments')

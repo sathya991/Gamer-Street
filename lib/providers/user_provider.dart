@@ -5,16 +5,6 @@ import 'package:gamer_street/services/storage.dart';
 
 class UserDataProvider extends ChangeNotifier {
   String userName = "";
-  // Future getUsername(String userId) async {
-  //   await FirebaseFirestore.instance
-  //       .collection('users')
-  //       .doc(userId)
-  //       .get()
-  //       .then((value) async {
-  //     userName = await value.get('userName');
-  //   });
-  //   return userName;
-  // }
 
   final SecureStorage secureStorage = SecureStorage();
   String _password = "";
@@ -62,24 +52,6 @@ class UserDataProvider extends ChangeNotifier {
     }
     return returnStatement;
   }
-
-  // Future addUserData() async {
-  //   final User? _curUser = FirebaseAuth.instance.currentUser;
-  //   if (_curUser != null) {
-  //     await FirebaseFirestore.instance
-  //         .collection('users')
-  //         .doc(_curUser.uid)
-  //         .set({
-  //       'userName': _curUser.displayName,
-  //       'admin': false,
-  //       'email': _curUser.email!,
-  //       'gamesPlayed': 0,
-  //       'gamesWon': 0,
-  //       'phone': "",
-  //       'rank': 'noRank',
-  //     });
-  //   }
-  // }
 
   Future _deleteFromDb() async {
     await FirebaseFirestore.instance

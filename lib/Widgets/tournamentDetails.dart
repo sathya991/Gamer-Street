@@ -7,6 +7,7 @@ import 'package:gamer_street/screens/tournamentDetailsRegistration.dart';
 
 class TournamentDetails extends StatefulWidget {
   final tId;
+
   const TournamentDetails({Key? key, required this.tId}) : super(key: key);
 
   @override

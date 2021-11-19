@@ -52,7 +52,8 @@ class _AppDrawerState extends State<AppDrawer> {
               leading: Icon(Icons.home),
               title: Text("User Details"),
               onTap: () {
-                Navigator.of(context).popAndPushNamed(Profile.profile);
+                Navigator.of(context).popAndPushNamed(Profile.profile,
+                    arguments: FirebaseAuth.instance.currentUser!.uid);
               },
             ),
             ListTile(

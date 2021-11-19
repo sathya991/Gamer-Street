@@ -99,11 +99,16 @@ class _MyAppState extends State<MyApp> {
                     ThemeScreen.themeScreenRoute: (ctx) => ThemeScreen(),
                     KnowMoreScreen.knowMoreScreenRoute: (ctx) =>
                         KnowMoreScreen(),
-                    Profile.profile: (ctx) => Profile(),
-                    PhoneVerificationScreen.phoneVerificationRoute: (ctx) =>
-                        PhoneVerificationScreen(),
+                    // Profile.profile: (ctx) => Profile(),
                   },
                   onGenerateRoute: (data) {
+                    if (data.name == Profile.profile) {
+                      final String profileUrl = data.arguments as String;
+                      return MaterialPageRoute(
+                          builder: (_) => Profile(
+                                profileUrl: profileUrl,
+                              ));
+                    }
                     if (data.name ==
                         TournamentDetailScreen.tournamentDetailScreenRoute) {
                       final curData = data.arguments as Map;

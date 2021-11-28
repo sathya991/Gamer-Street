@@ -5,7 +5,8 @@ import 'package:gamer_street/Widgets/tourneySmallDisplay.dart';
 import 'package:gamer_street/screens/tournamentDetailScreen.dart';
 
 class GamesTournament extends StatelessWidget {
-  const GamesTournament({Key? key}) : super(key: key);
+  final gameName;
+  const GamesTournament(this.gameName, {Key? key}) : super(key: key);
   static const gamesTournamentRoute = '/gamesTournamentList';
 
   Future<QuerySnapshot> getTid() {
@@ -26,11 +27,8 @@ class GamesTournament extends StatelessWidget {
       width = screenWidth / 3;
     else
       width = screenWidth / 3;
-    final gamename = ModalRoute.of(context)!.settings.arguments as String;
+    // final gamename = ModalRoute.of(context)!.settings.arguments as String;
     return Scaffold(
-      appBar: AppBar(
-        title: Text(gamename),
-      ),
       body: FutureBuilder<QuerySnapshot>(
           future: getTid(),
           builder: (ctx, snap) {

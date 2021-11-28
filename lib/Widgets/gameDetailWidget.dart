@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:gamer_street/screens/Gamestournament.dart';
 import 'package:gamer_street/screens/HostingGame.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:gamer_street/screens/games_screen.dart';
 import 'package:shimmer/shimmer.dart';
 
 class GameDetailWidget extends StatefulWidget {
@@ -73,8 +74,8 @@ class _GameDetailWidgetState extends State<GameDetailWidget> {
           Navigator.of(context)
               .pushNamed(HostingGame.Hosting_Game, arguments: widget.game);
         } else {
-          Navigator.of(context).pushNamed(GamesTournament.gamesTournamentRoute,
-              arguments: widget.game);
+          Navigator.of(context).push(
+              MaterialPageRoute(builder: (context) => GamesTournament("all")));
         }
       },
       child: Card(

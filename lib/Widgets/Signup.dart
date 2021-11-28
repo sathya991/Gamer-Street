@@ -23,6 +23,7 @@ class _SignupWidgetState extends State<SignupWidget> {
   String _email = "";
   String _password = "";
   String _userName = "";
+  String _phone = "";
   bool _passwordNotVisible = true;
   //function to check if the given number is a number or not.
   //Validating if given input is a number or an email
@@ -76,7 +77,7 @@ class _SignupWidgetState extends State<SignupWidget> {
           'gamesPlayed': 0,
           'gamesWon': 0,
           'hostSuccess': 0,
-          'phone': "",
+          'phone': _phone,
           'hosterRank': 'noRank',
           'hosterTier': 'noTier',
           'hosterTierUrl': '',
@@ -93,8 +94,7 @@ class _SignupWidgetState extends State<SignupWidget> {
             await curUser.sendEmailVerification();
           }
           Navigator.of(context).pushNamedAndRemoveUntil(
-              EmailVerifyWaitScreen.otpScreenRoute, (route) => false,
-              arguments: {'password': _password});
+              EmailVerifyWaitScreen.otpScreenRoute, (route) => false);
         });
       } on FirebaseAuthException catch (e) {
         loadingSet(false);
@@ -197,6 +197,30 @@ class _SignupWidgetState extends State<SignupWidget> {
                       ),
                     ),
                     keyboardType: TextInputType.emailAddress,
+                  ),
+                  SizedBox(
+                    height: 40,
+                  ),
+                  TextFormField(
+                    validator: (txt) => userProvider.validatePhoneNumber(txt!),
+                    autocorrect: true,
+                    enableSuggestions: true,
+                    onSaved: (tx) {
+                      _phone = tx!;
+                    },
+                    decoration: InputDecoration(
+                      labelText: "Phone",
+                      focusedBorder: OutlineInputBorder(
+                        borderSide:
+                            BorderSide(color: Colors.greenAccent, width: 2.0),
+                        borderRadius: BorderRadius.all(Radius.circular(5)),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.red, width: 2.0),
+                        borderRadius: BorderRadius.all(Radius.circular(10)),
+                      ),
+                    ),
+                    keyboardType: TextInputType.number,
                   ),
                   SizedBox(
                     height: 40,

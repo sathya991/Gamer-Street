@@ -15,7 +15,7 @@ import 'package:gamer_street/screens/auth_screen.dart';
 import 'package:gamer_street/screens/choose_screen.dart';
 import 'package:gamer_street/screens/email_verify_wait_screen.dart';
 import 'package:gamer_street/screens/know_more_screen.dart';
-import 'package:gamer_street/screens/phone_verification_screen.dart';
+
 import 'package:gamer_street/screens/profile.dart';
 import 'package:gamer_street/screens/settingsScreen.dart';
 import 'package:gamer_street/screens/splash_screen.dart';
@@ -40,21 +40,6 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   SecureStorage secureStorage = SecureStorage();
-  bool isPhoneNumberPresent = false;
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    FirebaseFirestore.instance
-        .collection('users')
-        .doc(FirebaseAuth.instance.currentUser!.uid)
-        .get()
-        .then((value) {
-      if (value.get('phone').toString().isNotEmpty) {
-        isPhoneNumberPresent = true;
-      }
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -91,11 +76,7 @@ class _MyAppState extends State<MyApp> {
                       if (userSnapshot.hasData) {
                         User? _user = FirebaseAuth.instance.currentUser;
                         if (_user!.emailVerified) {
-                          if (isPhoneNumberPresent) {
-                            return TabsScreenState();
-                          } else {
-                            return PhoneVerificationScreen();
-                          }
+                          return TabsScreenState();
                         } else if (!_user.emailVerified) {
                           return EmailVerifyWaitScreen();
                         }
@@ -109,7 +90,7 @@ class _MyAppState extends State<MyApp> {
                         EmailVerifyWaitScreen(),
                     TabsScreenState.tabsRouteName: (ctx) => TabsScreenState(),
                     GamesTournament.gamesTournamentRoute: (ctx) =>
-                        GamesTournament(),
+                        GamesTournament("all"),
                     Hosting.HostingRoute: (ctx) => Hosting(),
                     HostingGame.Hosting_Game: (ctx) => HostingGame(),
                     DetailGoogleScreen.googleDetailsScreen: (ctx) =>
@@ -119,8 +100,6 @@ class _MyAppState extends State<MyApp> {
                     ThemeScreen.themeScreenRoute: (ctx) => ThemeScreen(),
                     KnowMoreScreen.knowMoreScreenRoute: (ctx) =>
                         KnowMoreScreen(),
-                    PhoneVerificationScreen.phoneVerificationScreen: (ctx) =>
-                        PhoneVerificationScreen(),
                     // Profile.profile: (ctx) => Profile(),
                   },
                   onGenerateRoute: (data) {

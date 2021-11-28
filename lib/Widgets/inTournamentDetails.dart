@@ -1,8 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:gamer_street/screens/profile.dart';
-import 'package:firebase_storage/firebase_storage.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 
 class InTournamentDetails extends StatefulWidget {
   final tourneyId;
@@ -74,8 +72,12 @@ class _InTournamentDetailsState extends State<InTournamentDetails> {
                             children: [
                               CircleAvatar(
                                 radius: 30,
-                                backgroundImage: NetworkImage(
-                                    "https://www.pngall.com/wp-content/uploads/5/User-Profile-PNG.png"),
+                                backgroundImage: valMap['profileUrl'][0]
+                                        .toString()
+                                        .isEmpty
+                                    ? NetworkImage(
+                                        "https://www.pngall.com/wp-content/uploads/5/User-Profile-PNG.png")
+                                    : NetworkImage(valMap['profileUrl'][0]),
                                 backgroundColor: Colors.transparent,
                               ),
                               SizedBox(
@@ -86,7 +88,8 @@ class _InTournamentDetailsState extends State<InTournamentDetails> {
                           ),
                         ),
                         onTap: () {
-                          Navigator.of(context).pushNamed(Profile.profile);
+                          Navigator.of(context).pushNamed(Profile.profile,
+                              arguments: valMap['playerDocId'][0]);
                         },
                       );
                     })
@@ -96,35 +99,41 @@ class _InTournamentDetailsState extends State<InTournamentDetails> {
                     itemBuilder: (ctx, index) {
                       var val = snapshot.data!.docs;
                       Map valMap = val[index].get('players');
-                      List userNames = valMap['userName'];
                       return Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: ListView.builder(
                             shrinkWrap: true,
-                            itemCount: userNames.length,
+                            itemCount: valMap['email'].length,
                             itemBuilder: (ctx1, index1) {
                               return GestureDetector(
-                                key: ValueKey(userNames[index1]),
+                                key: ValueKey(valMap['userName'][index1]),
                                 child: Card(
                                   child: Row(
                                     mainAxisAlignment: MainAxisAlignment.start,
                                     children: [
                                       CircleAvatar(
                                         radius: 30,
-                                        backgroundImage: NetworkImage(
-                                            "https://www.pngall.com/wp-content/uploads/5/User-Profile-PNG.png"),
+                                        backgroundImage: valMap['profileUrl']
+                                                    [index]
+                                                .toString()
+                                                .isEmpty
+                                            ? NetworkImage(
+                                                "https://www.pngall.com/wp-content/uploads/5/User-Profile-PNG.png")
+                                            : NetworkImage(
+                                                valMap['profileUrl'][index]),
                                         backgroundColor: Colors.transparent,
                                       ),
                                       SizedBox(
                                         width: 20,
                                       ),
-                                      Text(userNames[index1])
+                                      Text(valMap['userName'][index1])
                                     ],
                                   ),
                                 ),
                                 onTap: () {
-                                  Navigator.of(context)
-                                      .pushNamed(Profile.profile);
+                                  Navigator.of(context).pushNamed(
+                                      Profile.profile,
+                                      arguments: valMap['playerDocId'][index]);
                                 },
                               );
                             }),

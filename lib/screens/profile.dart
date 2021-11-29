@@ -97,7 +97,7 @@ class _ProfileState extends State<Profile> {
           ]),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
-              return CircularProgressIndicator();
+              return Center(child: CircularProgressIndicator());
             } else if ((snapshot.hasData)) {
               var i = (snapshot.data! as dynamic)[0];
 

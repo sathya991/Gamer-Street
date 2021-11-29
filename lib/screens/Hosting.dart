@@ -20,7 +20,10 @@ class _HostingState extends State<Hosting> {
           style: TextStyle(fontWeight: FontWeight.w300),
         ),
       ),
-      body: GamesScreen(isHosting: _isHosting),
+      body: GamesScreen(
+        isHosting: _isHosting,
+        func: null,
+      ),
     );
   }
 }

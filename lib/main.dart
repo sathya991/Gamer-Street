@@ -89,8 +89,6 @@ class _MyAppState extends State<MyApp> {
                     EmailVerifyWaitScreen.otpScreenRoute: (ctx) =>
                         EmailVerifyWaitScreen(),
                     TabsScreenState.tabsRouteName: (ctx) => TabsScreenState(),
-                    GamesTournament.gamesTournamentRoute: (ctx) =>
-                        GamesTournament("all"),
                     Hosting.HostingRoute: (ctx) => Hosting(),
                     HostingGame.Hosting_Game: (ctx) => HostingGame(),
                     DetailGoogleScreen.googleDetailsScreen: (ctx) =>
@@ -109,6 +107,11 @@ class _MyAppState extends State<MyApp> {
                           builder: (_) => Profile(
                                 profileUrl: profileUrl,
                               ));
+                    }
+                    if (data.name == GamesTournament.gamesTournamentRoute) {
+                      final String gameName = data.arguments as String;
+                      return MaterialPageRoute(
+                          builder: (_) => GamesTournament(gameName));
                     }
                     if (data.name ==
                         TournamentDetailScreen.tournamentDetailScreenRoute) {

@@ -19,7 +19,9 @@ import 'package:shimmer/shimmer.dart';
 
 class GamesScreen extends StatefulWidget {
   final bool isHosting;
-  const GamesScreen({Key? key, required this.isHosting}) : super(key: key);
+  final func;
+  const GamesScreen({Key? key, required this.func, required this.isHosting})
+      : super(key: key);
   static const gamesScreenRoute = '/games-screen';
 
   @override
@@ -91,6 +93,7 @@ class _GamesScreenState extends State<GamesScreen> {
             itemCount: streamSnapshot.data?.docs.length,
             itemBuilder: (ctx, index) {
               return GameDetailWidget(
+                func: widget.func,
                 game: documents[index]['game'],
                 gameImageUrl: documents[index]['url'],
                 width: widgetwidth,

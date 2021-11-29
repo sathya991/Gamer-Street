@@ -10,10 +10,12 @@ class GameDetailWidget extends StatefulWidget {
   final String? gameImageUrl;
   final double? width;
   final bool isHosting;
+  final func;
   const GameDetailWidget(
       {Key? key,
       this.game,
       required this.gameImageUrl,
+      required this.func,
       this.width,
       required this.isHosting})
       : super(key: key);
@@ -70,13 +72,15 @@ class _GameDetailWidgetState extends State<GameDetailWidget> {
           bottomLeft: Radius.circular(20), bottomRight: Radius.circular(15)),
       splashColor: Colors.white,
       onTap: () {
+        widget.func(1, widget.game);
         if (widget.isHosting) {
           Navigator.of(context)
               .pushNamed(HostingGame.Hosting_Game, arguments: widget.game);
-        } else {
-          Navigator.of(context).push(
-              MaterialPageRoute(builder: (context) => GamesTournament("all")));
         }
+        // else {
+        //   Navigator.of(context).pushNamed(GamesTournament.gamesTournamentRoute,
+        //       arguments: "all");
+        // }
       },
       child: Card(
           shape: RoundedRectangleBorder(

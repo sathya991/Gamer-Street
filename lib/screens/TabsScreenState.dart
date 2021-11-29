@@ -22,12 +22,15 @@ class TabsScreenState extends StatefulWidget {
 }
 
 class _TabsState extends State<TabsScreenState> with TickerProviderStateMixin {
-  List<Widget> _widgets = [
-    GamesTournament("all"),
-    SeasonScreen(),
-    Profile(profileUrl: FirebaseAuth.instance.currentUser!.uid)
-  ];
   int index = 0;
+  String gameName = "all";
+  func(value, gameNameBack) {
+    setState(() {
+      index = value;
+      gameName = "all";
+    });
+  }
+
   void _handleSelected(int ind) {
     setState(() {
       index = ind;
@@ -47,71 +50,89 @@ class _TabsState extends State<TabsScreenState> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
+    List<Widget> _widgets = [
+      GamesScreen(
+        isHosting: false,
+        func: func,
+      ),
+      GamesTournament(gameName),
+      SeasonScreen(),
+      Profile(profileUrl: FirebaseAuth.instance.currentUser!.uid)
+    ];
     return Scaffold(
-      appBar: AppBar(
-        title: Row(
-          children: [
-            Text(
-              "Gamer",
-              style: TextStyle(
-                  fontWeight: FontWeight.w900,
-                  fontSize: 25,
-                  color: Colors.black),
-            ),
-            Stack(
-              children: <Widget>[
-                // Stroked text as border.
-                Text(
-                  'Street',
-                  style: TextStyle(
-                    fontSize: 23,
-                    fontStyle: FontStyle.italic,
-                    foreground: Paint()
-                      ..style = PaintingStyle.stroke
-                      ..strokeWidth = 3.5
-                      ..color = Colors.black,
+      appBar: index != 3
+          ? AppBar(
+              title: Row(
+                children: [
+                  Text(
+                    "Gamer",
+                    style: TextStyle(
+                        fontWeight: FontWeight.w900,
+                        fontSize: 25,
+                        color: Colors.black),
                   ),
-                ),
-                // Solid text as fill.
-                Text(
-                  'Street',
-                  style: TextStyle(
-                    fontSize: 23,
-                    fontStyle: FontStyle.italic,
-                    color: Colors.redAccent.shade700,
-                  ),
+                  Stack(
+                    children: <Widget>[
+                      // Stroked text as border.
+                      Text(
+                        'Street',
+                        style: TextStyle(
+                          fontSize: 23,
+                          fontStyle: FontStyle.italic,
+                          foreground: Paint()
+                            ..style = PaintingStyle.stroke
+                            ..strokeWidth = 3.5
+                            ..color = Colors.black,
+                        ),
+                      ),
+                      // Solid text as fill.
+                      Text(
+                        'Street',
+                        style: TextStyle(
+                          fontSize: 23,
+                          fontStyle: FontStyle.italic,
+                          color: Colors.redAccent.shade700,
+                        ),
+                      ),
+                    ],
+                  )
+                ],
+              ),
+              actions: <Widget>[
+                PopupMenuButton<String>(
+                  onSelected: handleClick,
+                  itemBuilder: (BuildContext context) {
+                    return {'Settings', 'Know more'}.map((String choice) {
+                      return PopupMenuItem<String>(
+                        value: choice,
+                        child: Text(choice),
+                      );
+                    }).toList();
+                  },
                 ),
               ],
             )
-          ],
-        ),
-        actions: <Widget>[
-          PopupMenuButton<String>(
-            onSelected: handleClick,
-            itemBuilder: (BuildContext context) {
-              return {'Settings', 'Know more'}.map((String choice) {
-                return PopupMenuItem<String>(
-                  value: choice,
-                  child: Text(choice),
-                );
-              }).toList();
-            },
-          ),
-        ],
-      ),
+          : null,
       body: Center(
         child: _widgets.elementAt(index),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.of(context)
-              .pushNamed(Hosting.HostingRoute, arguments: true);
-        },
-        child: FaIcon(FontAwesomeIcons.plus),
-        backgroundColor: Colors.red,
-      ),
+      floatingActionButton: index == 1
+          ? FloatingActionButton(
+              onPressed: () {
+                Navigator.of(context)
+                    .pushNamed(Hosting.HostingRoute, arguments: true);
+              },
+              child: FaIcon(FontAwesomeIcons.plus),
+              backgroundColor: Colors.red,
+            )
+          : null,
       bottomNavigationBar: BottomNavigationBar(
+        type: BottomNavigationBarType.fixed,
         items: const <BottomNavigationBarItem>[
+          BottomNavigationBarItem(
+            icon: FaIcon(FontAwesomeIcons.home),
+            label: 'Games',
+          ),
           BottomNavigationBarItem(
             icon: FaIcon(FontAwesomeIcons.gamepad),
             label: 'Tournaments',

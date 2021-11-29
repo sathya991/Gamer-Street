@@ -50,6 +50,7 @@ class TourneyProvider extends ChangeNotifier {
           .collection('tournaments')
           .doc(value.parent.parent!.id)
           .set({
+        'matchState': "inProgress",
         'game': 'BGMI',
         'hostId': FirebaseAuth.instance.currentUser!.uid.toString(),
         'count': teamsCount(teamMode),
@@ -90,6 +91,7 @@ class TourneyProvider extends ChangeNotifier {
           .collection('tournaments')
           .doc(value.parent.parent!.id)
           .set({
+        'matchState': "inProgress",
         'game': 'Ludo King',
         'hostId': FirebaseAuth.instance.currentUser!.uid.toString(),
         'count': players

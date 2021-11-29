@@ -40,51 +40,57 @@ class GamesTournament extends StatelessWidget {
               );
             } else if (snap.hasData) {
               var doc = snap.data!.docs;
-              return GridView.builder(
-                physics: BouncingScrollPhysics(),
-                padding: EdgeInsets.only(bottom: 200),
-                gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-                    // maxCrossAxisExtent: 200,
-                    // childAspectRatio: 3 / 2,
-                    maxCrossAxisExtent: width,
-                    childAspectRatio: width / (width / 1.7),
-                    mainAxisSpacing: 4,
-                    crossAxisSpacing: 4),
-                itemCount: doc.length,
-                itemBuilder: (ctx, index) {
-                  return Card(
-                    elevation: 25,
-                    margin: EdgeInsets.all(10),
-                    shape: RoundedRectangleBorder(
-                        borderRadius:
-                            BorderRadius.only(bottomLeft: Radius.circular(20))),
-                    child: Column(
-                      children: [
-                        TourneySmallDisplay(doc[index].id, 200),
-                        Container(
-                          padding: EdgeInsets.all(10),
-                          child: TextButton(
-                              onPressed: () {
-                                Navigator.of(context).pushNamed(
-                                    TournamentDetailScreen
-                                        .tournamentDetailScreenRoute,
-                                    arguments: {
-                                      'tId': doc[index].id.toString(),
-                                      'game': doc[index].get('game')
-                                    });
-                              },
-                              child: Text(
-                                "Tap to get registration screen",
-                                style: TextStyle(
-                                    fontSize: width / 19,
-                                    fontWeight: FontWeight.w300),
-                              )),
-                        )
-                      ],
-                    ),
-                  );
-                },
-              );
+              return doc.length == 0
+                  ? Center(
+                      child: Container(
+                        child: Text("No tournaments active"),
+                      ),
+                    )
+                  : GridView.builder(
+                      physics: BouncingScrollPhysics(),
+                      padding: EdgeInsets.only(bottom: 200),
+                      gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+                          // maxCrossAxisExtent: 200,
+                          // childAspectRatio: 3 / 2,
+                          maxCrossAxisExtent: width,
+                          childAspectRatio: width / (width / 1.7),
+                          mainAxisSpacing: 4,
+                          crossAxisSpacing: 4),
+                      itemCount: doc.length,
+                      itemBuilder: (ctx, index) {
+                        return Card(
+                          elevation: 25,
+                          margin: EdgeInsets.all(10),
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.only(
+                                  bottomLeft: Radius.circular(20))),
+                          child: Column(
+                            children: [
+                              TourneySmallDisplay(doc[index].id, 200),
+                              Container(
+                                padding: EdgeInsets.all(10),
+                                child: TextButton(
+                                    onPressed: () {
+                                      Navigator.of(context).pushNamed(
+                                          TournamentDetailScreen
+                                              .tournamentDetailScreenRoute,
+                                          arguments: {
+                                            'tId': doc[index].id.toString(),
+                                            'game': doc[index].get('game')
+                                          });
+                                    },
+                                    child: Text(
+                                      "Tap to get registration screen",
+                                      style: TextStyle(
+                                          fontSize: width / 19,
+                                          fontWeight: FontWeight.w300),
+                                    )),
+                              )
+                            ],
+                          ),
+                        );
+                      },
+                    );
             } else {
               return Center(
                 child: Text("No Tournaments Available"),

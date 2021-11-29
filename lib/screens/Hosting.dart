@@ -10,6 +10,7 @@ class Hosting extends StatefulWidget {
 }
 
 class _HostingState extends State<Hosting> {
+  func(val, val2) {}
   @override
   Widget build(BuildContext context) {
     final _isHosting = ModalRoute.of(context)!.settings.arguments as bool;
@@ -22,7 +23,7 @@ class _HostingState extends State<Hosting> {
       ),
       body: GamesScreen(
         isHosting: _isHosting,
-        func: null,
+        func: func,
       ),
     );
   }

@@ -52,12 +52,21 @@ class TourneyProvider extends ChangeNotifier {
           .set({
         'game': 'BGMI',
         'hostId': FirebaseAuth.instance.currentUser!.uid.toString(),
+        'count': teamsCount(teamMode),
       }).then((val) async {
         await FirebaseFirestore.instance
             .collection('tournaments')
             .doc(value.parent.parent!.id)
             .collection('additionalInfo')
             .add({'map': map, 'teamMode': teamMode});
+      });
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(FirebaseAuth.instance.currentUser!.uid)
+          .collection('HosterGames')
+          .doc()
+          .set({
+        'Tid': value.parent.parent!.id,
       });
     });
   }
@@ -83,6 +92,7 @@ class TourneyProvider extends ChangeNotifier {
           .set({
         'game': 'Ludo King',
         'hostId': FirebaseAuth.instance.currentUser!.uid.toString(),
+        'count': players
       }).then((val) async {
         await FirebaseFirestore.instance
             .collection('tournaments')
@@ -90,6 +100,24 @@ class TourneyProvider extends ChangeNotifier {
             .collection('additionalInfo')
             .add({'noOfPlayers': players});
       });
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(FirebaseAuth.instance.currentUser!.uid)
+          .collection('HosterGames')
+          .doc()
+          .set({
+        'Tid': value.parent.parent!.id,
+      });
     });
+  }
+
+  int teamsCount(String txt) {
+    if (txt == 'Squad') {
+      return 25;
+    } else if (txt == 'Duo') {
+      return 50;
+    } else {
+      return 100;
+    }
   }
 }

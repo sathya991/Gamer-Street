@@ -19,14 +19,10 @@ class _OtpScreenState extends State<EmailVerifyWaitScreen> {
   void initState() {
     super.initState();
     Future(() async {
-      var _passwordVal =
-          ModalRoute.of(context)!.settings.arguments as Map<String, String>;
-      String? _password = _passwordVal['password'];
       _timer = Timer.periodic(Duration(seconds: 5), (timer) async {
         FirebaseAuth.instance.currentUser!..reload();
         var user = FirebaseAuth.instance.currentUser;
         if (user!.emailVerified) {
-          secureStorage.writeSecureData('password', _password!);
           setState(() {
             _isUserEmailVerified = user.emailVerified;
             Navigator.pushNamedAndRemoveUntil(

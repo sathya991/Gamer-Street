@@ -80,6 +80,14 @@ class UserDataProvider extends ChangeNotifier {
   //     });
   //   }
   // }
+  String? validatePhoneNumber(String txt) {
+    if (txt.isEmpty) {
+      return "Enter a Proper Mobile Number";
+    } else if (txt.length != 10) {
+      return "Please check your mobile number";
+    }
+    return null;
+  }
 
   Future _deleteFromDb() async {
     await FirebaseFirestore.instance

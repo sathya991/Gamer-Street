@@ -31,9 +31,9 @@ class TourneyProvider extends ChangeNotifier {
     return null;
   }
 
-  Future createBgmiTourney(int entryFee, int prizeMoney, DateTime tourneyTime,
-      DateTime registrationTime, String map, String teamMode) async {
-    await FirebaseFirestore.instance
+  Future basicInfoAddition(int entryFee, int prizeMoney, DateTime tourneyTime,
+      DateTime registrationTime, String gameName, String url) async {
+    Future returnVal = (FirebaseFirestore.instance
         .collection('tournaments')
         .doc()
         .collection('basicInfo')
@@ -42,10 +42,51 @@ class TourneyProvider extends ChangeNotifier {
       'prizeMoney': prizeMoney,
       'tourneyTime': tourneyTime,
       'registrationEndTime': registrationTime,
-      'game': 'BGMI',
-      'url':
-          'https://firebasestorage.googleapis.com/v0/b/gamerstreet-40220.appspot.com/o/games%2Fbgmi.jpg?alt=media&token=2b9d0c31-1162-4aa9-93b4-af4c0ba5b3fe'
-    }).then((value) async {
+      'game': gameName,
+      'url': url,
+    }));
+    returnVal.then((value) async {
+      await FirebaseFirestore.instance
+          .collection('tournaments')
+          .doc(value.parent.parent!.id)
+          .collection('winners')
+          .doc()
+          .set({
+        'winnerOne': "",
+        'winnerOneSS': "",
+        'winnerTwo': "",
+        'winnerTwoSS': "",
+        'winnerThree': "",
+        'winnerThreeSS': "",
+      });
+    });
+    return returnVal;
+  }
+
+  Future addIntoHosterGames(dynamic value) async {
+    return await FirebaseFirestore.instance
+        .collection('users')
+        .doc(FirebaseAuth.instance.currentUser!.uid)
+        .collection('HosterGames')
+        .doc()
+        .set({
+      'Tid': value.parent.parent!.id,
+    });
+  }
+
+  Future createBgmiTourney(
+      int entryFee,
+      int prizeMoney,
+      DateTime tourneyTime,
+      DateTime registrationTime,
+      String map,
+      String teamMode,
+      int noOfWinners) async {
+    String url =
+        'https://firebasestorage.googleapis.com/v0/b/gamerstreet-40220.appspot.com/o/games%2Fbgmi.jpg?alt=media&token=2b9d0c31-1162-4aa9-93b4-af4c0ba5b3fe';
+    basicInfoAddition(
+            entryFee, prizeMoney, tourneyTime, registrationTime, "BGMI", url)
+        .then((value) async {
       await FirebaseFirestore.instance
           .collection('tournaments')
           .doc(value.parent.parent!.id)
@@ -59,34 +100,21 @@ class TourneyProvider extends ChangeNotifier {
             .collection('tournaments')
             .doc(value.parent.parent!.id)
             .collection('additionalInfo')
-            .add({'map': map, 'teamMode': teamMode});
+            .add(
+                {'map': map, 'teamMode': teamMode, 'noOfWinners': noOfWinners});
       });
-      await FirebaseFirestore.instance
-          .collection('users')
-          .doc(FirebaseAuth.instance.currentUser!.uid)
-          .collection('HosterGames')
-          .doc()
-          .set({
-        'Tid': value.parent.parent!.id,
-      });
+      addIntoHosterGames(value);
     });
   }
 
   Future createLudoTourney(int entryFee, int prizeMoney, DateTime tourneyTime,
       DateTime registrationTime, int? players) async {
-    await FirebaseFirestore.instance
-        .collection('tournaments')
-        .doc()
-        .collection('basicInfo')
-        .add({
-      'entryFee': entryFee,
-      'prizeMoney': prizeMoney,
-      'tourneyTime': tourneyTime,
-      'registrationEndTime': registrationTime,
-      'game': 'Ludo King',
-      'url':
-          'https://firebasestorage.googleapis.com/v0/b/gamerstreet-40220.appspot.com/o/games%2FLudo_King_Logo.jpg?alt=media&token=eeed85e4-aac3-4d53-af9f-a9cb98d9fd7a'
-    }).then((value) async {
+    String url =
+        'https://firebasestorage.googleapis.com/v0/b/gamerstreet-40220.appspot.com/o/games%2FLudo_King_Logo.jpg?alt=media&token=eeed85e4-aac3-4d53-af9f-a9cb98d9fd7a';
+
+    basicInfoAddition(entryFee, prizeMoney, tourneyTime, registrationTime,
+            "Ludo King", url)
+        .then((value) async {
       await FirebaseFirestore.instance
           .collection('tournaments')
           .doc(value.parent.parent!.id)
@@ -102,14 +130,7 @@ class TourneyProvider extends ChangeNotifier {
             .collection('additionalInfo')
             .add({'noOfPlayers': players});
       });
-      await FirebaseFirestore.instance
-          .collection('users')
-          .doc(FirebaseAuth.instance.currentUser!.uid)
-          .collection('HosterGames')
-          .doc()
-          .set({
-        'Tid': value.parent.parent!.id,
-      });
+      addIntoHosterGames(value);
     });
   }
 

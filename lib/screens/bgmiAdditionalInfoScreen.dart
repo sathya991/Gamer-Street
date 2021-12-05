@@ -22,10 +22,12 @@ class BGMIAdditionalInfo extends StatefulWidget {
 class _BGMIAdditionalInfoState extends State<BGMIAdditionalInfo> {
   String? teamModeValue;
   String? mapValue;
+  int? winCountValue;
   @override
   Widget build(BuildContext context) {
     List teamModes = ['Solo', 'Duo', 'Squad'];
     List maps = ['Erangel', 'Miramar', 'Sanhok', 'Livik', 'Karakin'];
+    List winCount = [1, 2, 3];
     return Scaffold(
       appBar: AppBar(title: Text("BGMI")),
       body: Container(
@@ -69,6 +71,24 @@ class _BGMIAdditionalInfoState extends State<BGMIAdditionalInfo> {
                 },
                 hint: Text("Choose Map"),
                 icon: Icon(Icons.arrow_drop_down_circle)),
+            DropdownButton(
+                isExpanded: true,
+                value: winCountValue,
+                items: winCount.map(
+                  (val) {
+                    return DropdownMenuItem<int>(
+                      child: Text(val.toString()),
+                      value: val,
+                    );
+                  },
+                ).toList(),
+                onChanged: (int? val) {
+                  setState(() {
+                    winCountValue = val!;
+                  });
+                },
+                hint: Text("Choose No. of Winners"),
+                icon: Icon(Icons.arrow_drop_down_circle)),
             ElevatedButton(
                 onPressed: () {
                   Provider.of<TourneyProvider>(context, listen: false)
@@ -79,6 +99,7 @@ class _BGMIAdditionalInfoState extends State<BGMIAdditionalInfo> {
                     widget.registrationEndtime,
                     mapValue!,
                     teamModeValue!,
+                    winCountValue!,
                   );
                   Navigator.pushNamedAndRemoveUntil(
                     context,

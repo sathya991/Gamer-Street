@@ -298,7 +298,7 @@ class _TournamentDetailsState extends State<TournamentDetails> {
                     ),
                   ]);
                 } else
-                  return Text(widget.tId);
+                  return Center(child: CircularProgressIndicator());
               })),
     );
   }

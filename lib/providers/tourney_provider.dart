@@ -128,7 +128,7 @@ class TourneyProvider extends ChangeNotifier {
             .collection('tournaments')
             .doc(value.parent.parent!.id)
             .collection('additionalInfo')
-            .add({'noOfPlayers': players});
+            .add({'noOfPlayers': players, 'noOfWinners': 1});
       });
       addIntoHosterGames(value);
     });

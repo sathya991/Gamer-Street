@@ -98,12 +98,14 @@ class _InTournamentDetailsState extends State<InTournamentDetails> {
                 isHost: isHost,
                 noOfWinners: winnersNo,
                 matchState: matchStateNow,
+                tourneyId: widget.tourneyId,
               )
             : MultiPlayerDisplay(
                 snapshot: snapshot,
                 isHost: isHost,
                 noOfWinners: winnersNo,
                 matchState: matchStateNow,
+                tourneyId: widget.tourneyId,
               ));
   }
 }

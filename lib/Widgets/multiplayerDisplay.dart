@@ -31,14 +31,16 @@ class _MultiPlayerDisplayState extends State<MultiPlayerDisplay> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    updateWinner(String winnerPlace) {
-      return FirebaseFirestore.instance
+    updateWinner(String winnerPlace) async {
+      return await FirebaseFirestore.instance
           .collection('tournaments')
           .doc(widget.tourneyId)
           .collection('winners')
           .get()
-          .then((value) {
-        value.docs.first.data().update(winnerPlace, (value) => curPlayerId);
+          .then((value) async {
+        await value.docs.first
+            .data()
+            .update(winnerPlace, (value) => curPlayerId);
       });
     }
 
@@ -61,7 +63,9 @@ class _MultiPlayerDisplayState extends State<MultiPlayerDisplay> {
     ];
     if (widget.matchState != 'inProgress') {
       for (int i = 0; i < widget.noOfWinners; i++) {
-        menuItemsList.add(items[i]);
+        setState(() {
+          menuItemsList.add(items[i]);
+        });
       }
     }
   }
@@ -125,14 +129,15 @@ class _MultiPlayerDisplayState extends State<MultiPlayerDisplay> {
         openWithTap: true,
         menuOffset: 10.0,
         bottomOffsetHeight: 80.0,
-        onPressed: () {},
+        onPressed: () {
+          setState(() {
+            curPlayerId = valMap['playerDocId'][index1];
+          });
+        },
         menuItems: [
               FocusedMenuItem(
                   title: Text("View Profile"),
                   onPressed: () {
-                    setState(() {
-                      curPlayerId = valMap['playerDocId'][index1];
-                    });
                     Navigator.of(context).pushNamed(Profile.profile,
                         arguments: valMap['playerDocId'][index1]);
                   }),

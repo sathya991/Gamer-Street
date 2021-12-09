@@ -25,6 +25,7 @@ class _InTournamentDetailsState extends State<InTournamentDetails> {
   List registeredNames = [];
   String hostId = "";
   String matchState = "";
+  int noOfWinners = 0;
   var registeredUserStream;
   Future getHostId(String id) async {
     await FirebaseFirestore.instance
@@ -37,8 +38,20 @@ class _InTournamentDetailsState extends State<InTournamentDetails> {
     });
   }
 
+  Future getWinnerNo(String id) async {
+    await FirebaseFirestore.instance
+        .collection('tournaments')
+        .doc(id)
+        .collection('additionalInfo')
+        .get()
+        .then((value) {
+      noOfWinners = value.docs.first.get('noOfWinners');
+    });
+  }
+
   getRegisteredUsers(String id) {
     getHostId(id);
+    getWinnerNo(id);
     registeredUserStream = FirebaseFirestore.instance
         .collection('tournaments')
         .doc(id)
@@ -68,10 +81,11 @@ class _InTournamentDetailsState extends State<InTournamentDetails> {
           }
           bool isHost = FirebaseAuth.instance.currentUser!.uid == hostId;
           if (matchState == "inProgress") {
-            return mainScreenWidget(snapshot, isHost);
+            return mainScreenWidget(snapshot, isHost, noOfWinners, matchState);
           } else {
             if (isHost) {
-              return mainScreenWidget(snapshot, isHost);
+              return mainScreenWidget(
+                  snapshot, isHost, noOfWinners, matchState);
             } else {
               return Screenshots();
             }
@@ -79,17 +93,24 @@ class _InTournamentDetailsState extends State<InTournamentDetails> {
         });
   }
 
-  Widget mainScreenWidget(var snapshot, var isHost) {
+  Widget mainScreenWidget(
+      var snapshot, var isHost, int winnersNo, String matchStateNow) {
     return Container(
         padding: EdgeInsets.all(10),
         child: widget.gameName == 'Ludo King'
             ? SinglePlayerDisplay(
                 snapshot: snapshot,
                 isHost: isHost,
+                noOfWinners: winnersNo,
+                matchState: matchStateNow,
+                tourneyId: widget.tourneyId,
               )
             : MultiPlayerDisplay(
                 snapshot: snapshot,
                 isHost: isHost,
+                noOfWinners: winnersNo,
+                matchState: matchStateNow,
+                tourneyId: widget.tourneyId,
               ));
   }
 }

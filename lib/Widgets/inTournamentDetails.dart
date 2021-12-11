@@ -26,6 +26,7 @@ class _InTournamentDetailsState extends State<InTournamentDetails> {
   String hostId = "";
   String matchState = "";
   int noOfWinners = 0;
+  bool isHost = false;
   var registeredUserStream;
   Future getHostId(String id) async {
     await FirebaseFirestore.instance
@@ -35,6 +36,7 @@ class _InTournamentDetailsState extends State<InTournamentDetails> {
         .then((firstValue) async {
       hostId = firstValue.get('hostId');
       matchState = firstValue.get('matchState');
+      isHost = FirebaseAuth.instance.currentUser!.uid == hostId;
     });
   }
 
@@ -79,7 +81,6 @@ class _InTournamentDetailsState extends State<InTournamentDetails> {
               child: Text("No users Registered yet"),
             );
           }
-          bool isHost = FirebaseAuth.instance.currentUser!.uid == hostId;
           if (matchState == "inProgress") {
             return mainScreenWidget(snapshot, isHost, noOfWinners, matchState);
           } else {

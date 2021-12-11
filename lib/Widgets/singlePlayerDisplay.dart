@@ -29,8 +29,6 @@ class _SinglePlayerDisplayState extends State<SinglePlayerDisplay> {
   List<FocusedMenuItem> menuItemsList = [];
   @override
   void initState() {
-    // TODO: implement initState
-    super.initState();
     updateWinner(String winnerPlace) {
       return FirebaseFirestore.instance
           .collection('tournaments')
@@ -38,7 +36,15 @@ class _SinglePlayerDisplayState extends State<SinglePlayerDisplay> {
           .collection('winners')
           .get()
           .then((value) {
-        value.docs.first.data().update(winnerPlace, (value) => curPlayerId);
+        value.docs.forEach((element) {
+          FirebaseFirestore.instance
+              .collection('tournaments')
+              .doc(widget.tourneyId)
+              .collection('winners')
+              .doc(element.id)
+              .update({winnerPlace: curPlayerId});
+        });
+        // value.docs.first.data().update(winnerPlace, (value) => curPlayerId);
       });
     }
 
@@ -64,6 +70,9 @@ class _SinglePlayerDisplayState extends State<SinglePlayerDisplay> {
         menuItemsList.add(items[i]);
       }
     }
+
+    // TODO: implement initState
+    super.initState();
   }
 
   @override
@@ -87,7 +96,11 @@ class _SinglePlayerDisplayState extends State<SinglePlayerDisplay> {
             openWithTap: true,
             menuOffset: 10.0,
             bottomOffsetHeight: 80.0,
-            onPressed: () {},
+            onPressed: () {
+              setState(() {
+                curPlayerId = valMap['playerDocId'][0];
+              });
+            },
             menuItems: [
                   FocusedMenuItem(
                       title: Text("View Profile"),

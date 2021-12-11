@@ -32,7 +32,7 @@ class _MultiPlayerDisplayState extends State<MultiPlayerDisplay> {
     // TODO: implement initState
     super.initState();
     updateWinner(String winnerPlace) async {
-      return await FirebaseFirestore.instance
+      await FirebaseFirestore.instance
           .collection('tournaments')
           .doc(widget.tourneyId)
           .collection('winners')

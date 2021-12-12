@@ -82,7 +82,13 @@ class _InTournamentDetailsState extends State<InTournamentDetails> {
             );
           }
           if (matchState == "inProgress") {
-            return mainScreenWidget(snapshot, isHost, noOfWinners, matchState);
+            return Column(
+              children: [
+                mainScreenWidget(snapshot, isHost, noOfWinners, matchState),
+                ElevatedButton(
+                    onPressed: () {}, child: Text("Match Completed..?"))
+              ],
+            );
           } else {
             if (isHost) {
               return mainScreenWidget(

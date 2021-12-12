@@ -2,7 +2,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:focused_menu/focused_menu.dart';
 import 'package:focused_menu/modals.dart';
+import 'package:gamer_street/providers/tourney_provider.dart';
 import 'package:gamer_street/screens/profile.dart';
+import 'package:provider/provider.dart';
 
 class MultiPlayerDisplay extends StatefulWidget {
   final snapshot;
@@ -29,36 +31,27 @@ class _MultiPlayerDisplayState extends State<MultiPlayerDisplay> {
   List<FocusedMenuItem> menuItemsList = [];
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-    updateWinner(String winnerPlace) async {
-      await FirebaseFirestore.instance
-          .collection('tournaments')
-          .doc(widget.tourneyId)
-          .collection('winners')
-          .get()
-          .then((value) async {
-        await value.docs.first
-            .data()
-            .update(winnerPlace, (value) => curPlayerId);
-      });
-    }
-
+    final tourneyProvider =
+        Provider.of<TourneyProvider>(context, listen: false);
     items = [
       FocusedMenuItem(
           title: Text("Winner"),
           onPressed: () {
-            updateWinner("winnerOne");
+            tourneyProvider.setWinner(
+                widget.tourneyId, "winnerOne", curPlayerId, context);
           }),
       FocusedMenuItem(
           title: Text("Second Place"),
           onPressed: () {
-            updateWinner("winnerTwo");
+            tourneyProvider.setWinner(
+                widget.tourneyId, "winnerTwo", curPlayerId, context);
           }),
       FocusedMenuItem(
           title: Text("Third Place"),
           onPressed: () {
-            updateWinner("winnerThree");
+            tourneyProvider.setWinner(
+                widget.tourneyId, "winnerThree", curPlayerId, context);
           }),
     ];
     if (widget.matchState != 'inProgress') {

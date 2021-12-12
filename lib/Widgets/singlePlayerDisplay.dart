@@ -2,7 +2,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:focused_menu/focused_menu.dart';
 import 'package:focused_menu/modals.dart';
+import 'package:gamer_street/providers/tourney_provider.dart';
 import 'package:gamer_street/screens/profile.dart';
+import 'package:provider/provider.dart';
 
 class SinglePlayerDisplay extends StatefulWidget {
   final snapshot;
@@ -29,40 +31,26 @@ class _SinglePlayerDisplayState extends State<SinglePlayerDisplay> {
   List<FocusedMenuItem> menuItemsList = [];
   @override
   void initState() {
-    updateWinner(String winnerPlace) {
-      return FirebaseFirestore.instance
-          .collection('tournaments')
-          .doc(widget.tourneyId)
-          .collection('winners')
-          .get()
-          .then((value) {
-        value.docs.forEach((element) {
-          FirebaseFirestore.instance
-              .collection('tournaments')
-              .doc(widget.tourneyId)
-              .collection('winners')
-              .doc(element.id)
-              .update({winnerPlace: curPlayerId});
-        });
-        // value.docs.first.data().update(winnerPlace, (value) => curPlayerId);
-      });
-    }
-
+    final tourneyProvider =
+        Provider.of<TourneyProvider>(context, listen: false);
     items = [
       FocusedMenuItem(
           title: Text("Winner"),
           onPressed: () {
-            updateWinner("winnerOne");
+            tourneyProvider.setWinner(
+                widget.tourneyId, "winnerOne", curPlayerId, context);
           }),
       FocusedMenuItem(
           title: Text("Second Place"),
           onPressed: () {
-            updateWinner("winnerTwo");
+            tourneyProvider.setWinner(
+                widget.tourneyId, "winnerTwo", curPlayerId, context);
           }),
       FocusedMenuItem(
           title: Text("Third Place"),
           onPressed: () {
-            updateWinner("winnerThree");
+            tourneyProvider.setWinner(
+                widget.tourneyId, "winnerThree", curPlayerId, context);
           }),
     ];
     if (widget.matchState != 'inProgress') {

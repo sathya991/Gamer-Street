@@ -45,21 +45,21 @@ class TourneyProvider extends ChangeNotifier {
       'game': gameName,
       'url': url,
     }));
-    returnVal.then((value) async {
-      await FirebaseFirestore.instance
-          .collection('tournaments')
-          .doc(value.parent.parent!.id)
-          .collection('winners')
-          .doc()
-          .set({
-        'winnerOne': "",
-        'winnerOneSS': "",
-        'winnerTwo': "",
-        'winnerTwoSS': "",
-        'winnerThree': "",
-        'winnerThreeSS': "",
-      });
-    });
+    // returnVal.then((value) async {
+    //   await FirebaseFirestore.instance
+    //       .collection('tournaments')
+    //       .doc(value.parent.parent!.id)
+    //       .collection('winners')
+    //       .doc()
+    //       .set({
+    //     'winnerOne': "",
+    //     'winnerOneSS': "",
+    //     'winnerTwo': "",
+    //     'winnerTwoSS': "",
+    //     'winnerThree': "",
+    //     'winnerThreeSS': "",
+    //   });
+    // });
     return returnVal;
   }
 
@@ -131,6 +131,43 @@ class TourneyProvider extends ChangeNotifier {
             .add({'noOfPlayers': players, 'noOfWinners': 1});
       });
       addIntoHosterGames(value);
+    });
+  }
+
+  setWinner(
+      String id, String winnerField, String uid, BuildContext context) async {
+    await FirebaseFirestore.instance
+        .collection('tournaments')
+        .doc(id)
+        .collection('winners')
+        .get()
+        .then((value) async {
+      if (value.docs.length == 1) {
+        if (value.docs.first.data().containsKey(winnerField)) {
+          ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text("This position has already been set")));
+        } else {
+          if (!value.docs.first.data().containsValue(uid)) {
+            await FirebaseFirestore.instance
+                .collection('tournaments')
+                .doc(id)
+                .collection('winners')
+                .doc(value.docs.first.id)
+                .update({winnerField: uid});
+          } else {
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                content:
+                    Text("This player position has already been updated")));
+          }
+        }
+      } else {
+        await FirebaseFirestore.instance
+            .collection('tournaments')
+            .doc(id)
+            .collection('winners')
+            .doc()
+            .set({winnerField: uid});
+      }
     });
   }
 

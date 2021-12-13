@@ -54,13 +54,6 @@ class _MultiPlayerDisplayState extends State<MultiPlayerDisplay> {
                 widget.tourneyId, "winnerThree", curPlayerId, context);
           }),
     ];
-    if (widget.matchState != 'inProgress') {
-      for (int i = 0; i < widget.noOfWinners; i++) {
-        setState(() {
-          menuItemsList.add(items[i]);
-        });
-      }
-    }
   }
 
   @override
@@ -106,6 +99,23 @@ class _MultiPlayerDisplayState extends State<MultiPlayerDisplay> {
   }
 
   Widget menuPopup(valMap, index1, child) {
+    selectList() {
+      var l = [
+        FocusedMenuItem(
+            title: Text("View Profile"),
+            onPressed: () {
+              Navigator.of(context).pushNamed(Profile.profile,
+                  arguments: valMap['playerDocId'][index1]);
+            }),
+      ];
+      if (widget.matchState != 'inProgress') {
+        for (int i = 0; i < widget.noOfWinners; i++) {
+          l.add(items[i]);
+        }
+      }
+      return l;
+    }
+
     if (index1 != 0) {
       menuItemsList = [];
     }
@@ -116,7 +126,7 @@ class _MultiPlayerDisplayState extends State<MultiPlayerDisplay> {
         menuBoxDecoration: BoxDecoration(
             color: Colors.grey,
             borderRadius: BorderRadius.all(Radius.circular(15.0))),
-        duration: Duration(milliseconds: 100),
+        duration: Duration(milliseconds: 300),
         animateMenuItems: true,
         blurBackgroundColor: Colors.black54,
         openWithTap: true,
@@ -127,15 +137,7 @@ class _MultiPlayerDisplayState extends State<MultiPlayerDisplay> {
             curPlayerId = valMap['playerDocId'][index1];
           });
         },
-        menuItems: [
-              FocusedMenuItem(
-                  title: Text("View Profile"),
-                  onPressed: () {
-                    Navigator.of(context).pushNamed(Profile.profile,
-                        arguments: valMap['playerDocId'][index1]);
-                  }),
-            ] +
-            menuItemsList,
+        menuItems: selectList(),
         child: child);
   }
 }

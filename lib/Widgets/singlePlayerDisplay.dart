@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:focused_menu/focused_menu.dart';
 import 'package:focused_menu/modals.dart';
@@ -52,6 +53,11 @@ class _SinglePlayerDisplayState extends State<SinglePlayerDisplay> {
                 widget.tourneyId, "winnerThree", curPlayerId, context);
           }),
     ];
+    if (widget.matchState != 'inProgress') {
+      for (int i = 0; i < widget.noOfWinners; i++) {
+        menuItemsList.add(items[i]);
+      }
+    }
 
     // TODO: implement initState
     super.initState();
@@ -59,23 +65,6 @@ class _SinglePlayerDisplayState extends State<SinglePlayerDisplay> {
 
   @override
   Widget build(BuildContext context) {
-    selectList(valMap) {
-      var l = [
-        FocusedMenuItem(
-            title: Text("View Profile"),
-            onPressed: () {
-              Navigator.of(context).pushNamed(Profile.profile,
-                  arguments: valMap['playerDocId'][0]);
-            }),
-      ];
-      if (widget.matchState != 'inProgress') {
-        for (int i = 0; i < widget.noOfWinners; i++) {
-          l.add(items[i]);
-        }
-      }
-      return l;
-    }
-
     return ListView.builder(
         shrinkWrap: true,
         itemCount: widget.snapshot.data!.docs.length,
@@ -100,7 +89,16 @@ class _SinglePlayerDisplayState extends State<SinglePlayerDisplay> {
                 curPlayerId = valMap['playerDocId'][0];
               });
             },
-            menuItems: selectList(valMap),
+            menuItems: [
+                  FocusedMenuItem(
+                      title: Text("View Profile"),
+                      onPressed: () {
+                        curPlayerId = valMap['playerDocId'][0];
+                        Navigator.of(context).pushNamed(Profile.profile,
+                            arguments: valMap['playerDocId'][0]);
+                      }),
+                ] +
+                menuItemsList,
             child: Card(
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.start,

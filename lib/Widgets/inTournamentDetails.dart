@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:gamer_street/Widgets/multiplayerDisplay.dart';
 import 'package:gamer_street/Widgets/screenshots.dart';
 import 'package:gamer_street/Widgets/singlePlayerDisplay.dart';
+import 'package:gamer_street/screens/profile.dart';
 
 class InTournamentDetails extends StatefulWidget {
   final tourneyId;
@@ -33,11 +34,9 @@ class _InTournamentDetailsState extends State<InTournamentDetails> {
         .doc(id)
         .get()
         .then((firstValue) async {
-      setState(() {
-        hostId = firstValue.get('hostId');
-        matchState = firstValue.get('matchState');
-        isHost = FirebaseAuth.instance.currentUser!.uid == hostId;
-      });
+      hostId = firstValue.get('hostId');
+      matchState = firstValue.get('matchState');
+      isHost = FirebaseAuth.instance.currentUser!.uid == hostId;
     });
   }
 
@@ -60,22 +59,18 @@ class _InTournamentDetailsState extends State<InTournamentDetails> {
         .collection('additionalInfo')
         .get()
         .then((value) {
-      setState(() {
-        noOfWinners = value.docs.first.get('noOfWinners');
-      });
+      noOfWinners = value.docs.first.get('noOfWinners');
     });
   }
 
   getRegisteredUsers(String id) {
     getHostId(id);
     getWinnerNo(id);
-    setState(() {
-      registeredUserStream = FirebaseFirestore.instance
-          .collection('tournaments')
-          .doc(id)
-          .collection('registeredUsers')
-          .snapshots();
-    });
+    registeredUserStream = FirebaseFirestore.instance
+        .collection('tournaments')
+        .doc(id)
+        .collection('registeredUsers')
+        .snapshots();
   }
 
   @override
@@ -96,11 +91,6 @@ class _InTournamentDetailsState extends State<InTournamentDetails> {
           if (snapshot.data!.docs.length == 0) {
             return Center(
               child: Text("No users Registered yet"),
-            );
-          }
-          while (matchState == "") {
-            return Center(
-              child: CircularProgressIndicator(),
             );
           }
           if (matchState == "inProgress") {

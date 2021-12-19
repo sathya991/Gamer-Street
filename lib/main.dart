@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -14,6 +15,7 @@ import 'package:gamer_street/screens/auth_screen.dart';
 import 'package:gamer_street/screens/choose_screen.dart';
 import 'package:gamer_street/screens/email_verify_wait_screen.dart';
 import 'package:gamer_street/screens/know_more_screen.dart';
+
 import 'package:gamer_street/screens/profile.dart';
 import 'package:gamer_street/screens/settingsScreen.dart';
 import 'package:gamer_street/screens/splash_screen.dart';
@@ -65,7 +67,6 @@ class _MyAppState extends State<MyApp> {
               ],
               child: Consumer<ThemeProvider>(builder: (_, theme, __) {
                 return MaterialApp(
-                  debugShowCheckedModeBanner: false,
                   title: 'GamerStreet',
                   theme: theme.themeData,
                   home: StreamBuilder(
@@ -73,7 +74,7 @@ class _MyAppState extends State<MyApp> {
                     builder: (ctx, userSnapshot) {
                       if (userSnapshot.connectionState ==
                           ConnectionState.waiting) {
-                        return CircularProgressIndicator();
+                        return SplashScreen();
                       }
                       if (userSnapshot.hasData) {
                         User? _user = FirebaseAuth.instance.currentUser;
@@ -100,6 +101,7 @@ class _MyAppState extends State<MyApp> {
                     ThemeScreen.themeScreenRoute: (ctx) => ThemeScreen(),
                     KnowMoreScreen.knowMoreScreenRoute: (ctx) =>
                         KnowMoreScreen(),
+                    // Profile.profile: (ctx) => Profile(),
                   },
                   onGenerateRoute: (data) {
                     if (data.name == Profile.profile) {

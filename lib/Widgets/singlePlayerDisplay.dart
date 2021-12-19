@@ -53,11 +53,6 @@ class _SinglePlayerDisplayState extends State<SinglePlayerDisplay> {
                 widget.tourneyId, "winnerThree", curPlayerId, context);
           }),
     ];
-    if (widget.matchState != 'inProgress') {
-      for (int i = 0; i < widget.noOfWinners; i++) {
-        menuItemsList.add(items[i]);
-      }
-    }
 
     // TODO: implement initState
     super.initState();
@@ -65,6 +60,11 @@ class _SinglePlayerDisplayState extends State<SinglePlayerDisplay> {
 
   @override
   Widget build(BuildContext context) {
+    if (widget.matchState != 'inProgress') {
+      for (int i = 0; i < widget.noOfWinners; i++) {
+        menuItemsList.add(items[i]);
+      }
+    }
     return ListView.builder(
         shrinkWrap: true,
         itemCount: widget.snapshot.data!.docs.length,

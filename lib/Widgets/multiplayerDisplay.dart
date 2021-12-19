@@ -54,6 +54,10 @@ class _MultiPlayerDisplayState extends State<MultiPlayerDisplay> {
                 widget.tourneyId, "winnerThree", curPlayerId, context);
           }),
     ];
+  }
+
+  @override
+  Widget build(BuildContext context) {
     if (widget.matchState != 'inProgress') {
       for (int i = 0; i < widget.noOfWinners; i++) {
         setState(() {
@@ -61,10 +65,6 @@ class _MultiPlayerDisplayState extends State<MultiPlayerDisplay> {
         });
       }
     }
-  }
-
-  @override
-  Widget build(BuildContext context) {
     return ListView.builder(
         shrinkWrap: true,
         itemCount: widget.snapshot.data!.docs.length,

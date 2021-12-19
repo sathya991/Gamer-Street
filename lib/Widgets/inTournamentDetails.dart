@@ -1,20 +1,19 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:gamer_street/Widgets/multiplayerDisplay.dart';
 import 'package:gamer_street/Widgets/screenshots.dart';
 import 'package:gamer_street/Widgets/singlePlayerDisplay.dart';
-import 'package:gamer_street/screens/profile.dart';
 
 class InTournamentDetails extends StatefulWidget {
   final tourneyId;
   final gameName;
-  final Function fun;
-  const InTournamentDetails(
-      {required this.gameName,
-      required this.tourneyId,
-      required this.fun,
-      Key? key})
+  final hostId;
+  final matchState;
+  final isHost;
+  final noOfWinners;
+  const InTournamentDetails(this.tourneyId, this.gameName, this.hostId,
+      this.matchState, this.isHost, this.noOfWinners,
+      {Key? key})
       : super(key: key);
 
   @override
@@ -23,49 +22,9 @@ class InTournamentDetails extends StatefulWidget {
 
 class _InTournamentDetailsState extends State<InTournamentDetails> {
   List registeredNames = [];
-  String hostId = "";
-  String matchState = "";
-  int noOfWinners = 0;
-  bool isHost = false;
   var registeredUserStream;
-  Future getHostId(String id) async {
-    await FirebaseFirestore.instance
-        .collection('tournaments')
-        .doc(id)
-        .get()
-        .then((firstValue) async {
-      hostId = firstValue.get('hostId');
-      matchState = firstValue.get('matchState');
-      isHost = FirebaseAuth.instance.currentUser!.uid == hostId;
-    });
-  }
-
-  Future setGameState(String id) async {
-    await FirebaseFirestore.instance
-        .collection('tournaments')
-        .doc(id)
-        .update({"matchState": "completed"});
-    //     .then((firstValue) async {
-    //   hostId = firstValue.get('hostId');
-    //   matchState = firstValue.get('matchState');
-    //   isHost = FirebaseAuth.instance.currentUser!.uid == hostId;
-    // });
-  }
-
-  Future getWinnerNo(String id) async {
-    await FirebaseFirestore.instance
-        .collection('tournaments')
-        .doc(id)
-        .collection('additionalInfo')
-        .get()
-        .then((value) {
-      noOfWinners = value.docs.first.get('noOfWinners');
-    });
-  }
 
   getRegisteredUsers(String id) {
-    getHostId(id);
-    getWinnerNo(id);
     registeredUserStream = FirebaseFirestore.instance
         .collection('tournaments')
         .doc(id)
@@ -93,58 +52,23 @@ class _InTournamentDetailsState extends State<InTournamentDetails> {
               child: Text("No users Registered yet"),
             );
           }
-          if (matchState == "inProgress") {
-            return Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                mainScreenWidget(snapshot, isHost, noOfWinners, matchState),
-                isHost
-                    ? Container(
-                        margin: EdgeInsets.only(top: 5, bottom: 0),
-                        alignment: Alignment.center,
-                        width: MediaQuery.of(context).size.width,
-                        child: ElevatedButton(
-                            onPressed: () {
-                              showDialog(
-                                  context: context,
-                                  builder: (ctx) {
-                                    return AlertDialog(
-                                      title: Text('Confirmation..!'),
-                                      content: Text(
-                                          'Are you sure, Match is completed?'),
-                                      actions: [
-                                        TextButton(
-                                          onPressed: () {
-                                            Navigator.pop(context);
-                                          },
-                                          child: Text('CANCEL'),
-                                        ),
-                                        TextButton(
-                                          onPressed: () {
-                                            setGameState(widget.tourneyId);
-                                          },
-                                          child: Text('YES'),
-                                        ),
-                                      ],
-                                    );
-                                  });
-                            },
-                            child: Container(
-                                height: 45,
-                                alignment: Alignment.center,
-                                width: MediaQuery.of(context).size.width,
-                                child: Text("Match Completed..?"))),
-                      )
-                    : SizedBox()
-              ],
+          if (widget.matchState == "") {
+            return Center(
+              child: CircularProgressIndicator(),
             );
-          } else {
-            if (isHost) {
-              return mainScreenWidget(
-                  snapshot, isHost, noOfWinners, matchState);
+          }
+          if (widget.matchState == "inProgress") {
+            return mainScreenWidget(
+                snapshot, widget.isHost, widget.noOfWinners, widget.matchState);
+          } else if (widget.matchState == "completed") {
+            if (widget.isHost) {
+              return mainScreenWidget(snapshot, widget.isHost,
+                  widget.noOfWinners, widget.matchState);
             } else {
               return Screenshots();
             }
+          } else {
+            return CircularProgressIndicator();
           }
         });
   }

@@ -1,10 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:gamer_street/Widgets/inTournamentChat.dart';
 import 'package:gamer_street/Widgets/inTournamentDetails.dart';
 import 'package:gamer_street/Widgets/tournamentDetails.dart';
-import 'package:gamer_street/Widgets/Screenshots.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 
 class TournamentDetailScreen extends StatefulWidget {
   static const String tournamentDetailScreenRoute = '/tournament-detail-screen';
@@ -19,28 +18,34 @@ class TournamentDetailScreen extends StatefulWidget {
 
 class _TournamentDetailScreenState extends State<TournamentDetailScreen>
     with TickerProviderStateMixin {
-  String mState = '';
-
-  void mtState() async {
+  var hostId;
+  var matchState;
+  var isHost;
+  var noOfWinners = 0;
+  Future getHostId(String id) async {
     await FirebaseFirestore.instance
         .collection('tournaments')
-        .doc(widget.tourneyId)
+        .doc(id)
         .get()
-        .then((value) {
+        .then((firstValue) async {
       setState(() {
-        mState = value.get('matchState');
+        hostId = firstValue.get('hostId');
+        matchState = firstValue.get('matchState');
+        isHost = FirebaseAuth.instance.currentUser!.uid == hostId;
       });
     });
   }
 
-  void changeWidget() async {
+  Future getWinnerNo(String id) async {
     await FirebaseFirestore.instance
         .collection('tournaments')
-        .doc(widget.tourneyId)
-        .update({"matchState": "completed"});
-
-    setState(() {
-      mState = "completed";
+        .doc(id)
+        .collection('additionalInfo')
+        .get()
+        .then((value) {
+      setState(() {
+        noOfWinners = value.docs.first.get('noOfWinners');
+      });
     });
   }
 
@@ -58,7 +63,8 @@ class _TournamentDetailScreenState extends State<TournamentDetailScreen>
   @override
   void initState() {
     super.initState();
-    mtState();
+    getHostId(widget.tourneyId);
+    getWinnerNo(widget.tourneyId);
     _tabController = new TabController(length: 3, vsync: this);
     _tabController.addListener(_handleSelected);
   }
@@ -69,17 +75,8 @@ class _TournamentDetailScreenState extends State<TournamentDetailScreen>
       TournamentDetails(
         tId: widget.tourneyId,
       ),
-      mState == ""
-          ? Container(
-              child: CircularProgressIndicator(),
-            )
-          : mState == "inProgress"
-              ? InTournamentDetails(
-                  gameName: widget.gameName,
-                  tourneyId: widget.tourneyId,
-                  fun: changeWidget,
-                )
-              : Screenshots(),
+      InTournamentDetails(widget.tourneyId, widget.gameName, hostId, matchState,
+          isHost, noOfWinners),
       InTournamentChat(widget.tourneyId)
     ];
 

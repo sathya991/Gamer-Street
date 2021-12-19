@@ -22,10 +22,13 @@ import 'package:gamer_street/screens/tournamentDetailScreen.dart';
 import 'package:gamer_street/services/storage.dart';
 import 'package:provider/provider.dart';
 import 'package:gamer_street/screens/Gamestournament.dart';
+import 'package:gamer_street/services/GetUserData.dart';
+import 'package:gamer_street/services/Self.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+
   runApp(MyApp());
 }
 
@@ -125,7 +128,10 @@ class _MyAppState extends State<MyApp> {
         }
         return SplashScreen();
       },
-      future: Firebase.initializeApp(),
+      future: Future.wait([
+        Firebase.initializeApp(),
+        Self.self(),
+      ]),
     );
   }
 }

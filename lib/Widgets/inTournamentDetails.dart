@@ -8,7 +8,12 @@ import 'package:gamer_street/Widgets/singlePlayerDisplay.dart';
 class InTournamentDetails extends StatefulWidget {
   final tourneyId;
   final gameName;
-  const InTournamentDetails(this.tourneyId, this.gameName, {Key? key})
+  final Function fun;
+  const InTournamentDetails(
+      {required this.gameName,
+      required this.tourneyId,
+      required this.fun,
+      Key? key})
       : super(key: key);
 
   @override
@@ -34,6 +39,18 @@ class _InTournamentDetailsState extends State<InTournamentDetails> {
         isHost = FirebaseAuth.instance.currentUser!.uid == hostId;
       });
     });
+  }
+
+  Future setGameState(String id) async {
+    await FirebaseFirestore.instance
+        .collection('tournaments')
+        .doc(id)
+        .update({"matchState": "completed"});
+    //     .then((firstValue) async {
+    //   hostId = firstValue.get('hostId');
+    //   matchState = firstValue.get('matchState');
+    //   isHost = FirebaseAuth.instance.currentUser!.uid == hostId;
+    // });
   }
 
   Future getWinnerNo(String id) async {
@@ -87,7 +104,50 @@ class _InTournamentDetailsState extends State<InTournamentDetails> {
             );
           }
           if (matchState == "inProgress") {
-            return mainScreenWidget(snapshot, isHost, noOfWinners, matchState);
+            return Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                mainScreenWidget(snapshot, isHost, noOfWinners, matchState),
+                isHost
+                    ? Container(
+                        margin: EdgeInsets.only(top: 5, bottom: 0),
+                        alignment: Alignment.center,
+                        width: MediaQuery.of(context).size.width,
+                        child: ElevatedButton(
+                            onPressed: () {
+                              showDialog(
+                                  context: context,
+                                  builder: (ctx) {
+                                    return AlertDialog(
+                                      title: Text('Confirmation..!'),
+                                      content: Text(
+                                          'Are you sure, Match is completed?'),
+                                      actions: [
+                                        TextButton(
+                                          onPressed: () {
+                                            Navigator.pop(context);
+                                          },
+                                          child: Text('CANCEL'),
+                                        ),
+                                        TextButton(
+                                          onPressed: () {
+                                            setGameState(widget.tourneyId);
+                                          },
+                                          child: Text('YES'),
+                                        ),
+                                      ],
+                                    );
+                                  });
+                            },
+                            child: Container(
+                                height: 45,
+                                alignment: Alignment.center,
+                                width: MediaQuery.of(context).size.width,
+                                child: Text("Match Completed..?"))),
+                      )
+                    : SizedBox()
+              ],
+            );
           } else {
             if (isHost) {
               return mainScreenWidget(

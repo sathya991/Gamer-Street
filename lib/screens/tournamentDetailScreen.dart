@@ -1,7 +1,10 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:gamer_street/Widgets/inTournamentChat.dart';
 import 'package:gamer_street/Widgets/inTournamentDetails.dart';
 import 'package:gamer_street/Widgets/tournamentDetails.dart';
+import 'package:gamer_street/Widgets/Screenshots.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class TournamentDetailScreen extends StatefulWidget {
   static const String tournamentDetailScreenRoute = '/tournament-detail-screen';
@@ -16,6 +19,31 @@ class TournamentDetailScreen extends StatefulWidget {
 
 class _TournamentDetailScreenState extends State<TournamentDetailScreen>
     with TickerProviderStateMixin {
+  String mState = '';
+
+  void mtState() async {
+    await FirebaseFirestore.instance
+        .collection('tournaments')
+        .doc(widget.tourneyId)
+        .get()
+        .then((value) {
+      setState(() {
+        mState = value.get('matchState');
+      });
+    });
+  }
+
+  void changeWidget() async {
+    await FirebaseFirestore.instance
+        .collection('tournaments')
+        .doc(widget.tourneyId)
+        .update({"matchState": "completed"});
+
+    setState(() {
+      mState = "completed";
+    });
+  }
+
   List<Widget> _widgets = [];
   late TabController _tabController;
   int index = 0;
@@ -30,6 +58,7 @@ class _TournamentDetailScreenState extends State<TournamentDetailScreen>
   @override
   void initState() {
     super.initState();
+    mtState();
     _tabController = new TabController(length: 3, vsync: this);
     _tabController.addListener(_handleSelected);
   }
@@ -40,10 +69,17 @@ class _TournamentDetailScreenState extends State<TournamentDetailScreen>
       TournamentDetails(
         tId: widget.tourneyId,
       ),
-      InTournamentDetails(
-        widget.tourneyId,
-        widget.gameName,
-      ),
+      mState == ""
+          ? Container(
+              child: CircularProgressIndicator(),
+            )
+          : mState == "inProgress"
+              ? InTournamentDetails(
+                  gameName: widget.gameName,
+                  tourneyId: widget.tourneyId,
+                  fun: changeWidget,
+                )
+              : Screenshots(),
       InTournamentChat(widget.tourneyId)
     ];
 
